@@ -107,9 +107,9 @@ export default function QuorumCaseStudy() {
             <Reveal delay={0.16}>
               <dl className="mt-14 grid grid-cols-2 gap-x-8 gap-y-6 font-mono text-xs sm:grid-cols-4">
                 {[
-                  ["Role", "UI/UX design · Frontend"],
+                  ["Role", "UI/UX lead · Full-stack build"],
                   ["Context", "CS capstone, Ohio University"],
-                  ["Timeline", "[Aug 2025 – May 2026]"],
+                  ["Timeline", "Aug 2025 – May 2026"],
                   ["Stack", "Flutter · Dart · Firebase"],
                 ].map(([term, detail]) => (
                   <div key={term}>
@@ -146,9 +146,10 @@ export default function QuorumCaseStudy() {
           </Reveal>
           <Reveal>
             <p>
-              [REPLACE WITH SPECIFICS: team size and your exact scope — e.g. "I
-              worked in a team of N; I owned the UI/UX end to end and built the
-              majority of the Flutter front end."]
+              Quorum was a five-person capstone team. I led the UI/UX end to end
+              and took on a large share of the engineering — the Flutter front end
+              and much of the Firebase back end, from the Firestore data model to
+              the availability logic that powers the heatmap.
             </p>
           </Reveal>
         </StudySection>
@@ -176,20 +177,20 @@ export default function QuorumCaseStudy() {
         <StudySection id="process" eyebrow="03 · Role & process" title="From sticky notes to a shipped app">
           <Reveal>
             <p>
-              I led design from the first sketches: informal interviews with
-              [N students/club organizers] about how they schedule now, paper
+              I started with the problem, not the pixels: informal interviews with
+              classmates and club organizers about how they schedule now, paper
               wireframes to test the core flow cheaply, then high-fidelity screens
               and a clickable prototype in Figma. Once the flow held up in hallway
-              usability tests, I moved into Flutter and treated the prototype as
-              the spec.
+              usability tests, I moved into Flutter — treating the prototype as the
+              spec — and stood up the Firebase data layer behind it.
             </p>
           </Reveal>
           <Reveal>
             <p>
               The most useful habit from the process: every screen had to answer
               "what is the user deciding here?" If a screen had no decision, it got
-              merged into one that did. That single rule cut the app from
-              [X] screens in early wireframes to [Y] in the shipped version.
+              merged into one that did — which kept the build small and the app
+              focused.
             </p>
           </Reveal>
           <Reveal>
@@ -234,19 +235,6 @@ export default function QuorumCaseStudy() {
             </Reveal>
 
             <Reveal>
-              <Decision title="Joining works before signing up">
-                <p>
-                  The person creating the event is motivated; the five people
-                  invited are not. Invites open straight into marking availability
-                  — no account required — and signup is offered only after someone
-                  has already gotten value from the app. [ADJUST IF YOUR AUTH FLOW
-                  DIFFERED.]
-                </p>
-                <ImagePlaceholder label="[SCREENSHOT — the invite / join flow.]" />
-              </Decision>
-            </Reveal>
-
-            <Reveal>
               <Decision title="Feedback in the small moments">
                 <p>
                   Marking availability animates the heatmap recalculating in real
@@ -263,20 +251,20 @@ export default function QuorumCaseStudy() {
         <StudySection id="tech" eyebrow="05 · Tech" title="Flutter + Firebase, and why">
           <Reveal>
             <p>
-              Flutter let one codebase target iOS and Android with full control
-              over the UI layer — important, because the design <em>was</em> the
-              product. Firebase covered auth and data: Firestore's realtime
-              listeners are what make the live-updating heatmap possible without
-              building sync infrastructure from scratch.
+              Flutter gave me a single codebase and full control over the UI
+              layer. Firebase covered auth and data, and because I
+              owned much of the back end, I designed the Firestore schema and the
+              availability-aggregation logic — Firestore's realtime listeners are
+              what make the live-updating heatmap possible without building sync
+              infrastructure from scratch.
             </p>
           </Reveal>
           <Reveal>
             <p>
-              The hard parts were the unglamorous ones: modeling availability so
-              concurrent edits merge cleanly, getting time zones right for groups
-              that span them, and keeping widget rebuilds cheap while the heatmap
-              updates live. [ADD OR ADJUST — name the actual hardest problem you
-              solved; this is a favorite interview question.]
+              The hard parts were the unglamorous back-end ones: modeling
+              availability so concurrent edits from different people merge cleanly,
+              getting time zones right for groups that span them, and keeping widget
+              rebuilds cheap while the heatmap recalculates live.
             </p>
           </Reveal>
         </StudySection>
@@ -285,19 +273,19 @@ export default function QuorumCaseStudy() {
         <StudySection id="outcome" eyebrow="06 · Outcome" title="What happened, and what I took from it">
           <Reveal>
             <div className="grid gap-4 sm:grid-cols-3">
-              <Metric value="[N]" label="[testers / pilot users during evaluation]" />
-              <Metric value="[X%]" label="[task completion or success rate in usability testing]" />
-              <Metric value="[A]" label="[grade, award, or showcase result — or delete this card]" />
+              <Metric value="5" label="Person capstone team I shared the build with" />
+              <Metric value="Android" label="Shipped from a single Flutter codebase" />
+              <Metric value="2 semesters" label="From first user interview to a working app" />
             </div>
           </Reveal>
           <Reveal>
             <p>
-              The biggest lesson wasn't technical. It was that the design work
-              done before code — the interviews, the paper tests, the "what is
-              the user deciding here?" rule — is what made the build go fast,
-              because almost nothing had to be redesigned mid-implementation.
-              That's the way I want to keep working: design first, then build
-              exactly that.
+              The biggest lesson was how much the work before code pays off. The
+              interviews, the paper tests, the "what is the user deciding here?"
+              rule — that up-front thinking is what let the build go fast, because
+              almost nothing had to be reworked mid-implementation. That's how I
+              want to keep working: understand the problem, design the solution,
+              then build the whole thing — front end and back — to match.
             </p>
           </Reveal>
         </StudySection>
