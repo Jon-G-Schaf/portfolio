@@ -1,0 +1,38 @@
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: [
+    "./app/**/*.{js,jsx}",
+    "./components/**/*.{js,jsx}",
+    "./lib/**/*.{js,jsx}",
+  ],
+  theme: {
+    extend: {
+      colors: {
+      // Base — dark amber, not black
+      ink: "#2b1707",
+      panel: "#3b2414",
+      line: "rgba(246, 236, 217, 0.08)",
+
+      // Text
+      fog: "#f7eddc",
+      muted: "#b89672",
+
+      // Accents
+      ember: "#ff7a1a",  // deep ember orange
+      amber: "#ffc35c",  // warm amber gold
+},
+      fontFamily: {
+        sans: ["var(--font-body)", "system-ui", "sans-serif"],
+        display: ["var(--font-display)", "system-ui", "sans-serif"],
+        mono: ["var(--font-mono)", "ui-monospace", "monospace"],
+      },
+      maxWidth: {
+        page: "72rem",
+      },
+      letterSpacing: {
+        label: "0.18em",
+      },
+    },
+  },
+  plugins: [],
+};
