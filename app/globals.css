@@ -1,0 +1,129 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --ink: #2b1707;
+  --fog: #f7eddc;
+  --ember: #ff7a1a;
+  --amber: #ffc35c;
+}
+
+html {
+  scroll-behavior: smooth;
+  /* Keep anchored sections clear of the sticky nav. */
+  scroll-padding-top: 5.5rem;
+}
+
+body {
+  background:
+    radial-gradient(
+      circle at top,
+      #4a2a12 0%,
+      #2b1707 40%,
+      #1b1008 100%
+    );
+  background-attachment: fixed;
+  color: var(--fog);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: rgba(255, 122, 26, 0.30);
+  color: var(--fog);
+}
+
+/* Visible, consistent keyboard focus everywhere. */
+:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* ---------------------------------------------------------------------------
+   Texture & depth
+--------------------------------------------------------------------------- */
+
+/* Soft photographic grain over the whole page — barely there. */
+.grain::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Faint blueprint grid, used behind the hero and case-study header.
+   Masked so it dissolves before reaching the content below. */
+.grid-lines {
+  background-image:
+    linear-gradient(
+  to right,
+  rgba(247, 237, 220, 0.04) 1px,
+  transparent 1px
+),
+linear-gradient(
+  to bottom,
+  rgba(247, 237, 220, 0.04) 1px,
+  transparent 1px
+);
+  background-size: 56px 56px;
+  -webkit-mask-image: radial-gradient(
+    ellipse 90% 75% at 30% 20%,
+    black 35%,
+    transparent 78%
+  );
+  mask-image: radial-gradient(
+    ellipse 90% 75% at 30% 20%,
+    black 35%,
+    transparent 78%
+  );
+}
+
+/* The one accent treatment: ember → amber. */
+.accent-text {
+  background-image: linear-gradient(100deg, var(--ember), var(--amber));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.accent-bar {
+  background-image: linear-gradient(90deg, var(--ember), var(--amber));
+}
+
+/* Links inside prose get a quiet gradient underline on hover. */
+.link-quiet {
+  background-image: linear-gradient(90deg, var(--ember), var(--amber));
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0% 1px;
+  transition: background-size 250ms ease;
+  padding-bottom: 2px;
+}
+
+.link-quiet:hover,
+.link-quiet:focus-visible {
+  background-size: 100% 1px;
+}
+
+/* ---------------------------------------------------------------------------
+   Accessibility: honor reduced-motion preferences across the board.
+   Framer Motion is also handled in JS via useReducedMotion.
+--------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
