@@ -62,17 +62,22 @@ function Metric({ value, label }) {
   );
 }
 
-/* A phone screenshot. All exports are 1440px wide; pass each image's real
-   height so next/image renders the correct aspect ratio (no distortion). */
+/* A phone screenshot in a slim device bezel. All exports are 1440px wide;
+   pass each image's real height so next/image renders the correct aspect
+   ratio (no distortion). Extra classes (tilts, hovers) land on the frame. */
 function Shot({ src, alt, h = 3020, className = "" }) {
   return (
-    <Image
-      src={src}
-      alt={alt}
-      width={1440}
-      height={h}
-      className={`w-full max-w-[260px] rounded-[1.75rem] border border-line shadow-2xl ${className}`}
-    />
+    <div
+      className={`w-full max-w-[260px] rounded-[2rem] border border-line bg-[#171310] p-2 shadow-2xl ${className}`}
+    >
+      <Image
+        src={src}
+        alt={alt}
+        width={1440}
+        height={h}
+        className="w-full rounded-[1.5rem]"
+      />
+    </div>
   );
 }
 
