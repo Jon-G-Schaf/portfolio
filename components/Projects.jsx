@@ -5,7 +5,7 @@ import { otherProjects } from "@/lib/content";
 export default function Projects() {
   return (
     <Section id="projects" eyebrow="Other work" className="border-t border-line">
-      <div className="grid gap-px overflow-hidden rounded-2xl border border-line bg-line md:grid-cols-2">
+      <div className="grid gap-px overflow-hidden rounded-2xl border border-line bg-line shadow-[0_24px_70px_-32px_rgba(0,0,0,0.6)] md:grid-cols-2">
         {otherProjects.map((project, i) => (
           <Reveal key={`${project.name}-${i}`} delay={i * 0.06} className="bg-ink">
             <a

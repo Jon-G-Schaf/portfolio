@@ -11,7 +11,7 @@ module.exports = {
       // Base — dark amber, not black
       ink: "#2b1707",
       panel: "#3b2414",
-      line: "rgba(246, 236, 217, 0.08)",
+      line: "rgba(246, 236, 217, 0.13)",
 
       // Text
       fog: "#f7eddc",
