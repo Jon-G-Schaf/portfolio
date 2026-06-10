@@ -1,7 +1,7 @@
+import Image from "next/image";
 import Link from "next/link";
 import Section from "@/components/Section";
 import Reveal from "@/components/Reveal";
-import QuorumMock from "@/components/QuorumMock";
 import { featuredProject } from "@/lib/content";
 
 export default function FeaturedProject() {
@@ -45,16 +45,21 @@ export default function FeaturedProject() {
           </Link>
         </Reveal>
 
-        {/* Visual — replace QuorumMock with a real screenshot when ready.
-            [SCREENSHOT: drop /public/images/quorum-cover.png and swap in
-            next/image — instructions in README] */}
+        {/* Visual — the real Quorum "Discover" screen (Figma export). */}
         <Reveal delay={0.1} className="lg:col-span-7">
-          <div className="relative">
+          <div className="relative flex justify-center">
             <div
               aria-hidden="true"
               className="absolute inset-0 -z-10 scale-90 rounded-full bg-ember/10 blur-[100px]"
             />
-            <QuorumMock />
+            <Image
+              src="/images/quorum-discover-dark.jpg"
+              alt="Quorum's Discover screen: a feed of nearby pickup games showing sport, date and time, skill level, distance, and a Join button"
+              width={1717}
+              height={3821}
+              priority
+              className="w-full max-w-[260px] rounded-[2rem] border border-line shadow-2xl"
+            />
           </div>
         </Reveal>
       </div>

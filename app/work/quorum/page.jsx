@@ -1,15 +1,14 @@
+import Image from "next/image";
 import Link from "next/link";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import Reveal from "@/components/Reveal";
-import QuorumMock from "@/components/QuorumMock";
-import ImagePlaceholder from "@/components/ImagePlaceholder";
 import { site } from "@/lib/content";
 
 export const metadata = {
   title: "Quorum — case study",
   description:
-    "Case study: designing and building Quorum, a Flutter and Firebase event-scheduling app, as a Computer Science capstone at Ohio University.",
+    "Case study: designing and building Quorum, a Flutter and Firebase app for local pickup sports and events, as a Computer Science capstone at Ohio University.",
 };
 
 /* ---------------------------------------------------------------------------
@@ -62,6 +61,19 @@ function Metric({ value, label }) {
   );
 }
 
+/* A phone screenshot (Figma export, 1717×3821). */
+function Shot({ src, alt, className = "" }) {
+  return (
+    <Image
+      src={src}
+      alt={alt}
+      width={1717}
+      height={3821}
+      className={`w-full max-w-[260px] rounded-[1.75rem] border border-line shadow-2xl ${className}`}
+    />
+  );
+}
+
 /* ---------------------------------------------------------------------------
    Page
 --------------------------------------------------------------------------- */
@@ -98,8 +110,8 @@ export default function QuorumCaseStudy() {
                 Quorum
               </h1>
               <p className="mt-5 max-w-2xl text-xl leading-snug text-fog/90">
-                Group scheduling that finds the time —{" "}
-                <span className="accent-text">not another poll.</span>
+                Find local games that need players —{" "}
+                <span className="accent-text">and actually show up.</span>
               </p>
             </Reveal>
 
@@ -122,13 +134,20 @@ export default function QuorumCaseStudy() {
           </div>
         </header>
 
-        {/* Hero visual */}
+        {/* Hero visual — the signature Discover screen, in both themes */}
         <div className="mx-auto w-full max-w-page px-6 pt-16 sm:px-10">
           <Reveal>
-            <ImagePlaceholder
-              aspect="aspect-[16/9]"
-              label="[HERO IMAGE — a wide shot of Quorum's main screens, e.g. three phone frames side by side. Drop the file in /public/images/ and swap this placeholder for a next/image — see README.]"
-            />
+            <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10">
+              <Shot
+                src="/images/quorum-discover-dark.jpg"
+                alt="Quorum's Discover feed in dark mode: nearby pickup games with sport, time, skill level, distance, and Join buttons"
+              />
+              <Shot
+                src="/images/quorum-discover-light.jpg"
+                alt="The same Discover feed in light mode, showing Quorum's light/dark design system"
+                className="hidden sm:block"
+              />
+            </div>
           </Reveal>
         </div>
 
@@ -136,156 +155,240 @@ export default function QuorumCaseStudy() {
         <StudySection id="overview" eyebrow="01 · Overview" title="What Quorum is">
           <Reveal>
             <p>
-              Quorum is a mobile app for finding a meeting time that actually works
-              for a group. Instead of sending people a form and tallying responses,
-              it shows everyone's availability as a single glanceable heatmap and
-              surfaces one recommended time — the moment the group reaches
-              "quorum." It was my senior capstone in Computer Science at Ohio
-              University, built with Flutter and Firebase.
+              Quorum is a mobile app for getting people to the same place at the
+              same time. Open it and you see a feed of pickup games and events
+              happening near you — a tennis match two miles out that still needs a
+              fourth, a beginner-friendly volleyball game tonight — with the skill
+              level, distance, and open spots right on the card. Tap{" "}
+              <span className="text-fog">Join</span>, and you land in a shared chat
+              with everyone else going. It started as &ldquo;Player Needed&rdquo;
+              for pickup sports and grew into a general events app with groups,
+              profiles, and messaging.
             </p>
           </Reveal>
           <Reveal>
             <p>
-              Quorum was a five-person capstone team. I led the UI/UX end to end
-              and took on a large share of the engineering — the Flutter front end
-              and much of the Firebase back end, from the Firestore data model to
-              the availability logic that powers the heatmap.
+              It was my senior capstone in Computer Science at Ohio University,
+              built in Flutter and Firebase by a five-person team. I led the UI/UX
+              end to end — from Figma flows to a Material 3 design system — and took
+              on a large share of the engineering, building much of the Flutter
+              front end and the Firebase back end behind it.
             </p>
           </Reveal>
         </StudySection>
 
         {/* Problem */}
-        <StudySection id="problem" eyebrow="02 · Problem" title="Scheduling dies in the group chat">
+        <StudySection
+          id="problem"
+          eyebrow="02 · Problem"
+          title="The game's on — if enough people show"
+        >
           <Reveal>
             <p>
-              Picking a time for six people usually goes one of two ways: a long
-              message thread where the answer gets buried, or a polling link that
-              half the group never opens. The existing tools treat scheduling as a
-              data-collection problem — fill out this grid — when for the user it's
-              a decision problem: just tell me when we're meeting.
+              Pickup sports have a chicken-and-egg problem: the people who'd play
+              can't find the games, and the games that need players can't find the
+              people. The coordination that does happen is scattered across group
+              chats, stories, and word of mouth, where a half-formed plan quietly
+              dies because nobody could tell if it was actually happening.
             </p>
           </Reveal>
           <Reveal>
             <p>
-              That framing became the product's one-sentence brief: collect as
-              little as possible, decide as much as possible.
+              That gave the product its one-sentence brief: put the nearby games in
+              one place, make the missing spots obvious, and keep the people who
+              join talking in the same app — so &ldquo;we need one more&rdquo;
+              reaches someone who can actually fill it.
             </p>
           </Reveal>
         </StudySection>
 
         {/* Role & process */}
-        <StudySection id="process" eyebrow="03 · Role & process" title="From sticky notes to a shipped app">
+        <StudySection
+          id="process"
+          eyebrow="03 · Role & process"
+          title="From Figma flows to a shipped design system"
+        >
           <Reveal>
             <p>
-              I started with the problem, not the pixels: informal interviews with
-              classmates and club organizers about how they schedule now, paper
-              wireframes to test the core flow cheaply, then high-fidelity screens
-              and a clickable prototype in Figma. Once the flow held up in hallway
-              usability tests, I moved into Flutter — treating the prototype as the
-              spec — and stood up the Firebase data layer behind it.
+              I owned the design from the first sketches: mapping the core flows —
+              registration, discovery, event creation, chat — as clickable
+              prototypes in Figma before any of it hit code. Testing those flows
+              cheaply meant we settled the hard navigation questions on the
+              whiteboard instead of mid-build.
             </p>
           </Reveal>
           <Reveal>
             <p>
-              The most useful habit from the process: every screen had to answer
-              "what is the user deciding here?" If a screen had no decision, it got
-              merged into one that did — which kept the build small and the app
-              focused.
+              Those prototypes became a real design system in Flutter: a Material 3
+              theme with custom light and dark color schemes, an{" "}
+              <span className="text-fog">Outfit</span> type scale, and shared
+              components so every screen felt like one app. A{" "}
+              <code className="rounded bg-panel px-1.5 py-0.5 text-sm text-fog/90">
+                ThemeController
+              </code>{" "}
+              swaps light and dark at runtime — the whole UI was built against
+              tokens, not hard-coded colors, from day one.
             </p>
           </Reveal>
           <Reveal>
-            <ImagePlaceholder label="[PROCESS IMAGE — early wireframes or the Figma board next to the final screens. A messy-to-clean progression photographs well here.]" />
+            <div className="flex justify-center pt-2">
+              <Shot
+                src="/images/quorum-register.jpg"
+                alt="Quorum's registration screen, part of the onboarding flow designed in Figma"
+              />
+            </div>
           </Reveal>
         </StudySection>
 
-        {/* Design decisions */}
+        {/* Product & design decisions */}
         <StudySection
           id="design"
-          eyebrow="04 · Design decisions"
-          title="The calls that shaped the product"
+          eyebrow="04 · Product decisions"
+          title="The calls that shaped the app"
         >
           <div className="space-y-12 pt-2">
             <Reveal>
-              <Decision title="Availability is a heatmap, not a form">
+              <Decision title="Discovery is location-first">
                 <p>
-                  Polls ask each person to do data entry. Quorum shows the group's
-                  combined availability as a color-weighted week grid, so adding
-                  your own availability feels like painting onto a shared picture
-                  rather than filling out a survey. Completion is the whole game in
-                  a scheduling tool, and lowering that effort was the highest-
-                  leverage design decision in the project.
+                  The home screen isn't a calendar — it's a feed of what's near you{" "}
+                  <em>now</em>, sorted by distance and time, with category chips
+                  (tennis, pickleball, basketball…) to filter fast. Events carry a
+                  real{" "}
+                  <code className="rounded bg-panel px-1.5 py-0.5 text-sm text-fog/90">
+                    GeoPoint
+                  </code>
+                  , so distance is computed from your actual location, and a map
+                  view plots them. Picking a place when you create an event uses
+                  Google Places autocomplete, so locations are real and consistent.
                 </p>
-                <div className="pt-2">
-                  <QuorumMock />
+              </Decision>
+            </Reveal>
+
+            <Reveal>
+              <Decision title="Open spots are the whole point">
+                <p>
+                  Every event tracks how many players it needs and who's already
+                  in, so a card can say &ldquo;needs 2 more&rdquo; at a glance —
+                  with skill level and who-can-join surfaced too, because a beginner
+                  doesn't want to crash an advanced game. Creating an event is a
+                  guided, multi-step flow that keeps a long form from feeling like
+                  one.
+                </p>
+                <div className="flex justify-center pt-2">
+                  <Shot
+                    src="/images/quorum-event-create.jpg"
+                    alt="Quorum's event-creation flow, where a host sets the sport, time, location, skill level, and number of open spots"
+                  />
                 </div>
               </Decision>
             </Reveal>
 
             <Reveal>
-              <Decision title="One recommended time, on top">
+              <Decision title="Coordination lives in the app">
                 <p>
-                  Showing raw availability still makes the organizer do math.
-                  Quorum ranks candidate slots and pins the best one — with a
-                  plain-language reason ("5 of 6 available") — at the top of the
-                  screen. Users can override it, but they shouldn't have to think
-                  unless they want to.
+                  Joining an event drops you straight into its group chat, so plans
+                  don't scatter back out to a dozen separate threads. The chat is a
+                  full real-time system: direct and group conversations, read
+                  receipts, emoji reactions, photo sharing, and the ability to share
+                  an event as a rich card right in the conversation.
                 </p>
-                <ImagePlaceholder label="[SCREENSHOT — the recommendation card / results screen.]" />
+                <div className="flex justify-center pt-2">
+                  <Shot
+                    src="/images/quorum-chat.jpg"
+                    alt="A Quorum chat conversation with message bubbles, a shared location card, and a composer with attach and emoji controls"
+                  />
+                </div>
               </Decision>
             </Reveal>
 
             <Reveal>
-              <Decision title="Feedback in the small moments">
+              <Decision title="Light and dark, by design">
                 <p>
-                  Marking availability animates the heatmap recalculating in real
-                  time, so cause and effect are visible: your input changes the
-                  group's answer. It's a small touch, but it's the moment testers
-                  consistently reacted to — the app feels alive in your hands.
+                  Both themes were designed together, not bolted on. Custom Material
+                  color schemes, a consistent type scale, and tabular figures for
+                  the numbers that matter (distances, counts) keep the app legible
+                  and calm in either mode — the two Discover screens above are the
+                  same screen, same code, different theme.
                 </p>
               </Decision>
             </Reveal>
           </div>
         </StudySection>
 
-        {/* Tech */}
-        <StudySection id="tech" eyebrow="05 · Tech" title="Flutter + Firebase, and why">
+        {/* Engineering */}
+        <StudySection
+          id="engineering"
+          eyebrow="05 · Engineering"
+          title="Flutter + Firebase, and the hard parts"
+        >
           <Reveal>
             <p>
-              Flutter gave me a single codebase and full control over the UI
-              layer. Firebase covered auth and data, and because I
-              owned much of the back end, I designed the Firestore schema and the
-              availability-aggregation logic — Firestore's realtime listeners are
-              what make the live-updating heatmap possible without building sync
-              infrastructure from scratch.
+              The back end is Firebase — Auth, Firestore, Storage, and Cloud
+              Messaging — with a feature-first Flutter architecture that splits each
+              feature into its data layer and its UI. I designed the Firestore data
+              model: collections for users, events, groups, chat rooms and their
+              messages, plus per-user notifications, all driven by realtime
+              listeners so the UI updates the instant data changes.
             </p>
           </Reveal>
           <Reveal>
             <p>
-              The hard parts were the unglamorous back-end ones: modeling
-              availability so concurrent edits from different people merge cleanly,
-              getting time zones right for groups that span them, and keeping widget
-              rebuilds cheap while the heatmap recalculates live.
+              The interesting problems were the ones you don't see:
             </p>
+          </Reveal>
+          <Reveal>
+            <ul className="space-y-3">
+              <li className="border-l border-line pl-5">
+                <span className="text-fog">Joining can't oversell a game.</span>{" "}
+                Limited-spot events use Firestore transactions to add or remove a
+                player, so two people tapping Join at once can't both claim the last
+                slot.
+              </li>
+              <li className="border-l border-line pl-5">
+                <span className="text-fog">Derived state stays in sync.</span> An
+                event's group chat is kept in lockstep with who's actually joined —
+                membership changes sync to the chat room automatically, and
+                participant names are denormalized in so the list renders without
+                extra reads.
+              </li>
+              <li className="border-l border-line pl-5">
+                <span className="text-fog">Unread, done cheaply.</span> Read state
+                comes from per-user timestamp maps; marking a thread read batches its
+                updates and caps the work to recent messages, so opening a busy chat
+                doesn't fan out into hundreds of writes.
+              </li>
+              <li className="border-l border-line pl-5">
+                <span className="text-fog">The feed stays fresh.</span> Events that
+                are past get archived to a separate collection, so Discover only ever
+                queries what's still worth showing.
+              </li>
+            </ul>
           </Reveal>
         </StudySection>
 
         {/* Outcome */}
-        <StudySection id="outcome" eyebrow="06 · Outcome" title="What happened, and what I took from it">
+        <StudySection
+          id="outcome"
+          eyebrow="06 · Outcome"
+          title="What shipped, and what I took from it"
+        >
           <Reveal>
             <div className="grid gap-4 sm:grid-cols-3">
               <Metric value="5" label="Person capstone team I shared the build with" />
               <Metric value="Android" label="Shipped from a single Flutter codebase" />
-              <Metric value="2 semesters" label="From first user interview to a working app" />
+              <Metric value="2 semesters" label="From first Figma flow to a working app" />
             </div>
           </Reveal>
           <Reveal>
             <p>
-              The biggest lesson was how much the work before code pays off. The
-              interviews, the paper tests, the "what is the user deciding here?"
-              rule — that up-front thinking is what let the build go fast, because
-              almost nothing had to be reworked mid-implementation. That's how I
-              want to keep working: understand the problem, design the solution,
-              then build the whole thing — front end and back — to match.
+              Quorum is the project where design and engineering stopped being two
+              jobs for me. Owning both meant the Figma decisions and the Firestore
+              decisions answered to the same goal, and the up-front design work — the
+              flows, the prototypes, the design system — is exactly what let the
+              build move fast, because the structure was settled before the code
+              started. That's how I want to keep working: understand the problem,
+              design the solution, then build the whole thing, front end and back, to
+              match.
             </p>
           </Reveal>
         </StudySection>
