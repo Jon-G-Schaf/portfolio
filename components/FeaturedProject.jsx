@@ -58,7 +58,7 @@ export default function FeaturedProject() {
               width={1440}
               height={3023}
               priority
-              className="w-full max-w-[260px] rounded-[2rem] border border-line shadow-2xl"
+              className="w-full max-w-[260px] rounded-[2rem] border border-line shadow-2xl transition-transform duration-500 hover:-rotate-1 hover:scale-[1.02]"
             />
           </div>
         </Reveal>

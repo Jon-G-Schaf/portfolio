@@ -79,7 +79,7 @@ This repo is connected to Vercel and **auto-deploys on every push to `main`**. T
 app/
   layout.jsx          # fonts, metadata, robots/noindex, skip link, theme-song provider
   page.jsx            # main single-page scroller
-  globals.css         # tokens, grain, grid texture, focus & reduced-motion rules
+  globals.css         # tokens, grain, sand texture, scrollbar, focus & reduced-motion rules
   work/quorum/        # the Quorum case study
 components/
   Nav.jsx  Hero.jsx  About.jsx  Skills.jsx
