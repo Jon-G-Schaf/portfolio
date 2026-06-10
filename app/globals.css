@@ -13,6 +13,8 @@ html {
   scroll-behavior: smooth;
   /* Keep anchored sections clear of the sticky nav. */
   scroll-padding-top: 5.5rem;
+  /* Dark base so mobile toolbar hide/show and overscroll never flash white. */
+  background-color: #1b1008;
 }
 
 body {
