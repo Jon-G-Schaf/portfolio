@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { site } from "@/lib/content";
+import ThemeSong from "@/components/ThemeSong";
 
 const links = [
   { href: "/#about", label: "About" },
@@ -22,15 +23,18 @@ export default function Nav() {
         aria-label="Primary"
         className="mx-auto flex h-16 w-full max-w-page items-center justify-between px-6 sm:px-10"
       >
-        <Link
-          href="/"
-          className="font-mono text-sm text-fog transition-colors hover:text-white"
-          onClick={() => setOpen(false)}
-        >
-          <span className="accent-text font-semibold">g</span>
-          {"//"}
-          {site.shortName.toLowerCase()}
-        </Link>
+        <div className="flex items-center gap-3">
+          <ThemeSong />
+          <Link
+            href="/"
+            className="font-mono text-sm text-fog transition-colors hover:text-white"
+            onClick={() => setOpen(false)}
+          >
+            <span className="accent-text font-semibold">g</span>
+            {"//"}
+            {site.shortName.toLowerCase()}
+          </Link>
+        </div>
 
         {/* Desktop links */}
         <div className="hidden items-center gap-8 md:flex">
