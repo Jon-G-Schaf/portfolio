@@ -61,14 +61,14 @@ export default function Hero() {
           className="mx-auto max-w-4xl font-display text-5xl font-semibold leading-[1.05] tracking-tight sm:text-7xl"
         >
           {hero.headline}
-          <span className="accent-text mt-3 block text-3xl font-medium sm:text-5xl">
+          <span className="accent-text mt-3 block pb-1 text-3xl font-medium leading-[1.2] sm:text-5xl">
             {hero.positioning}
           </span>
         </motion.h1>
 
         <motion.p
           variants={item}
-          className="mx-auto mt-8 max-w-2xl text-left text-lg leading-relaxed text-muted"
+          className="mx-auto mt-8 max-w-2xl text-lg leading-relaxed text-muted"
         >
           {hero.intro}
         </motion.p>
