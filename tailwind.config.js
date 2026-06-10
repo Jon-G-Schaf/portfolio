@@ -15,7 +15,7 @@ module.exports = {
 
       // Text
       fog: "#f7eddc",
-      muted: "#b89672",
+      muted: "#d0aa81",
 
       // Accents
       ember: "#ff7a1a",  // deep ember orange
