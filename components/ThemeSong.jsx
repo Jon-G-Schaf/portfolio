@@ -23,7 +23,7 @@ export default function ThemeSong() {
             ? "Pause theme song, Southern Lights by Sliders Club"
             : "Play theme song, Southern Lights by Sliders Club"
         }
-        title={playing ? "Pause — Southern Lights" : "Play — Southern Lights"}
+        title={playing ? "Pause Southern Lights" : "Play Southern Lights"}
         className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-line text-fog transition-colors hover:border-amber/60"
       >
         {playing ? (

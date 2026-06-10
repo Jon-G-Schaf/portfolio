@@ -27,7 +27,7 @@ export const metadata = {
   ),
   title: {
     default: site.title,
-    template: `%s — ${site.shortName}`,
+    template: `%s - ${site.shortName}`,
   },
   description: site.description,
   // Live but private: keep it out of search results until launch. Remove to go public.
