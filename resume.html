@@ -52,7 +52,8 @@
     font-size: 8.8pt;
     color: var(--muted);
   }
-  .contact span + span::before { content: "  ·  "; color: #b9b0a4; }
+  .contact span { white-space: nowrap; }
+  .contact span + span::before { content: "  ·  "; color: #b9b0a4; white-space: normal; }
 
   .summary {
     margin-top: 9px;
@@ -127,8 +128,10 @@
       <span>Columbus, OH</span>
       <span>(614) 961-9989</span>
       <span><a href="mailto:jon.g.schaf@gmail.com">jon.g.schaf@gmail.com</a></span>
-      <span><a href="https://www.linkedin.com/in/jonathan-schafer-531859265">linkedin.com/in/jonathan-schafer-531859265</a></span>
+    </p>
+    <p class="contact">
       <span><a href="https://github.com/Jon-G-Schaf">github.com/Jon-G-Schaf</a></span>
+      <span><a href="https://www.linkedin.com/in/jonathan-schafer-531859265">linkedin.com/in/jonathan-schafer-531859265</a></span>
     </p>
     <p class="summary">
       Full-stack developer with a designer's eye. Computer Science graduate who designs
