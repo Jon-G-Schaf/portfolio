@@ -8,7 +8,7 @@ A single-page developer portfolio with a dedicated case-study page for **Quorum*
 
 Dark amber base, a single ember→amber accent treatment, and a Schibsted Grotesk / Inter / JetBrains Mono type system. Fully responsive, keyboard-accessible, and `prefers-reduced-motion` aware. There's also a small "Vibe Setter" theme-song player in the nav.
 
-Live (currently `noindex`, link-only): https://portfolio-two-delta-3nbcvpeok4.vercel.app
+Live (currently `noindex`, link-only): https://jongschaf.com
 
 ---
 
