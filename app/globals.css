@@ -83,15 +83,17 @@ body {
    The noise is thresholded in the SVG (steep alpha ramp), which is what
    turns soft grain into discrete sparkles. */
 .sand-field {
+  /* Tighter mask: glints pool in the lit upper zone and thin out toward
+     the edges, so the sparkle reads as light on sand, not uniform static. */
   -webkit-mask-image: radial-gradient(
-    ellipse 100% 90% at 50% 12%,
-    black 30%,
-    transparent 78%
+    ellipse 90% 80% at 50% 10%,
+    black 22%,
+    transparent 68%
   );
   mask-image: radial-gradient(
-    ellipse 100% 90% at 50% 12%,
-    black 30%,
-    transparent 78%
+    ellipse 90% 80% at 50% 10%,
+    black 22%,
+    transparent 68%
   );
 }
 
@@ -111,19 +113,23 @@ body {
   to { transform: translate3d(320px, -320px, 0); }
 }
 
-/* Fine bright glints: tiny, gold-white, sparse. */
+/* Fine bright glints: tiny, gold-white, sparse. The SVG tile renders at 2x
+   and is scaled down via background-size, so each glint anti-aliases
+   smoothly while drifting instead of flickering across pixel boundaries. */
 .sand-a {
   inset: -240px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='ga'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='1' stitchTiles='stitch' seed='7'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 0.9 0 0 0 0 0.65 0 0 0 12 -7.6'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23ga)'/%3E%3C/svg%3E");
-  opacity: 0.6;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='480' height='480'%3E%3Cfilter id='ga'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.45' numOctaves='1' stitchTiles='stitch' seed='7'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 0.9 0 0 0 0 0.65 0 0 0 12 -8.1'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23ga)'/%3E%3C/svg%3E");
+  background-size: 240px 240px;
+  opacity: 0.5;
   animation: sand-drift-a 60s linear infinite;
 }
 
 /* Slightly larger, warmer glints on the opposite drift. */
 .sand-b {
   inset: -320px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='320'%3E%3Cfilter id='gb'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.5' numOctaves='1' stitchTiles='stitch' seed='11'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 0.8 0 0 0 0 0.45 0 0 0 12 -7.8'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23gb)'/%3E%3C/svg%3E");
-  opacity: 0.5;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='640' height='640'%3E%3Cfilter id='gb'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.25' numOctaves='1' stitchTiles='stitch' seed='11'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 0.8 0 0 0 0 0.45 0 0 0 12 -8.3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23gb)'/%3E%3C/svg%3E");
+  background-size: 320px 320px;
+  opacity: 0.45;
   animation: sand-drift-b 95s linear infinite;
 }
 
