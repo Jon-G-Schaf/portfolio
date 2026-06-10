@@ -316,7 +316,7 @@ export default function QuorumCaseStudy() {
                   <Shot
                     src="/images/quorum-chat.jpg"
                     alt="A Quorum chat conversation with message bubbles, a shared location card, and a composer with attach and emoji controls"
-                    h={3120}
+                    h={3025}
                   />
                 </div>
               </Decision>
