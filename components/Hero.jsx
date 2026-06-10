@@ -35,7 +35,7 @@ export default function Hero() {
     const rect = e.currentTarget.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
-    el.style.background = `radial-gradient(540px circle at ${x}px ${y}px, rgba(255, 122, 26, 0.09), transparent 70%)`;
+    el.style.background = `radial-gradient(540px circle at ${x}px ${y}px, rgba(255, 178, 80, 0.12), transparent 70%)`;
   }
 
   function handleMouseLeave() {
@@ -54,10 +54,15 @@ export default function Hero() {
       {/* Texture: drifting sand that dissolves toward the content. */}
       <SandField />
 
-      {/* Depth: one soft glow, anchored off-center so the layout stays editorial. */}
+      {/* Light: a sun-like glow pouring in from the top, plus two soft
+          off-center washes for depth. */}
       <div
         aria-hidden="true"
-        className="absolute -top-40 right-[-10%] h-[34rem] w-[34rem] rounded-full bg-ember/15 blur-[140px]"
+        className="absolute -top-72 left-1/2 h-[42rem] w-[72rem] -translate-x-1/2 rounded-full bg-amber/15 blur-[160px]"
+      />
+      <div
+        aria-hidden="true"
+        className="absolute -top-40 right-[-10%] h-[34rem] w-[34rem] rounded-full bg-ember/20 blur-[140px]"
       />
       <div
         aria-hidden="true"
