@@ -1,4 +1,4 @@
-# Jonathan Schafer — Portfolio
+# Jonathan Schafer - Portfolio
 
 A single-page developer portfolio with a dedicated case-study page for **Quorum**, built with:
 
@@ -8,7 +8,7 @@ A single-page developer portfolio with a dedicated case-study page for **Quorum*
 
 Dark amber base, a single ember→amber accent treatment, and a Schibsted Grotesk / Inter / JetBrains Mono type system. Fully responsive, keyboard-accessible, and `prefers-reduced-motion` aware. There's also a small "Vibe Setter" theme-song player in the nav.
 
-Live (currently `noindex` — link-only): https://portfolio-two-delta-3nbcvpeok4.vercel.app
+Live (currently `noindex`, link-only): https://portfolio-two-delta-3nbcvpeok4.vercel.app
 
 ---
 
@@ -27,7 +27,7 @@ Open [http://localhost:3000](http://localhost:3000). The Quorum case study lives
 
 ## Where to edit things
 
-**Almost all copy, links, and project entries live in one file: `lib/content.js`.** Edit there first — you rarely need to touch components for content changes.
+**Almost all copy, links, and project entries live in one file: `lib/content.js`.** Edit there first; you rarely need to touch components for content changes.
 
 | What | Where |
 | --- | --- |
@@ -46,7 +46,7 @@ Open [http://localhost:3000](http://localhost:3000). The Quorum case study lives
 
 ## Screenshots
 
-Real Quorum screenshots live in `public/images/` as `quorum-*.jpg` (1440-px-wide phone exports). The case study renders them through a small local `Shot` helper in `app/work/quorum/page.jsx` — all are 1440 wide, so each call just passes the image's real **height** (`h={...}`) to keep the aspect ratio correct.
+Real Quorum screenshots live in `public/images/` as `quorum-*.jpg` (1440-px-wide phone exports). The case study renders them through a small local `Shot` helper in `app/work/quorum/page.jsx`. All are 1440 wide, so each call just passes the image's real **height** (`h={...}`) to keep the aspect ratio correct.
 
 To swap one:
 
@@ -66,7 +66,7 @@ To change the track, replace `public/audio/southern-lights.mp3` (or update the `
 
 ## Deploy (Vercel)
 
-This repo is connected to Vercel and **auto-deploys on every push to `main`**. To set it up from scratch: [vercel.com/new](https://vercel.com/new) → import the repo → **Deploy** (no config — Next.js is auto-detected).
+This repo is connected to Vercel and **auto-deploys on every push to `main`**. To set it up from scratch: [vercel.com/new](https://vercel.com/new) → import the repo → **Deploy** (no config; Next.js is auto-detected).
 
 - `site.url` in `lib/content.js` is the deployed URL; it powers the Open Graph / social-preview metadata.
 - The site is currently kept out of search results by `robots: { index: false, follow: false }` in `app/layout.jsx`. **Remove that line to make it publicly indexable at launch.**

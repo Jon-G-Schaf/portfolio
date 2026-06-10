@@ -43,7 +43,7 @@ export default function Projects() {
         {otherProjects.length % 2 === 1 && (
           <div aria-hidden="true" className="hidden bg-ink p-8 md:block">
             <p className="font-mono text-xs text-muted/60">
-              [More on the way — this slot is yours.]
+              [More on the way. This slot is yours.]
             </p>
           </div>
         )}
