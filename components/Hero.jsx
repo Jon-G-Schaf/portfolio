@@ -4,6 +4,7 @@ import { useRef } from "react";
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { hero, site } from "@/lib/content";
+import SandField from "@/components/SandField";
 
 export default function Hero() {
   const reduceMotion = useReducedMotion();
@@ -50,8 +51,8 @@ export default function Hero() {
       onMouseLeave={handleMouseLeave}
       className="relative overflow-hidden border-b border-line"
     >
-      {/* Texture: faint blueprint grid that dissolves toward the content. */}
-      <div aria-hidden="true" className="grid-lines absolute inset-0" />
+      {/* Texture: drifting sand that dissolves toward the content. */}
+      <SandField />
 
       {/* Depth: one soft glow, anchored off-center so the layout stays editorial. */}
       <div
@@ -106,7 +107,7 @@ export default function Hero() {
         <motion.div variants={item} className="mt-12 flex flex-wrap items-center justify-center gap-4">
           <Link
             href="/#work"
-            className="accent-bar rounded-full px-6 py-3 text-sm font-medium text-ink transition-transform hover:scale-[1.03] active:scale-[0.98]"
+            className="accent-bar rounded-full px-6 py-3 text-sm font-medium text-ink shadow-[0_0_28px_-6px_rgba(255,122,26,0.45)] transition hover:scale-[1.03] hover:shadow-[0_0_38px_-6px_rgba(255,122,26,0.65)] active:scale-[0.98]"
           >
             View work
           </Link>

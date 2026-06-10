@@ -3,6 +3,7 @@ import Link from "next/link";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import Reveal from "@/components/Reveal";
+import SandField from "@/components/SandField";
 import { site } from "@/lib/content";
 
 export const metadata = {
@@ -86,7 +87,7 @@ export default function QuorumCaseStudy() {
       <main id="main">
         {/* Header */}
         <header className="relative overflow-hidden border-b border-line">
-          <div aria-hidden="true" className="grid-lines absolute inset-0" />
+          <SandField />
           <div
             aria-hidden="true"
             className="absolute -top-32 right-[-10%] h-[28rem] w-[28rem] rounded-full bg-ember/15 blur-[140px]"
@@ -143,11 +144,13 @@ export default function QuorumCaseStudy() {
                 src="/images/quorum-discover-dark.jpg"
                 alt="Quorum's Discover feed in dark mode: nearby events with category, time, distance, and Join buttons"
                 h={3023}
+                className="transition-transform duration-500 sm:-rotate-2 sm:hover:rotate-0"
               />
               <Shot
                 src="/images/quorum-discover-light.jpg"
                 alt="The same Discover feed in light mode, showing Quorum's light/dark design system"
                 h={2994}
+                className="transition-transform duration-500 sm:rotate-2 sm:hover:rotate-0"
               />
             </div>
           </Reveal>
@@ -447,7 +450,7 @@ export default function QuorumCaseStudy() {
               <div className="mt-6 flex flex-wrap items-center gap-6">
                 <a
                   href={`mailto:${site.email}`}
-                  className="accent-bar rounded-full px-6 py-3 text-sm font-medium text-ink transition-transform hover:scale-[1.03] active:scale-[0.98]"
+                  className="accent-bar rounded-full px-6 py-3 text-sm font-medium text-ink shadow-[0_0_28px_-6px_rgba(255,122,26,0.45)] transition hover:scale-[1.03] hover:shadow-[0_0_38px_-6px_rgba(255,122,26,0.65)] active:scale-[0.98]"
                 >
                   Email me
                 </a>
