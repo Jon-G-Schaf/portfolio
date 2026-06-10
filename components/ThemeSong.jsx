@@ -45,7 +45,7 @@ export default function ThemeSong() {
           </svg>
         )}
       </button>
-      <span className="hidden font-mono text-[10px] uppercase tracking-label text-muted sm:inline">
+      <span className="font-mono text-[10px] uppercase tracking-label text-muted">
         Vibe Setter
       </span>
     </div>
