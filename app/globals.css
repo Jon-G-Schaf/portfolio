@@ -110,6 +110,16 @@ linear-gradient(
   background-size: 100% 1px;
 }
 
+/* Theme-song button: tiny equalizer bars while the track is playing. */
+@keyframes eq {
+  0%, 100% { transform: scaleY(0.35); }
+  50% { transform: scaleY(1); }
+}
+.eq-bar {
+  transform-origin: bottom;
+  animation: eq 0.85s ease-in-out infinite;
+}
+
 /* ---------------------------------------------------------------------------
    Accessibility: honor reduced-motion preferences across the board.
    Framer Motion is also handled in JS via useReducedMotion.
