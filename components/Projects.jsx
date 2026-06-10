@@ -10,6 +10,8 @@ export default function Projects() {
           <Reveal key={`${project.name}-${i}`} delay={i * 0.06} className="bg-ink">
             <a
               href={project.href}
+              target={project.href?.startsWith("http") ? "_blank" : undefined}
+              rel={project.href?.startsWith("http") ? "noopener noreferrer" : undefined}
               className="group flex h-full flex-col p-8 transition-colors hover:bg-panel"
             >
               <p className="flex items-center justify-between font-mono text-xs text-muted">

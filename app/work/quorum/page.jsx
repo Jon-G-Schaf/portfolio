@@ -8,7 +8,7 @@ import { site } from "@/lib/content";
 export const metadata = {
   title: "Quorum — case study",
   description:
-    "Case study: designing and building Quorum, a Flutter and Firebase app for local pickup sports and events, as a Computer Science capstone at Ohio University.",
+    "Case study: designing and building Quorum, a Flutter and Firebase app for finding and organizing local events, as a Computer Science capstone at Ohio University.",
 };
 
 /* ---------------------------------------------------------------------------
@@ -110,7 +110,7 @@ export default function QuorumCaseStudy() {
                 Quorum
               </h1>
               <p className="mt-5 max-w-2xl text-xl leading-snug text-fog/90">
-                Find local games that need players —{" "}
+                Find events near you, fill the open spots —{" "}
                 <span className="accent-text">and actually show up.</span>
               </p>
             </Reveal>
@@ -155,15 +155,15 @@ export default function QuorumCaseStudy() {
         <StudySection id="overview" eyebrow="01 · Overview" title="What Quorum is">
           <Reveal>
             <p>
-              Quorum is a mobile app for getting people to the same place at the
-              same time. Open it and you see a feed of pickup games and events
-              happening near you — a tennis match two miles out that still needs a
-              fourth, a beginner-friendly volleyball game tonight — with the skill
-              level, distance, and open spots right on the card. Tap{" "}
+              Quorum is a mobile app for finding events near you and getting people
+              to actually show up to them — pickup games, club meetups, study
+              sessions, anything with a time, a place, and room for more. Open it and
+              you see a feed of what's happening nearby, with the still-open spots and
+              the details right on each card. Tap{" "}
               <span className="text-fog">Join</span>, and you land in a shared chat
-              with everyone else going. It started as &ldquo;Player Needed&rdquo;
-              for pickup sports and grew into a general events app with groups,
-              profiles, and messaging.
+              with everyone else going. It started as &ldquo;Player Needed&rdquo; for
+              pickup sports and grew into a general events app with groups, profiles,
+              and messaging.
             </p>
           </Reveal>
           <Reveal>
@@ -181,23 +181,24 @@ export default function QuorumCaseStudy() {
         <StudySection
           id="problem"
           eyebrow="02 · Problem"
-          title="The game's on — if enough people show"
+          title="The plan's on — if enough people show"
         >
           <Reveal>
             <p>
-              Pickup sports have a chicken-and-egg problem: the people who'd play
-              can't find the games, and the games that need players can't find the
-              people. The coordination that does happen is scattered across group
-              chats, stories, and word of mouth, where a half-formed plan quietly
-              dies because nobody could tell if it was actually happening.
+              Events run into a chicken-and-egg problem, whether it's a pickup game
+              or a club's first meetup: the people who'd come can't find them, and
+              the ones that need people can't find the people. The coordination that
+              does happen scatters across group chats, stories, and word of mouth,
+              where a half-formed plan quietly dies because nobody could tell if it
+              was actually happening.
             </p>
           </Reveal>
           <Reveal>
             <p>
-              That gave the product its one-sentence brief: put the nearby games in
-              one place, make the missing spots obvious, and keep the people who
-              join talking in the same app — so &ldquo;we need one more&rdquo;
-              reaches someone who can actually fill it.
+              That gave the product its one-sentence brief: put the nearby events in
+              one place, make the open spots obvious, and keep the people who join
+              talking in the same app — so &ldquo;we need a few more&rdquo; reaches
+              someone who can actually fill it.
             </p>
           </Reveal>
         </StudySection>
@@ -251,8 +252,8 @@ export default function QuorumCaseStudy() {
               <Decision title="Discovery is location-first">
                 <p>
                   The home screen isn't a calendar — it's a feed of what's near you{" "}
-                  <em>now</em>, sorted by distance and time, with category chips
-                  (tennis, pickleball, basketball…) to filter fast. Events carry a
+                  <em>now</em>, sorted by distance and time, with category chips to
+                  filter by what you're into. Events carry a
                   real{" "}
                   <code className="rounded bg-panel px-1.5 py-0.5 text-sm text-fog/90">
                     GeoPoint
@@ -267,12 +268,11 @@ export default function QuorumCaseStudy() {
             <Reveal>
               <Decision title="Open spots are the whole point">
                 <p>
-                  Every event tracks how many players it needs and who's already
-                  in, so a card can say &ldquo;needs 2 more&rdquo; at a glance —
-                  with skill level and who-can-join surfaced too, because a beginner
-                  doesn't want to crash an advanced game. Creating an event is a
-                  guided, multi-step flow that keeps a long form from feeling like
-                  one.
+                  Every event tracks how many people it needs and who's already in,
+                  so a card can say &ldquo;needs 2 more&rdquo; at a glance. For a
+                  pickup game that includes skill level and who-can-join; for other
+                  events those fields just fall away. Creating an event is a guided,
+                  multi-step flow that keeps a long form from feeling like one.
                 </p>
                 <div className="flex justify-center pt-2">
                   <Shot
@@ -339,9 +339,9 @@ export default function QuorumCaseStudy() {
           <Reveal>
             <ul className="space-y-3">
               <li className="border-l border-line pl-5">
-                <span className="text-fog">Joining can't oversell a game.</span>{" "}
+                <span className="text-fog">Joining can't oversell an event.</span>{" "}
                 Limited-spot events use Firestore transactions to add or remove a
-                player, so two people tapping Join at once can't both claim the last
+                person, so two people tapping Join at once can't both claim the last
                 slot.
               </li>
               <li className="border-l border-line pl-5">
