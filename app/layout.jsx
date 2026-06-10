@@ -30,6 +30,8 @@ export const metadata = {
     template: `%s — ${site.shortName}`,
   },
   description: site.description,
+  // Live but private: keep it out of search results until launch. Remove to go public.
+  robots: { index: false, follow: false },
   openGraph: {
     title: site.title,
     description: site.description,
