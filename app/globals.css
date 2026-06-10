@@ -101,6 +101,7 @@ body {
   position: absolute;
   background-repeat: repeat;
   will-change: transform;
+  backface-visibility: hidden;
 }
 
 @keyframes sand-drift-a {
