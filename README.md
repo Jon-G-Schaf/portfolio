@@ -1,12 +1,14 @@
 # Jonathan Schafer — Portfolio
 
-A single-page portfolio with a dedicated case-study page for **Quorum**, built with:
+A single-page developer portfolio with a dedicated case-study page for **Quorum**, built with:
 
 - **Next.js** (App Router, JavaScript)
 - **Tailwind CSS** for styling
 - **Framer Motion** for restrained scroll reveals and micro-interactions
 
-Dark slate base, one violet→cyan accent treatment, Schibsted Grotesk / Inter / JetBrains Mono type system. Fully responsive, keyboard-accessible, and `prefers-reduced-motion` aware.
+Dark amber base, a single ember→amber accent treatment, and a Schibsted Grotesk / Inter / JetBrains Mono type system. Fully responsive, keyboard-accessible, and `prefers-reduced-motion` aware. There's also a small "Vibe Setter" theme-song player in the nav.
+
+Live (currently `noindex` — link-only): https://portfolio-two-delta-3nbcvpeok4.vercel.app
 
 ---
 
@@ -17,17 +19,9 @@ npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000). The case study lives at `/work/quorum`.
+Open [http://localhost:3000](http://localhost:3000). The Quorum case study lives at `/work/quorum`.
 
 > Requires Node.js 18.18+ (20+ recommended).
-
-## Deploy to Vercel
-
-1. Push this folder to a GitHub repo.
-2. Go to [vercel.com/new](https://vercel.com/new), import the repo, and click **Deploy**. No configuration needed — Vercel detects Next.js automatically.
-3. After deploying, copy your live URL into `site.url` in `lib/content.js` (it powers the Open Graph / social-preview metadata) and push again.
-
-Alternatively, from the project folder: `npx vercel`.
 
 ---
 
@@ -37,7 +31,7 @@ Alternatively, from the project folder: `npx vercel`.
 
 | What | Where |
 | --- | --- |
-| Name, email, GitHub/LinkedIn/resume links, meta tags | `lib/content.js` → `site` |
+| Name, email, GitHub/LinkedIn/resume links, meta, `site.url` | `lib/content.js` → `site` |
 | Hero copy & CTAs | `lib/content.js` → `hero` |
 | About paragraphs | `lib/content.js` → `about` |
 | Skill groups | `lib/content.js` → `skillGroups` |
@@ -45,45 +39,45 @@ Alternatively, from the project folder: `npx vercel`.
 | Other projects grid | `lib/content.js` → `otherProjects` (add/remove entries freely) |
 | Contact copy | `lib/content.js` → `contact` |
 | Footer colophon | `lib/content.js` → `colophon` |
-| Quorum case-study copy | `app/work/quorum/page.jsx` (written copy lives in the page) |
+| Quorum case-study copy | `app/work/quorum/page.jsx` (the written copy lives in the page) |
 | Colors & fonts | `tailwind.config.js` + `app/layout.jsx` |
 
-## Placeholder checklist — replace everything in [BRACKETS]
+---
 
-- [ ] `lib/content.js` → your **last name** (appears in `site`, `hero`)
-- [ ] `lib/content.js` → **email**, **GitHub**, **LinkedIn** URLs
-- [ ] **Resume**: drop `resume.pdf` into `/public/` and set `site.links.resume` to `"/resume.pdf"`
-- [ ] `lib/content.js` → `site.url` after your first deploy
-- [ ] `lib/content.js` → the three `otherProjects` entries (or delete the ones you don't need)
-- [ ] `app/work/quorum/page.jsx` → timeline, team size/scope, interview count, screen counts, the "hardest problem" paragraph, and the three outcome metrics
-- [ ] Screenshots (see below)
+## Screenshots
 
-## Adding real screenshots
+Real Quorum screenshots live in `public/images/` as `quorum-*.jpg` (1440-px-wide phone exports). The case study renders them through a small local `Shot` helper in `app/work/quorum/page.jsx` — all are 1440 wide, so each call just passes the image's real **height** (`h={...}`) to keep the aspect ratio correct.
 
-Placeholders are clearly marked dashed boxes (`<ImagePlaceholder />`) plus a coded mock of the Quorum heatmap (`<QuorumMock />`) that stands in until you have assets.
+To swap one:
 
-1. Drop images into `public/images/` (e.g. `public/images/quorum-cover.png`).
-2. Replace a placeholder with `next/image`:
+1. Drop the new file in `public/images/` (overwrite to keep the same name, or add a new one).
+2. If it isn't 1440×(its height), update the `h={...}` on that `<Shot />` (and the `width`/`height` on the featured image in `components/FeaturedProject.jsx`).
+3. **Dev-server gotcha:** Next caches optimized images by filename. If you overwrite a file but still see the old one, clear `.next/cache/images` and hard-refresh the browser.
 
-```jsx
-import Image from "next/image";
+---
 
-<Image
-  src="/images/quorum-cover.png"
-  alt="Quorum's availability heatmap screen"  // write real alt text
-  width={1600}
-  height={1000}
-  className="rounded-2xl border border-line"
-/>
-```
+## Theme song
 
-3. Swap instances in `components/FeaturedProject.jsx` and `app/work/quorum/page.jsx`. You can keep `<QuorumMock />` in the case study's first design decision even after adding screenshots — it reads as an illustration.
+The nav play button is `components/ThemeSong.jsx`; the actual `<audio>` element and play/pause state live in `components/ThemeSongProvider.jsx`, mounted once in `app/layout.jsx` so playback **survives page navigation**.
+
+To change the track, replace `public/audio/southern-lights.mp3` (or update the `src` and the `aria-label`/caption in those two components).
+
+---
+
+## Deploy (Vercel)
+
+This repo is connected to Vercel and **auto-deploys on every push to `main`**. To set it up from scratch: [vercel.com/new](https://vercel.com/new) → import the repo → **Deploy** (no config — Next.js is auto-detected).
+
+- `site.url` in `lib/content.js` is the deployed URL; it powers the Open Graph / social-preview metadata.
+- The site is currently kept out of search results by `robots: { index: false, follow: false }` in `app/layout.jsx`. **Remove that line to make it publicly indexable at launch.**
+
+---
 
 ## Project structure
 
 ```
 app/
-  layout.jsx          # fonts, metadata, skip link
+  layout.jsx          # fonts, metadata, robots/noindex, skip link, theme-song provider
   page.jsx            # main single-page scroller
   globals.css         # tokens, grain, grid texture, focus & reduced-motion rules
   work/quorum/        # the Quorum case study
@@ -92,15 +86,23 @@ components/
   FeaturedProject.jsx  Projects.jsx  Contact.jsx  Footer.jsx
   Section.jsx         # shared section shell + mono eyebrow
   Reveal.jsx          # scroll-reveal wrapper (reduced-motion aware)
-  QuorumMock.jsx      # coded stand-in visual for Quorum
-  ImagePlaceholder.jsx
+  ThemeSong.jsx       # nav play/pause button ("Vibe Setter")
+  ThemeSongProvider.jsx  # persistent <audio> + context (in the root layout)
 lib/
   content.js          # ← edit this file for nearly everything
+public/
+  images/             # quorum-*.jpg screenshots
+  audio/              # southern-lights.mp3
+  JonathanSchafer_Resume.pdf
 ```
+
+---
 
 ## Accessibility notes (already handled)
 
 - Semantic landmarks (`header`, `main`, `section` with `aria-labelledby`, `footer`) and a skip-to-content link
 - Visible keyboard focus states on every interactive element
 - All animation respects `prefers-reduced-motion` (CSS **and** Framer Motion's `useReducedMotion`)
-- Color contrast tuned for the dark theme; remember to write real `alt` text when you add screenshots
+- The theme song is user-initiated only (never autoplays) and the toggle is labeled for screen readers
+- Color contrast tuned for the dark theme; screenshots carry descriptive `alt` text
+```
