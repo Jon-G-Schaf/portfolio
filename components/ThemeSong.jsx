@@ -1,38 +1,19 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useThemeSong } from "@/components/ThemeSongProvider";
 
 /**
- * Theme-song toggle that lives in the nav, beside the wordmark.
+ * The play/pause control in the nav. State and the actual <audio> live in
+ * ThemeSongProvider (root layout) so playback survives page navigation.
  * Browsers block autoplay with sound, so it's strictly user-initiated.
- * Drop the track at /public/audio/southern-lights.mp3.
  */
 export default function ThemeSong() {
-  const audioRef = useRef(null);
-  const [playing, setPlaying] = useState(false);
-
-  function toggle() {
-    const audio = audioRef.current;
-    if (!audio) return;
-    if (playing) {
-      audio.pause();
-    } else {
-      // play() rejects if the file is missing or autoplay is blocked — ignore.
-      audio.play().catch(() => {});
-    }
-  }
+  const ctx = useThemeSong();
+  const playing = ctx?.playing ?? false;
+  const toggle = ctx?.toggle ?? (() => {});
 
   return (
-    <>
-      <audio
-        ref={audioRef}
-        src="/audio/southern-lights.mp3"
-        loop
-        preload="none"
-        onPlay={() => setPlaying(true)}
-        onPause={() => setPlaying(false)}
-        onEnded={() => setPlaying(false)}
-      />
+    <div className="flex items-center gap-2">
       <button
         type="button"
         onClick={toggle}
@@ -43,7 +24,7 @@ export default function ThemeSong() {
             : "Play theme song, Southern Lights by Sliders Club"
         }
         title={playing ? "Pause — Southern Lights" : "Play — Southern Lights"}
-        className="flex h-8 w-8 items-center justify-center rounded-full border border-line text-fog transition-colors hover:border-amber/60"
+        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-line text-fog transition-colors hover:border-amber/60"
       >
         {playing ? (
           <span className="flex items-end gap-[2px]" aria-hidden="true">
@@ -64,6 +45,9 @@ export default function ThemeSong() {
           </svg>
         )}
       </button>
-    </>
+      <span className="hidden font-mono text-[10px] uppercase tracking-label text-muted sm:inline">
+        Vibe Setter
+      </span>
+    </div>
   );
 }

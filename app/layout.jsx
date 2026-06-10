@@ -1,6 +1,7 @@
 import "./globals.css";
 import { Inter, Schibsted_Grotesk, JetBrains_Mono } from "next/font/google";
 import { site } from "@/lib/content";
+import ThemeSongProvider from "@/components/ThemeSongProvider";
 
 const body = Inter({
   subsets: ["latin"],
@@ -55,7 +56,7 @@ export default function RootLayout({ children }) {
         >
           Skip to content
         </a>
-        {children}
+        <ThemeSongProvider>{children}</ThemeSongProvider>
       </body>
     </html>
   );
