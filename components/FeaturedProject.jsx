@@ -54,9 +54,9 @@ export default function FeaturedProject() {
             />
             <Image
               src="/images/quorum-discover-dark.jpg"
-              alt="Quorum's Discover screen: a feed of nearby pickup games showing sport, date and time, skill level, distance, and a Join button"
-              width={1717}
-              height={3821}
+              alt="Quorum's Discover screen: a feed of nearby events showing category, date and time, distance, and a Join button"
+              width={1440}
+              height={3023}
               priority
               className="w-full max-w-[260px] rounded-[2rem] border border-line shadow-2xl"
             />

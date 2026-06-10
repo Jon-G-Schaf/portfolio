@@ -61,14 +61,15 @@ function Metric({ value, label }) {
   );
 }
 
-/* A phone screenshot (Figma export, 1717×3821). */
-function Shot({ src, alt, className = "" }) {
+/* A phone screenshot. All exports are 1440px wide; pass each image's real
+   height so next/image renders the correct aspect ratio (no distortion). */
+function Shot({ src, alt, h = 3020, className = "" }) {
   return (
     <Image
       src={src}
       alt={alt}
-      width={1717}
-      height={3821}
+      width={1440}
+      height={h}
       className={`w-full max-w-[260px] rounded-[1.75rem] border border-line shadow-2xl ${className}`}
     />
   );
@@ -140,11 +141,13 @@ export default function QuorumCaseStudy() {
             <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10">
               <Shot
                 src="/images/quorum-discover-dark.jpg"
-                alt="Quorum's Discover feed in dark mode: nearby pickup games with sport, time, skill level, distance, and Join buttons"
+                alt="Quorum's Discover feed in dark mode: nearby events with category, time, distance, and Join buttons"
+                h={3023}
               />
               <Shot
                 src="/images/quorum-discover-light.jpg"
                 alt="The same Discover feed in light mode, showing Quorum's light/dark design system"
+                h={2994}
                 className="hidden sm:block"
               />
             </div>
@@ -168,11 +171,11 @@ export default function QuorumCaseStudy() {
           </Reveal>
           <Reveal>
             <p>
-              It was my senior capstone in Computer Science at Ohio University,
-              built in Flutter and Firebase by a five-person team. I led the UI/UX
-              end to end — from Figma flows to a Material 3 design system — and took
-              on a large share of the engineering, building much of the Flutter
-              front end and the Firebase back end behind it.
+              It was my senior capstone in Computer Science at Ohio University, built
+              in Flutter and Firebase by a five-person team. I led the UI/UX end to
+              end — from Figma flows to a Material 3 design system — and took on a
+              large share of the engineering, building much of the Flutter front end
+              and the Firebase back end behind it.
             </p>
           </Reveal>
         </StudySection>
@@ -236,6 +239,7 @@ export default function QuorumCaseStudy() {
               <Shot
                 src="/images/quorum-register.jpg"
                 alt="Quorum's registration screen, part of the onboarding flow designed in Figma"
+                h={3027}
               />
             </div>
           </Reveal>
@@ -253,15 +257,21 @@ export default function QuorumCaseStudy() {
                 <p>
                   The home screen isn't a calendar — it's a feed of what's near you{" "}
                   <em>now</em>, sorted by distance and time, with category chips to
-                  filter by what you're into. Events carry a
-                  real{" "}
+                  filter by what you're into. Events carry a real{" "}
                   <code className="rounded bg-panel px-1.5 py-0.5 text-sm text-fog/90">
                     GeoPoint
                   </code>
-                  , so distance is computed from your actual location, and a map
-                  view plots them. Picking a place when you create an event uses
-                  Google Places autocomplete, so locations are real and consistent.
+                  , so distance is computed from your actual location, and a map view
+                  plots them. Picking a place when you create an event uses Google
+                  Places autocomplete, so locations are real and consistent.
                 </p>
+                <div className="flex justify-center pt-2">
+                  <Shot
+                    src="/images/quorum-discover-map.jpg"
+                    alt="Quorum's Discover map view, plotting nearby events by location"
+                    h={2999}
+                  />
+                </div>
               </Decision>
             </Reveal>
 
@@ -269,15 +279,18 @@ export default function QuorumCaseStudy() {
               <Decision title="Open spots are the whole point">
                 <p>
                   Every event tracks how many people it needs and who's already in,
-                  so a card can say &ldquo;needs 2 more&rdquo; at a glance. For a
-                  pickup game that includes skill level and who-can-join; for other
-                  events those fields just fall away. Creating an event is a guided,
-                  multi-step flow that keeps a long form from feeling like one.
+                  so a card can say &ldquo;needs 2 more&rdquo; at a glance. Open one
+                  and you get the full picture — who's hosting, who's coming, the
+                  exact spot on the map — behind a single{" "}
+                  <span className="text-fog">Join</span> that drops you straight into
+                  the group. For a pickup game that includes skill level and
+                  who-can-join; for other events those fields just fall away.
                 </p>
                 <div className="flex justify-center pt-2">
                   <Shot
-                    src="/images/quorum-event-create.jpg"
-                    alt="Quorum's event-creation flow, where a host sets the sport, time, location, skill level, and number of open spots"
+                    src="/images/quorum-event-detail.jpg"
+                    alt="A Quorum event detail screen showing the host, attendees, location, open spots, and a Join button"
+                    h={3023}
                   />
                 </div>
               </Decision>
@@ -296,6 +309,7 @@ export default function QuorumCaseStudy() {
                   <Shot
                     src="/images/quorum-chat.jpg"
                     alt="A Quorum chat conversation with message bubbles, a shared location card, and a composer with attach and emoji controls"
+                    h={3120}
                   />
                 </div>
               </Decision>
@@ -307,13 +321,40 @@ export default function QuorumCaseStudy() {
                   Both themes were designed together, not bolted on. Custom Material
                   color schemes, a consistent type scale, and tabular figures for
                   the numbers that matter (distances, counts) keep the app legible
-                  and calm in either mode — the two Discover screens above are the
-                  same screen, same code, different theme.
+                  and calm in either mode — the two Discover screens at the top are
+                  the same screen, same code, different theme.
                 </p>
               </Decision>
             </Reveal>
           </div>
         </StudySection>
+
+        {/* More of the app — gallery of the remaining real screens */}
+        <div className="mx-auto w-full max-w-page px-6 py-8 sm:px-10">
+          <Reveal>
+            <p className="mb-8 flex items-center gap-3 font-mono text-xs uppercase tracking-label text-muted">
+              <span aria-hidden="true" className="accent-bar h-px w-8" />
+              More of the app
+            </p>
+            <div className="grid grid-cols-2 gap-6 sm:grid-cols-4">
+              {[
+                ["/images/quorum-event-create-1.jpg", "Creating an event", 3025],
+                ["/images/quorum-event-create-2.jpg", "Setting the details", 3024],
+                ["/images/quorum-group.jpg", "Group dashboard", 3019],
+                ["/images/quorum-profile.jpg", "Your profile", 3007],
+              ].map(([src, cap, h]) => (
+                <figure key={src} className="flex flex-col items-center gap-3">
+                  <div className="w-full max-w-[190px]">
+                    <Shot src={src} alt={`Quorum — ${cap}`} h={h} />
+                  </div>
+                  <figcaption className="font-mono text-xs text-muted">
+                    {cap}
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
+          </Reveal>
+        </div>
 
         {/* Engineering */}
         <StudySection
@@ -332,9 +373,7 @@ export default function QuorumCaseStudy() {
             </p>
           </Reveal>
           <Reveal>
-            <p>
-              The interesting problems were the ones you don't see:
-            </p>
+            <p>The interesting problems were the ones you don't see:</p>
           </Reveal>
           <Reveal>
             <ul className="space-y-3">
