@@ -149,13 +149,13 @@ export default function QuorumCaseStudy() {
                 src="/images/quorum-discover-dark.jpg"
                 alt="Quorum's Discover feed in dark mode: nearby events with category, time, distance, and Join buttons"
                 h={3023}
-                className="transition-transform duration-500 sm:-rotate-2 sm:hover:rotate-0"
+                className="will-change-transform transition-transform duration-500 sm:-rotate-2 sm:hover:rotate-0"
               />
               <Shot
                 src="/images/quorum-discover-light.jpg"
                 alt="The same Discover feed in light mode, showing Quorum's light/dark design system"
                 h={2994}
-                className="transition-transform duration-500 sm:rotate-2 sm:hover:rotate-0"
+                className="will-change-transform transition-transform duration-500 sm:rotate-2 sm:hover:rotate-0"
               />
             </div>
           </Reveal>
