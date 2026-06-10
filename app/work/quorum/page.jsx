@@ -148,7 +148,6 @@ export default function QuorumCaseStudy() {
                 src="/images/quorum-discover-light.jpg"
                 alt="The same Discover feed in light mode, showing Quorum's light/dark design system"
                 h={2994}
-                className="hidden sm:block"
               />
             </div>
           </Reveal>
