@@ -58,7 +58,7 @@ export default function Hero() {
           off-center washes for depth. */}
       <div
         aria-hidden="true"
-        className="absolute -top-72 left-1/2 h-[42rem] w-[72rem] -translate-x-1/2 rounded-full bg-amber/15 blur-[160px]"
+        className="absolute -top-72 left-1/2 h-[42rem] w-[72rem] -translate-x-1/2 rounded-full bg-amber/20 blur-[160px]"
       />
       <div
         aria-hidden="true"

@@ -52,14 +52,16 @@ export default function FeaturedProject() {
               aria-hidden="true"
               className="absolute inset-0 -z-10 scale-90 rounded-full bg-ember/10 blur-[100px]"
             />
-            <Image
-              src="/images/quorum-discover-dark.jpg"
-              alt="Quorum's Discover screen: a feed of nearby events showing category, date and time, distance, and a Join button"
-              width={1440}
-              height={3023}
-              priority
-              className="w-full max-w-[260px] rounded-[2rem] border border-line shadow-2xl transition-transform duration-500 hover:-rotate-1 hover:scale-[1.02]"
-            />
+            <div className="w-full max-w-[260px] rounded-[2rem] border border-line bg-[#171310] p-2 shadow-2xl transition-transform duration-500 hover:-rotate-1 hover:scale-[1.02]">
+              <Image
+                src="/images/quorum-discover-dark.jpg"
+                alt="Quorum's Discover screen: a feed of nearby events showing category, date and time, distance, and a Join button"
+                width={1440}
+                height={3023}
+                priority
+                className="w-full rounded-[1.5rem]"
+              />
+            </div>
           </div>
         </Reveal>
       </div>
