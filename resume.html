@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Jonathan Schafer - Resume</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Schibsted+Grotesk:wght@600;700&display=swap" rel="stylesheet" />
+<style>
+  /* ------------------------------------------------------------------
+     Resume source of truth. Open in a browser, Ctrl+P, "Save as PDF"
+     (enable Background graphics), save over public/JonathanSchafer_Resume.pdf.
+  ------------------------------------------------------------------ */
+  :root {
+    --ink: #1c1814;
+    --muted: #57504a;
+    --accent: #b45309;     /* dark amber: brand-warm, prints with contrast */
+    --rule: #e7dfd3;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: "Inter", system-ui, sans-serif;
+    font-size: 9.7pt;
+    line-height: 1.42;
+    color: var(--ink);
+    background: #efeae2;
+  }
+
+  .page {
+    width: 8.5in;
+    min-height: 11in;
+    margin: 24px auto;
+    padding: 0.55in 0.65in;
+    background: #fff;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.18);
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  /* Header */
+  h1 {
+    font-family: "Schibsted Grotesk", "Inter", sans-serif;
+    font-size: 23pt;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+  }
+  .contact {
+    margin-top: 4px;
+    font-size: 8.8pt;
+    color: var(--muted);
+  }
+  .contact span + span::before { content: "  ·  "; color: #b9b0a4; }
+
+  .summary {
+    margin-top: 9px;
+    font-size: 9.7pt;
+    color: var(--ink);
+  }
+
+  .header-rule {
+    margin-top: 11px;
+    height: 2.5px;
+    background: linear-gradient(90deg, #ff7a1a, #ffc35c);
+    border-radius: 2px;
+  }
+
+  /* Sections */
+  h2 {
+    margin: 13px 0 7px;
+    font-size: 9pt;
+    font-weight: 700;
+    letter-spacing: 2.2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 3px;
+  }
+
+  .item { margin-bottom: 9px; }
+  .item:last-child { margin-bottom: 0; }
+
+  .item-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+  }
+  .item-title { font-weight: 700; font-size: 10.2pt; }
+  .item-title .sep { color: #b9b0a4; font-weight: 400; }
+  .item-sub { font-weight: 500; color: var(--muted); font-size: 9pt; margin-top: 1px; }
+  .item-when { font-size: 8.8pt; color: var(--muted); white-space: nowrap; }
+
+  ul { margin: 4px 0 0 0; padding-left: 14px; }
+  li { margin-bottom: 2.5px; }
+  li::marker { color: var(--accent); }
+
+  /* Skills */
+  .skills p { margin-bottom: 3px; }
+  .skills b { font-weight: 600; }
+
+  /* Education */
+  .edu-course { margin-top: 2px; font-size: 9pt; color: var(--muted); }
+
+  @page { size: letter; margin: 0; }
+  @media print {
+    body { background: #fff; }
+    .page {
+      width: auto;
+      min-height: auto;
+      margin: 0;
+      padding: 0.5in 0.62in;
+      box-shadow: none;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ============ Header ============ -->
+  <header>
+    <h1>Jonathan Schafer</h1>
+    <p class="contact">
+      <span>Columbus, OH</span>
+      <span>(614) 961-9989</span>
+      <span><a href="mailto:grant.schafer555@gmail.com">grant.schafer555@gmail.com</a></span>
+      <span><a href="https://www.linkedin.com/in/jonathan-schafer-531859265">linkedin.com/in/jonathan-schafer-531859265</a></span>
+      <span><a href="https://github.com/Jon-G-Schaf">github.com/Jon-G-Schaf</a></span>
+    </p>
+    <p class="summary">
+      Full-stack developer with a designer's eye. Computer Science graduate who designs
+      interfaces in Figma and builds them end to end, from Flutter and Firebase on mobile to
+      React and Next.js on the web. Seeking junior software and full-stack roles in Columbus,
+      Cincinnati, or Pittsburgh (or remote).
+    </p>
+    <div class="header-rule"></div>
+  </header>
+
+  <!-- ============ Education ============ -->
+  <section>
+    <h2>Education</h2>
+    <div class="item">
+      <div class="item-head">
+        <p class="item-title">Ohio University <span class="sep">·</span> B.S. Computer Science</p>
+        <p class="item-when">Athens, OH · May 2026</p>
+      </div>
+      <p class="edu-course">
+        Coursework: Algorithms, Databases, Operating Systems, Computer Networking, Compilers,
+        Cryptography, Parallel Computing
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ Projects ============ -->
+  <section>
+    <h2>Projects</h2>
+
+    <div class="item">
+      <div class="item-head">
+        <p class="item-title">Quorum <span class="sep">·</span> Local Events App (CS Capstone)</p>
+        <p class="item-when">Aug 2025 – May 2026</p>
+      </div>
+      <p class="item-sub">UI/UX Lead &amp; Full-Stack · Flutter, Dart, Firebase, Figma · five-person team</p>
+      <ul>
+        <li>Led all UI/UX and built much of the Flutter front end and Firebase back end for an app
+            that surfaces nearby events, shows the open spots, and gets people to show up</li>
+        <li>Designed the complete interface in Figma and shipped it as a Material&nbsp;3 design system
+            with custom light/dark color schemes and runtime theme switching</li>
+        <li>Designed the Firestore data model (users, events, groups, chat) on realtime listeners;
+            used transactions for limited-spot joins so concurrent users can't oversell an event</li>
+        <li>Built real-time chat with read receipts, reactions, photo sharing, and shareable event
+            cards; event chat membership syncs automatically with attendance</li>
+        <li>Integrated geolocation, a map view, and Google Places autocomplete for
+            location-first event discovery</li>
+      </ul>
+    </div>
+
+    <div class="item">
+      <div class="item-head">
+        <p class="item-title">Personal Portfolio</p>
+        <p class="item-when">2026</p>
+      </div>
+      <p class="item-sub">Designer &amp; Developer · Next.js, React, Tailwind CSS, Framer Motion</p>
+      <ul>
+        <li>Designed and built a fully custom site: one-accent design system, scroll-driven reveals,
+            and a generative animated sand background built from layered SVG noise</li>
+        <li>Code-generated Open Graph images and favicon; keyboard-accessible and
+            reduced-motion aware; auto-deployed to Vercel from GitHub on every push</li>
+      </ul>
+    </div>
+
+    <div class="item">
+      <div class="item-head">
+        <p class="item-title">SnipBoard <span class="sep">·</span> Code Snippet Manager</p>
+        <p class="item-when">Fall 2025</p>
+      </div>
+      <p class="item-sub">UI/UX Designer · Qt/QML, C++, SQLite · five-person team</p>
+      <ul>
+        <li>Designed the visual identity, color system, and the snippet, search, tag, and settings
+            screens for a cross-platform desktop snippet manager</li>
+        <li>App pairs a layered C++ core (models, repositories, services) over SQLite with a QML UI
+            and a companion VS Code extension for in-editor snippet insertion</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ Skills ============ -->
+  <section class="skills">
+    <h2>Technical Skills</h2>
+    <p><b>Languages:</b> JavaScript, Dart, Python, C++, C, SQL, OCaml, HTML/CSS</p>
+    <p><b>Frameworks:</b> React, Next.js, Tailwind CSS, Flutter, Firebase (Auth, Firestore, Storage, FCM), Qt/QML</p>
+    <p><b>Tools &amp; Design:</b> Git, Docker, Linux, Figma · UI/UX design, wireframing, prototyping, design systems</p>
+  </section>
+
+  <!-- ============ Experience ============ -->
+  <section>
+    <h2>Work Experience</h2>
+
+    <div class="item">
+      <div class="item-head">
+        <p class="item-title">The Sidebar <span class="sep">·</span> Bouncer / Barback</p>
+        <p class="item-when">Athens, OH · Dec 2024 – Sep 2025</p>
+      </div>
+      <ul>
+        <li>Managed crowd safety, de-escalation, and policy enforcement in a high-volume nightlife venue</li>
+      </ul>
+    </div>
+
+    <div class="item">
+      <div class="item-head">
+        <p class="item-title">LongHorn Steakhouse <span class="sep">·</span> Server</p>
+        <p class="item-when">Chillicothe, OH · Jan 2023 – Apr 2024</p>
+      </div>
+      <ul>
+        <li>Delivered table service across multiple simultaneous tables, resolving issues under pressure</li>
+      </ul>
+    </div>
+
+    <div class="item">
+      <div class="item-head">
+        <p class="item-title">Kenworth Trucking <span class="sep">·</span> Assembly Specialist</p>
+        <p class="item-when">Chillicothe, OH · Summers 2022 – 2023</p>
+      </div>
+      <ul>
+        <li>Performed quality-controlled assembly on a semi-truck production line to spec</li>
+      </ul>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>
