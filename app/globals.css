@@ -76,10 +76,12 @@ body {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-/* Sand, used behind the hero and case-study header: two seamless warm noise
-   layers drifting in opposite directions, like wind over sand. The wrapper
-   carries the dissolve mask; the layers animate via transform (cheap, looping
-   exactly one tile so the drift is seamless). */
+/* Sand, Journey-style, behind the hero and case-study header: the surface
+   stays smooth (no mottling) and the sand reads as sparse golden GLINTS,
+   like sunlight catching glitter. Two glint fields drift in opposite
+   directions, so individual sparkles wink in and out as they cross.
+   The noise is thresholded in the SVG (steep alpha ramp), which is what
+   turns soft grain into discrete sparkles. */
 .sand-field {
   -webkit-mask-image: radial-gradient(
     ellipse 100% 90% at 50% 12%,
@@ -99,30 +101,30 @@ body {
   will-change: transform;
 }
 
-@keyframes sand-drift-fine {
+@keyframes sand-drift-a {
   from { transform: translate3d(0, 0, 0); }
   to { transform: translate3d(-240px, -240px, 0); }
 }
 
-@keyframes sand-drift-coarse {
+@keyframes sand-drift-b {
   from { transform: translate3d(0, 0, 0); }
-  to { transform: translate3d(480px, -480px, 0); }
+  to { transform: translate3d(320px, -320px, 0); }
 }
 
-/* Fine cream grain: the sand itself. */
-.sand-fine {
+/* Fine bright glints: tiny, gold-white, sparse. */
+.sand-a {
   inset: -240px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='sf'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch' seed='7'/%3E%3CfeColorMatrix values='0 0 0 0 0.97 0 0 0 0 0.93 0 0 0 0 0.86 0 0 0 0.55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23sf)'/%3E%3C/svg%3E");
-  opacity: 0.35;
-  animation: sand-drift-fine 50s linear infinite;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='ga'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='1' stitchTiles='stitch' seed='7'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 0.9 0 0 0 0 0.65 0 0 0 12 -8.5'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23ga)'/%3E%3C/svg%3E");
+  opacity: 0.5;
+  animation: sand-drift-a 60s linear infinite;
 }
 
-/* Coarse amber mottling: slow dunes / heat shimmer under the grain. */
-.sand-coarse {
-  inset: -480px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='480' height='480'%3E%3Cfilter id='sc'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.012' numOctaves='3' stitchTiles='stitch' seed='3'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 0.76 0 0 0 0 0.36 0 0 0 0.5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23sc)'/%3E%3C/svg%3E");
-  opacity: 0.3;
-  animation: sand-drift-coarse 130s linear infinite;
+/* Slightly larger, warmer glints on the opposite drift. */
+.sand-b {
+  inset: -320px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='320'%3E%3Cfilter id='gb'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.5' numOctaves='1' stitchTiles='stitch' seed='11'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 0.8 0 0 0 0 0.45 0 0 0 12 -8.6'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23gb)'/%3E%3C/svg%3E");
+  opacity: 0.4;
+  animation: sand-drift-b 95s linear infinite;
 }
 
 /* The one accent treatment: ember → amber. */
