@@ -118,7 +118,7 @@ export default function QuorumCaseStudy() {
               </h1>
               <p className="mt-5 max-w-2xl text-xl leading-snug text-fog/90">
                 Find events near you, fill the open spots,{" "}
-                <span className="accent-text">and actually show up.</span>
+                <span className="accent-text">and make the plan happen.</span>
               </p>
             </Reveal>
 
@@ -165,9 +165,9 @@ export default function QuorumCaseStudy() {
         <StudySection id="overview" eyebrow="01 \u00b7 Overview" title="What Quorum is">
           <Reveal>
             <p>
-              Quorum is a mobile app for finding events near you and getting people
-              to actually show up to them: pickup games, club meetups, study
-              sessions, anything with a time, a place, and room for more. Open it and
+              Quorum is a mobile app for finding events near you and helping people
+              follow through: pickup games, club meetups, study sessions, anything
+              with a time, a place, and room for more. Open it and
               you see a feed of what's happening nearby, with the still-open spots and
               the details right on each card. Tap{" "}
               <span className="text-fog">Join</span>, and you land in a shared chat
@@ -195,20 +195,20 @@ export default function QuorumCaseStudy() {
         >
           <Reveal>
             <p>
-              Events run into a chicken-and-egg problem, whether it's a pickup game
-              or a club's first meetup: the people who'd come can't find them, and
-              the ones that need people can't find the people. The coordination that
+              Events have a supply problem, whether it's a pickup game or a club's
+              first meetup: people who would come can't find the event, and hosts
+              who need people can't find them. The coordination that
               does happen scatters across group chats, stories, and word of mouth,
               where a half-formed plan quietly dies because nobody could tell if it
-              was actually happening.
+              was still happening.
             </p>
           </Reveal>
           <Reveal>
             <p>
-              That gave the product its one-sentence brief: put the nearby events in
-              one place, make the open spots obvious, and keep the people who join
-              talking in the same app, so &ldquo;we need a few more&rdquo; reaches
-              someone who can actually fill it.
+              That gave the product its one-sentence brief: put nearby events in one
+              place, make the open spots obvious, and keep the people who join
+              talking in the same app. When a host needs a few more people, that
+              message should reach someone who can fill the spot.
             </p>
           </Reveal>
         </StudySection>
@@ -221,16 +221,16 @@ export default function QuorumCaseStudy() {
         >
           <Reveal>
             <p>
-              I owned the design from the first sketches, mapping the core flows
-              (registration, discovery, event creation, chat) as clickable
-              prototypes in Figma before any of it hit code. Testing those flows
+              I owned the design from the first sketches. The core flows were
+              registration, discovery, event creation, and chat, and I mapped them as
+              clickable prototypes in Figma before any of it hit code. Testing those flows
               cheaply meant we settled the hard navigation questions on the
               whiteboard instead of mid-build.
             </p>
           </Reveal>
           <Reveal>
             <p>
-              Those prototypes became a real design system in Flutter: a Material 3
+              Those prototypes became the design system in Flutter: a Material 3
               theme with custom light and dark color schemes, an{" "}
               <span className="text-fog">Outfit</span> type scale, and shared
               components so every screen felt like one app. A{" "}
@@ -238,7 +238,7 @@ export default function QuorumCaseStudy() {
                 ThemeController
               </code>{" "}
               swaps light and dark at runtime. The whole UI was built against
-              tokens, not hard-coded colors, from day one.
+              tokens from day one instead of hard-coded colors.
             </p>
           </Reveal>
           <Reveal>
@@ -264,13 +264,13 @@ export default function QuorumCaseStudy() {
                 <p>
                   The home screen isn't a calendar. It's a feed of what's near you{" "}
                   <em>now</em>, sorted by distance and time, with category chips to
-                  filter by what you're into. Events carry a real{" "}
+                  filter by what you're into. Events carry a{" "}
                   <code className="rounded bg-panel px-1.5 py-0.5 text-sm text-fog/90">
                     GeoPoint
                   </code>
-                  , so distance is computed from your actual location, and a map view
-                  plots them. Picking a place when you create an event uses Google
-                  Places autocomplete, so locations are real and consistent.
+                  , so distance is computed from your location, and a map view plots
+                  them. Picking a place when you create an event uses Google Places
+                  autocomplete, which keeps locations consistent.
                 </p>
                 <div className="flex justify-center pt-2">
                   <Shot
@@ -287,11 +287,11 @@ export default function QuorumCaseStudy() {
                 <p>
                   Every event tracks how many people it needs and who's already in,
                   so a card can say &ldquo;needs 2 more&rdquo; at a glance. Open one
-                  and you get the full picture (who's hosting, who's coming, the
-                  exact spot on the map) behind a single{" "}
-                  <span className="text-fog">Join</span> that drops you straight into
-                  the group. For a pickup game that includes skill level and
-                  who-can-join; for other events those fields just fall away.
+                  and you get the full picture: who's hosting, who's coming, and the
+                  exact spot on the map. A single{" "}
+                  <span className="text-fog">Join</span> button drops you straight into
+                  the group. Pickup games include skill level and who-can-join
+                  fields. Other event types keep the form shorter.
                 </p>
                 <div className="flex justify-center pt-2">
                   <Shot
@@ -325,11 +325,11 @@ export default function QuorumCaseStudy() {
             <Reveal>
               <Decision title="Light and dark, by design">
                 <p>
-                  Both themes were designed together, not bolted on. Custom Material
+                  Light and dark mode share the same structure. Custom Material
                   color schemes, a consistent type scale, and tabular figures for
-                  the numbers that matter (distances, counts) keep the app legible
-                  and calm in either mode. The two Discover screens at the top are
-                  the same screen, same code, different theme.
+                  distances and counts keep the app legible in either mode. The two
+                  Discover screens at the top are the same screen, same code,
+                  different theme.
                 </p>
               </Decision>
             </Reveal>
@@ -371,8 +371,8 @@ export default function QuorumCaseStudy() {
         >
           <Reveal>
             <p>
-              The back end is Firebase (Auth, Firestore, Storage, and Cloud
-              Messaging), with a feature-first Flutter architecture that splits each
+              The back end uses Firebase Auth, Firestore, Storage, and Cloud
+              Messaging, with a feature-first Flutter architecture that splits each
               feature into its data layer and its UI. I designed the Firestore data
               model: collections for users, events, groups, chat rooms and their
               messages, plus per-user notifications, all driven by realtime
@@ -380,7 +380,7 @@ export default function QuorumCaseStudy() {
             </p>
           </Reveal>
           <Reveal>
-            <p>The interesting problems were the ones you don't see:</p>
+            <p>The harder problems sit behind the screens:</p>
           </Reveal>
           <Reveal>
             <ul className="space-y-3">
@@ -392,14 +392,14 @@ export default function QuorumCaseStudy() {
               </li>
               <li className="border-l border-line pl-5">
                 <span className="text-fog">Derived state stays in sync.</span> An
-                event's group chat is kept in lockstep with who's actually joined:
-                membership changes sync to the chat room automatically, and
+                event's group chat is kept in lockstep with the attendee list.
+                Membership changes sync to the chat room automatically, and
                 participant names are denormalized in so the list renders without
                 extra reads.
               </li>
               <li className="border-l border-line pl-5">
                 <span className="text-fog">Unread, done cheaply.</span> Read state
-                comes from per-user timestamp maps; marking a thread read batches its
+                comes from per-user timestamp maps. Marking a thread read batches its
                 updates and caps the work to recent messages, so opening a busy chat
                 doesn't fan out into hundreds of writes.
               </li>
@@ -427,14 +427,13 @@ export default function QuorumCaseStudy() {
           </Reveal>
           <Reveal>
             <p>
-              Quorum is the project where design and engineering stopped being two
-              jobs for me. Owning both meant the Figma decisions and the Firestore
-              decisions answered to the same goal, and the up-front design work (the
-              flows, the prototypes, the design system) is exactly what let the
-              build move fast, because the structure was settled before the code
-              started. That's how I want to keep working: understand the problem,
-              design the solution, then build the whole thing, front end and back, to
-              match.
+              Quorum is the project where I learned how much faster the work moves
+              when design and engineering stay close together. The Figma decisions
+              and the Firestore decisions had to support the same product. Because
+              the flows, prototypes, and design system were settled early, the build
+              moved faster once we started writing code. That's how I want to keep
+              working: understand the problem, design the solution, then build the
+              whole thing, front end and back, to match.
             </p>
           </Reveal>
         </StudySection>

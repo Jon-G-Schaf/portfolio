@@ -182,23 +182,22 @@ export default function CrosstownCaseStudy() {
         <StudySection id="overview" eyebrow="01 \u00b7 Overview" title="What Crosstown is">
           <Reveal>
             <p>
-              Crosstown answers one question: how reliable is each Columbus bus route,
-              actually? The schedule is a promise. Crosstown records what really
-              happens, permanently, and turns it into numbers you can act on. The
-              live map is the front door, but the real product is the record: every
-              arrival the system has ever observed, rolled up into per-route,
+              Crosstown answers one question: how reliable is each Columbus bus route?
+              The schedule tells riders what should happen. Crosstown records what
+              did happen, keeps it, and turns it into numbers people can use. The
+              live map is the entry point. The record behind it is the product: every
+              arrival the system has observed, rolled up into per-route and
               per-time-of-day reliability stats.
             </p>
           </Reveal>
           <Reveal>
             <p>
-              It is deliberately a <span className="text-fog">measurement</span>{" "}
-              product, not an arrival predictor. COTA already tells you when the next
-              bus is coming. Nobody tells you whether the 5:15 on your route is the
-              kind of bus that shows up. That answer needs months of receipts, so
-              Crosstown's job is to keep them: it has run around the clock since the
-              day it shipped, and its dataset gets more valuable every week without
-              another line of code.
+              Crosstown focuses on <span className="text-fog">measurement</span>{" "}
+              because COTA already tells you when the next bus is coming. What riders
+              do not get is a history of whether a specific route keeps time at a
+              specific hour. That takes months of records, so Crosstown keeps them:
+              it has run around the clock since launch, and the dataset gets more
+              useful each week without another line of code.
             </p>
           </Reveal>
         </StudySection>
@@ -212,20 +211,18 @@ export default function CrosstownCaseStudy() {
           <Reveal>
             <p>
               Transit reliability data mostly evaporates the moment it exists. The
-              arrival screens at bus stops show a prediction, the bus comes or it
-              doesn't, and the prediction is gone. If you want to know whether a
-              route is dependable at rush hour (the thing that decides whether you
-              can rely on it for a job), there is nothing to look up.
+              arrival screens at bus stops show a prediction. The bus comes, or it
+              does not, and the prediction is gone. If you want to know whether a
+              route is dependable at rush hour, there is nothing to look up.
             </p>
           </Reveal>
           <Reveal>
             <p>
               That gave the project its brief: ingest the city's realtime transit
               feeds continuously, score every arrival against the published
-              schedule, keep the results forever, and present them honestly. The
-              interesting engineering all falls out of the words{" "}
-              <span className="text-fog">continuously</span> and{" "}
-              <span className="text-fog">honestly</span>.
+              schedule, keep the results, and make the methodology clear. Most of
+              the engineering work came from making those records continuous and
+              defensible.
             </p>
           </Reveal>
         </StudySection>
@@ -238,13 +235,13 @@ export default function CrosstownCaseStudy() {
         >
           <Reveal>
             <p>
-              One Node.js service does three jobs: it polls COTA's GTFS-realtime
-              protobuf feeds (positions every 15 seconds, arrival predictions every
-              30, matched to the feed's own measured regeneration cycle, with
-              conditional requests so an unchanged feed costs nothing), it writes to
-              Postgres, and it serves the API. Positions push to the browser over
-              server-sent events; the map interpolates motion client-side between
-              updates, so the buses glide instead of teleporting.
+              One Node.js service polls COTA's GTFS-realtime protobuf feeds, writes
+              to Postgres, and serves the API. It checks positions every 15 seconds
+              and arrival predictions every 30, matching the feed's measured
+              regeneration cycle. Conditional requests keep unchanged feeds cheap.
+              Positions push to the browser over server-sent events, and the map
+              interpolates motion client-side between updates so the buses glide
+              instead of teleporting.
             </p>
           </Reveal>
           <Reveal>
@@ -257,10 +254,10 @@ export default function CrosstownCaseStudy() {
                 COTA's feed carries predicted arrival times but leaves the delay
                 field empty, and protobuf decoders return 0 for missing numbers, so
                 naive code records every bus as perfectly on time forever. Crosstown
-                computes each delay itself, in SQL, by joining every prediction
-                against the 365,000-row published schedule (service days start at
+                computes each delay itself in SQL by joining every prediction
+                against the 365,000-row published schedule. Service days start at
                 noon minus 12 hours, so past-midnight trips and daylight-saving
-                switches need real care; that math has its own integration tests).
+                switches get their own integration tests.
               </li>
               <li className="border-l border-line pl-5">
                 <span className="text-fog">"Row exists" is not "event happened."</span>{" "}
@@ -275,16 +272,16 @@ export default function CrosstownCaseStudy() {
                 positions live 48 hours, arrival records 90 days, and nightly
                 rollups live forever, so the charts stay instant as the dataset
                 grows and the database stays inside a $5 hosting plan. The rollup
-                job is idempotent and runs hourly; whichever run happens after
-                midnight finalizes the day, no precise scheduler needed.
+                job is idempotent and runs hourly. The first run after midnight
+                finalizes the day, so the system does not need a precise scheduler.
               </li>
               <li className="border-l border-line pl-5">
                 <span className="text-fog">Failure means a gap, not a crash.</span>{" "}
                 Every poll is isolated; a feed outage leaves a hole in the data and
                 nothing else. Deploys reload the schedule automatically, so the
-                static and realtime datasets can't quietly drift apart (the
-                well-known public copy of COTA's schedule is a full schedule period
-                stale, which cost me an evening once).
+                static and realtime datasets can't quietly drift apart. That matters
+                because the best-known public copy of COTA's schedule is a full
+                schedule period stale, which cost me an evening once.
               </li>
             </ul>
           </Reveal>
@@ -304,18 +301,17 @@ export default function CrosstownCaseStudy() {
         <StudySection
           id="design"
           eyebrow="04 \u00b7 Design"
-          title="Night service: a control room, not a dashboard"
+          title="Night service, built like a control room"
         >
           <Reveal>
             <p>
-              The design concept is a transit control room at night: the city is
-              dark, the data glows. Deep ink surfaces, translucent glass panels,
-              hairline rules, Archivo for UI and IBM Plex Mono for every number. The
-              discipline that holds it together is that{" "}
-              <span className="text-fog">color always means something</span>: route
-              colors are COTA's own brand colors (lightness-floored so they survive
-              a dark map), and the only other saturated colors are the three status
-              colors that score reliability. Nothing is tinted for decoration.
+              The design borrows from a transit control room at night: dark city,
+              glowing data, deep ink surfaces, translucent panels, and hairline
+              rules. Archivo handles the UI, and IBM Plex Mono handles the numbers.
+              <span className="text-fog"> Color always means something.</span> Route
+              colors come from COTA's own palette, adjusted to stay readable on a
+              dark map. The other saturated colors are reserved for reliability
+              status.
             </p>
           </Reveal>
           <Reveal>
@@ -323,9 +319,9 @@ export default function CrosstownCaseStudy() {
               Motion carries information too. Buses interpolate between GPS pings
               with comet trails, faint pulses drift along every route strand in the
               actual direction of travel, arrivals tick across a live feed as the
-              system observes them, and the whole map boots with a camera flight
-              while the network fades up. All of it, every animation on the site,
-              collapses to a static render under{" "}
+              system observes them. On load, the camera moves into Columbus while
+              the network fades up. Every animation on the site falls back to a
+              static render under{" "}
               <code className="rounded bg-panel px-1.5 py-0.5 text-sm text-fog/90">
                 prefers-reduced-motion
               </code>
@@ -364,12 +360,11 @@ export default function CrosstownCaseStudy() {
             <Reveal>
               <Decision title="Measure, don't predict">
                 <p>
-                  The honest version of this product records what happened; the
-                  flashy version guesses what will. Prediction is a losing game
-                  against the agency's own arrival screens, and it expires every 30
-                  seconds. A record compounds. Positioning Crosstown as measurement
-                  decided everything downstream, from the about page's methodology
-                  notes to what counts as an observation.
+                  Crosstown records what happened instead of trying to beat the
+                  agency's own arrival screens. Predictions expire every 30 seconds.
+                  A record gets more useful the longer it runs. That choice shaped
+                  everything downstream, from the methodology notes to what counts
+                  as an observation.
                 </p>
               </Decision>
             </Reveal>
@@ -378,10 +373,9 @@ export default function CrosstownCaseStudy() {
               <Decision title="SSE over WebSockets">
                 <p>
                   The realtime data flows one way, so the map uses server-sent
-                  events: plain HTTP, no upgrade dance for proxies to fumble, and
-                  the browser reconnects by itself. The connection status is surfaced
-                  in the UI as a breathing live dot that turns amber while
-                  reconnecting. Boring technology, deliberately chosen.
+                  events. It is plain HTTP, avoids proxy issues, and lets the browser
+                  reconnect by itself. The connection status shows up in the UI as a
+                  live dot that turns amber while reconnecting.
                 </p>
               </Decision>
             </Reveal>
@@ -391,10 +385,9 @@ export default function CrosstownCaseStudy() {
                 <p>
                   The worker and the API share a process, retention windows bound
                   every table, and reads come from rollups or in-memory caches. At
-                  real scale you'd split the worker from the API so a slow query can
-                  never delay polling; at this scale the tradeoff buys an
-                  always-on data product for the price of a coffee, and the README
-                  says so out loud.
+                  larger scale I would split the worker from the API so a slow query
+                  could never delay polling. For this project, keeping them together
+                  made the product cheap enough to run continuously.
                 </p>
               </Decision>
             </Reveal>
@@ -405,7 +398,7 @@ export default function CrosstownCaseStudy() {
         <StudySection
           id="outcome"
           eyebrow="06 \u00b7 Outcome"
-          title="Live, recording, and compounding"
+          title="Live and recording"
         >
           <Reveal>
             <div className="grid gap-4 sm:grid-cols-3">
@@ -417,13 +410,12 @@ export default function CrosstownCaseStudy() {
           <Reveal>
             <p>
               Crosstown went from first commit to live product in two days, and the
-              dataset has been growing every minute since. It already settles real
-              questions (one crosstown route runs a +4 minute average delay across
-              9,000 recorded arrivals; another keeps 96% of its promises), and the
-              longer it runs, the better its answers get. It is also the project
-              where I got to own every layer at once: the ingestion math, the
-              database design, the API, and a design system with opinions, all
-              pointed at the same goal.
+              dataset has been growing every minute since. It already answers
+              specific questions: one crosstown route runs a +4 minute average delay
+              across 9,000 recorded arrivals, while another keeps 96% of its
+              scheduled arrivals on time. It is also the project where I owned every
+              layer at once: the ingestion math, the database design, the API, and
+              the interface.
             </p>
           </Reveal>
         </StudySection>
