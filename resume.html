@@ -183,8 +183,23 @@
             used transactions for limited-spot joins so concurrent users can't oversell an event</li>
         <li>Built real-time chat with read receipts, reactions, photo sharing, and shareable event
             cards; event chat membership syncs automatically with attendance</li>
-        <li>Integrated geolocation, a map view, and Google Places autocomplete for
-            location-first event discovery</li>
+      </ul>
+    </div>
+
+    <div class="item">
+      <div class="item-head">
+        <p class="item-title">Crosstown <span class="sep">·</span> Live Transit Reliability Tracker</p>
+        <p class="item-when">2026 · <a href="https://crosstown.jongschaf.com"><b>crosstown.jongschaf.com</b></a></p>
+      </div>
+      <p class="item-sub">Solo · TypeScript, Node.js, Fastify, PostgreSQL, Next.js, MapLibre</p>
+      <ul>
+        <li>Built a 24/7 ingestion service that polls COTA's public GTFS-realtime feeds into Postgres
+            and rolls every arrival up into route-by-route on-time stats with hand-written SQL</li>
+        <li>Computes the arrival delays the feed doesn't publish by joining realtime predictions
+            against the static schedule, set-based in SQL at roughly 10k upserts a minute</li>
+        <li>Streams live positions to a Next.js + MapLibre map over server-sent events with
+            client-side motion interpolation; tested with Vitest, CI on GitHub Actions,
+            deployed on Railway and Vercel</li>
       </ul>
     </div>
 
@@ -202,27 +217,14 @@
       </ul>
     </div>
 
-    <div class="item">
-      <div class="item-head">
-        <p class="item-title">SnipBoard <span class="sep">·</span> Code Snippet Manager</p>
-        <p class="item-when">Fall 2025</p>
-      </div>
-      <p class="item-sub">UI/UX Designer · Qt/QML, C++, SQLite · five-person team</p>
-      <ul>
-        <li>Designed the visual identity, color system, and the snippet, search, tag, and settings
-            screens for a cross-platform desktop snippet manager</li>
-        <li>App pairs a layered C++ core (models, repositories, services) over SQLite with a QML UI
-            and a companion VS Code extension for in-editor snippet insertion</li>
-      </ul>
-    </div>
   </section>
 
   <!-- ============ Skills ============ -->
   <section class="skills">
     <h2>Technical Skills</h2>
-    <p><b>Languages:</b> JavaScript, Dart, Python, C++, C, SQL, OCaml, HTML/CSS</p>
-    <p><b>Frameworks:</b> React, Next.js, Tailwind CSS, Flutter, Firebase (Auth, Firestore, Storage, FCM), Qt/QML</p>
-    <p><b>Tools &amp; Design:</b> Git, Docker, Linux, Figma · UI/UX design, wireframing, prototyping, design systems</p>
+    <p><b>Languages:</b> TypeScript, JavaScript, Dart, Python, C++, C, SQL, OCaml, HTML/CSS</p>
+    <p><b>Frameworks &amp; Data:</b> React, Next.js, Node.js, Fastify, PostgreSQL, Tailwind CSS, Flutter, Firebase, Qt/QML</p>
+    <p><b>Tools &amp; Design:</b> Git, Docker, Linux, GitHub Actions, Figma · UI/UX design, wireframing, prototyping, design systems</p>
   </section>
 
   <!-- ============ Experience ============ -->
@@ -254,9 +256,6 @@
         <p class="item-title">LongHorn Steakhouse <span class="sep">·</span> Server</p>
         <p class="item-when">Chillicothe, OH · Jan 2023 – Apr 2024</p>
       </div>
-      <ul>
-        <li>Delivered table service across multiple simultaneous tables, resolving issues under pressure</li>
-      </ul>
     </div>
 
   </section>
