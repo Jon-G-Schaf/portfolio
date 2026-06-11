@@ -123,7 +123,7 @@ export default function Hero() {
             Resume
           </a>
           <Link href="/#contact" className="link-quiet text-sm text-muted hover:text-fog">
-            Contact →
+            Contact &rarr;
           </Link>
         </motion.div>
       </motion.div>

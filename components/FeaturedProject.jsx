@@ -51,13 +51,13 @@ export default function FeaturedProject() {
                 aria-hidden="true"
                 className="transition-transform group-hover:translate-x-1"
               >
-                →
+                &rarr;
               </span>
             </Link>
           </div>
         </Reveal>
 
-        {/* Visual — the live map, in a slim browser frame. The whole frame
+        {/* Visual - the live map, in a slim browser frame. The whole frame
             links out to the running product. */}
         <Reveal delay={0.1} className="lg:col-span-7">
           <div className="relative">

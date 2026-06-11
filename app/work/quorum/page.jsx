@@ -104,7 +104,7 @@ export default function QuorumCaseStudy() {
                 href="/#work"
                 className="link-quiet font-mono text-xs uppercase tracking-label text-muted hover:text-fog"
               >
-                ← Back to work
+                &larr; Back to work
               </Link>
             </Reveal>
 
@@ -126,10 +126,10 @@ export default function QuorumCaseStudy() {
             <Reveal delay={0.16}>
               <dl className="mt-14 grid grid-cols-2 gap-x-8 gap-y-6 font-mono text-xs sm:grid-cols-4">
                 {[
-                  ["Role", "UI/UX lead · Full-stack build"],
+                  ["Role", "UI/UX lead \u00b7 Full-stack build"],
                   ["Context", "CS capstone, Ohio University"],
                   ["Timeline", "Aug 2025 - May 2026"],
-                  ["Stack", "Flutter · Dart · Firebase"],
+                  ["Stack", "Flutter \u00b7 Dart \u00b7 Firebase"],
                 ].map(([term, detail]) => (
                   <div key={term}>
                     <dt className="uppercase tracking-label text-muted">{term}</dt>
@@ -141,7 +141,7 @@ export default function QuorumCaseStudy() {
           </div>
         </header>
 
-        {/* Hero visual — the signature Discover screen, in both themes */}
+        {/* Hero visual - the signature Discover screen, in both themes */}
         <div className="mx-auto w-full max-w-page px-6 pt-16 sm:px-10">
           <Reveal>
             <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10">
@@ -162,7 +162,7 @@ export default function QuorumCaseStudy() {
         </div>
 
         {/* Overview */}
-        <StudySection id="overview" eyebrow="01 · Overview" title="What Quorum is">
+        <StudySection id="overview" eyebrow="01 \u00b7 Overview" title="What Quorum is">
           <Reveal>
             <p>
               Quorum is a mobile app for finding events near you and getting people
@@ -190,7 +190,7 @@ export default function QuorumCaseStudy() {
         {/* Problem */}
         <StudySection
           id="problem"
-          eyebrow="02 · Problem"
+          eyebrow="02 \u00b7 Problem"
           title="The plan only works if people show"
         >
           <Reveal>
@@ -216,7 +216,7 @@ export default function QuorumCaseStudy() {
         {/* Role & process */}
         <StudySection
           id="process"
-          eyebrow="03 · Role & process"
+          eyebrow="03 \u00b7 Role & process"
           title="From Figma flows to a shipped design system"
         >
           <Reveal>
@@ -255,7 +255,7 @@ export default function QuorumCaseStudy() {
         {/* Product & design decisions */}
         <StudySection
           id="design"
-          eyebrow="04 · Product decisions"
+          eyebrow="04 \u00b7 Product decisions"
           title="The calls that shaped the app"
         >
           <div className="space-y-12 pt-2">
@@ -336,7 +336,7 @@ export default function QuorumCaseStudy() {
           </div>
         </StudySection>
 
-        {/* More of the app — gallery of the remaining real screens */}
+        {/* More of the app - gallery of the remaining real screens */}
         <div className="mx-auto w-full max-w-page px-6 py-8 sm:px-10">
           <Reveal>
             <p className="mb-8 flex items-center gap-3 font-mono text-xs uppercase tracking-label text-muted">
@@ -366,7 +366,7 @@ export default function QuorumCaseStudy() {
         {/* Engineering */}
         <StudySection
           id="engineering"
-          eyebrow="05 · Engineering"
+          eyebrow="05 \u00b7 Engineering"
           title="Flutter + Firebase, and the hard parts"
         >
           <Reveal>
@@ -415,7 +415,7 @@ export default function QuorumCaseStudy() {
         {/* Outcome */}
         <StudySection
           id="outcome"
-          eyebrow="06 · Outcome"
+          eyebrow="06 \u00b7 Outcome"
           title="What shipped, and what I took from it"
         >
           <Reveal>
@@ -460,7 +460,7 @@ export default function QuorumCaseStudy() {
                   Email me
                 </a>
                 <Link href="/#projects" className="link-quiet text-sm text-muted hover:text-fog">
-                  More work →
+                  More work &rarr;
                 </Link>
               </div>
             </div>
