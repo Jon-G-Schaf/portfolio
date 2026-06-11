@@ -14,7 +14,7 @@ export default function Contact() {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
-      // Clipboard unavailable (older browser / permissions) — the mailto
+      // Clipboard unavailable (older browser / permissions) - the mailto
       // link right above still works, so fail silently.
     }
   }
@@ -45,7 +45,7 @@ export default function Contact() {
               onClick={copyEmail}
               className="rounded-full border border-line px-4 py-1.5 font-mono text-xs uppercase tracking-label text-muted transition-colors hover:border-amber/60 hover:text-fog"
             >
-              {copied ? "Copied ✓" : "Copy"}
+              {copied ? "Copied \u2713" : "Copy"}
             </button>
           </div>
         </Reveal>
@@ -59,7 +59,7 @@ export default function Contact() {
                 rel="noopener noreferrer"
                 className="link-quiet text-muted hover:text-fog"
               >
-                GitHub ↗
+                GitHub &#8599;
               </a>
             </li>
             <li>
@@ -69,7 +69,7 @@ export default function Contact() {
                 rel="noopener noreferrer"
                 className="link-quiet text-muted hover:text-fog"
               >
-                LinkedIn ↗
+                LinkedIn &#8599;
               </a>
             </li>
             <li>
@@ -77,7 +77,7 @@ export default function Contact() {
                 href={site.links.resume}
                 className="link-quiet text-muted hover:text-fog"
               >
-                Resume ↓
+                Resume &darr;
               </a>
             </li>
           </ul>

@@ -24,7 +24,7 @@ export default function ThemeSongProvider({ children }) {
     if (playing) {
       audio.pause();
     } else {
-      // Rejects if the file is missing or autoplay is blocked — ignore.
+      // Rejects if the file is missing or autoplay is blocked - ignore.
       audio.play().catch(() => {});
     }
   }

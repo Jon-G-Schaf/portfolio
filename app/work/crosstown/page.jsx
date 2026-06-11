@@ -114,7 +114,7 @@ export default function CrosstownCaseStudy() {
                 href="/#work"
                 className="link-quiet font-mono text-xs uppercase tracking-label text-muted hover:text-fog"
               >
-                ← Back to work
+                &larr; Back to work
               </Link>
             </Reveal>
 
@@ -141,7 +141,7 @@ export default function CrosstownCaseStudy() {
                   aria-hidden="true"
                   className="transition-transform group-hover:translate-x-1"
                 >
-                  →
+                  &rarr;
                 </span>
               </a>
             </Reveal>
@@ -151,9 +151,9 @@ export default function CrosstownCaseStudy() {
               <dl className="mt-14 grid grid-cols-2 gap-x-8 gap-y-6 font-mono text-xs sm:grid-cols-4">
                 {[
                   ["Role", "Design + build, solo"],
-                  ["Context", "Personal project · live product"],
+                  ["Context", "Personal project \u00b7 live product"],
                   ["Timeline", "June 2026 - running 24/7 since"],
-                  ["Stack", "TypeScript · Postgres · Next.js"],
+                  ["Stack", "TypeScript \u00b7 Postgres \u00b7 Next.js"],
                 ].map(([term, detail]) => (
                   <div key={term}>
                     <dt className="uppercase tracking-label text-muted">{term}</dt>
@@ -165,21 +165,21 @@ export default function CrosstownCaseStudy() {
           </div>
         </header>
 
-        {/* Hero visual — the live map */}
+        {/* Hero visual - the live map */}
         <div className="mx-auto w-full max-w-page px-6 pt-16 sm:px-10">
           <Reveal>
             <BrowserShot
               src="/images/crosstown-map.jpg"
               alt="Crosstown's live map at night: every COTA bus as a glowing directional marker over a dark map of Columbus, route strands faintly lit beneath them, with a stats panel, a service-tier legend, and a ticker of recent arrivals"
               h={900}
-              label="The live map · one marker per bus, updating in real time"
+              label="The live map \u00b7 one marker per bus, updating in real time"
               priority
             />
           </Reveal>
         </div>
 
         {/* Overview */}
-        <StudySection id="overview" eyebrow="01 · Overview" title="What Crosstown is">
+        <StudySection id="overview" eyebrow="01 \u00b7 Overview" title="What Crosstown is">
           <Reveal>
             <p>
               Crosstown answers one question: how reliable is each Columbus bus route,
@@ -206,7 +206,7 @@ export default function CrosstownCaseStudy() {
         {/* Problem */}
         <StudySection
           id="problem"
-          eyebrow="02 · Problem"
+          eyebrow="02 \u00b7 Problem"
           title="The schedule is a promise nobody checks"
         >
           <Reveal>
@@ -233,7 +233,7 @@ export default function CrosstownCaseStudy() {
         {/* System */}
         <StudySection
           id="system"
-          eyebrow="03 · The system"
+          eyebrow="03 \u00b7 The system"
           title="A 24/7 pipeline on a $5 budget"
         >
           <Reveal>
@@ -248,7 +248,7 @@ export default function CrosstownCaseStudy() {
             </p>
           </Reveal>
           <Reveal>
-            <p>The parts I'd want to be asked about in an interview:</p>
+            <p>The parts worth digging into:</p>
           </Reveal>
           <Reveal>
             <ul className="space-y-3">
@@ -303,7 +303,7 @@ export default function CrosstownCaseStudy() {
         {/* Design */}
         <StudySection
           id="design"
-          eyebrow="04 · Design"
+          eyebrow="04 \u00b7 Design"
           title="Night service: a control room, not a dashboard"
         >
           <Reveal>
@@ -357,7 +357,7 @@ export default function CrosstownCaseStudy() {
         {/* Decisions */}
         <StudySection
           id="decisions"
-          eyebrow="05 · Decisions"
+          eyebrow="05 \u00b7 Decisions"
           title="The calls that shaped it"
         >
           <div className="space-y-12 pt-2">
@@ -404,7 +404,7 @@ export default function CrosstownCaseStudy() {
         {/* Outcome */}
         <StudySection
           id="outcome"
-          eyebrow="06 · Outcome"
+          eyebrow="06 \u00b7 Outcome"
           title="Live, recording, and compounding"
         >
           <Reveal>
@@ -457,7 +457,7 @@ export default function CrosstownCaseStudy() {
                   Email me
                 </a>
                 <Link href="/#projects" className="link-quiet text-sm text-muted hover:text-fog">
-                  More work →
+                  More work &rarr;
                 </Link>
               </div>
             </div>

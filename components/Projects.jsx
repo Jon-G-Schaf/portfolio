@@ -26,13 +26,13 @@ export default function Projects() {
               </p>
               <p className="mt-6 flex items-center justify-between">
                 <span className="font-mono text-xs text-muted">
-                  {project.tags.join(" · ")}
+                  {project.tags.join(" \u00b7 ")}
                 </span>
                 <span
                   aria-hidden="true"
                   className="text-muted transition-transform group-hover:translate-x-1 group-hover:text-amber"
                 >
-                  →
+                  &rarr;
                 </span>
               </p>
             </a>

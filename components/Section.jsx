@@ -2,7 +2,7 @@ import Reveal from "@/components/Reveal";
 
 /**
  * Shared section shell. Gives every section the same horizontal measure,
- * vertical rhythm, and a monospace eyebrow label — the page's recurring
+ * vertical rhythm, and a monospace eyebrow label - the page's recurring
  * structural device.
  */
 export default function Section({ id, eyebrow, children, align = "left", className = "" }) {
