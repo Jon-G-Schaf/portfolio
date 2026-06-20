@@ -21,7 +21,7 @@ const PUSH_STRENGTH = 3.3;
 const FRICTION = 0.84;
 const HEAL = 0.005; // how quickly pooled grains drift home (small = slow)
 const LIGHT_FALLOFF = 0.24; // share of the short side the cursor light reaches
-const MOBILE_LIGHT_FALLOFF = 0.13;
+const MOBILE_LIGHT_FALLOFF = 0.11;
 const GRAIN = [210, 146, 86]; // toned to sit close to the lit sand below
 const SPRITE_SIZE = 32;
 
@@ -140,7 +140,7 @@ export default function SandGrains({ reduceMotion = false, className = "" }) {
         // Desktops rest on a soft top-center sun; touch/mobile has no cursor,
         // so place the light just beyond the top edge to mimic one hovering
         // over the page boundary.
-        const sy = canHover ? height * 0.1 : -height * 0.16;
+        const sy = canHover ? height * 0.1 : -height * 0.18;
         pointer.x = sx;
         pointer.y = sy;
         light.x = light.tx = sx;

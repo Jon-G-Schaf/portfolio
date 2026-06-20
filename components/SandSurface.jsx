@@ -213,7 +213,7 @@ export default function SandSurface({ reduceMotion = false, className = "" }) {
     const canHover = !!(
       window.matchMedia && window.matchMedia("(hover: hover)").matches
     );
-    const SUN = canHover ? { x: 0.5, y: 0.1 } : { x: 0.5, y: -0.16 };
+    const SUN = canHover ? { x: 0.5, y: 0.1 } : { x: 0.5, y: -0.18 };
 
     // Recent pointer positions (a fading trail) drive the drag trough.
     const TRAIL_N = 24;
@@ -277,7 +277,7 @@ export default function SandSurface({ reduceMotion = false, className = "" }) {
 
     // A tighter glint on touch devices keeps the fixed top-edge sun from
     // blooming too large; desktops use the full pool.
-    gl.uniform1f(uGlow, canHover ? 1.0 : 0.7);
+    gl.uniform1f(uGlow, canHover ? 1.0 : 0.55);
 
     resize();
     const ro = new ResizeObserver(() => {
