@@ -33,6 +33,7 @@ uniform float u_time;
 uniform vec2 u_mouse;
 uniform vec2 u_trail[TRAIL_N];
 uniform float u_trailStr[TRAIL_N];
+uniform float u_glow;
 
 float hash(vec2 p) {
   p = fract(p * vec2(123.34, 456.21));
@@ -102,10 +103,10 @@ void main() {
   vec2 p = vec2(uv.x * aspect, uv.y);
   vec2 windUv = vec2(p.x * 0.76 + p.y * 0.48, p.y * 0.82 - p.x * 0.16);
   float wind = sin(windUv.x * 12.0 + fbm(windUv * 1.7) * 3.0 - t * 0.7);
-  float windLine = smoothstep(0.44, 1.0, wind);
+  float windLine = smoothstep(0.40, 1.0, wind);
   float windMask = 0.72 + 0.28 * smoothstep(0.04, 0.36, uv.y);
-  col *= 1.0 + wind * 0.022 * windMask;
-  col += vec3(1.0, 0.76, 0.38) * windLine * 0.042 * windMask;
+  col *= 1.0 + wind * 0.030 * windMask;
+  col += vec3(1.0, 0.76, 0.38) * windLine * 0.060 * windMask;
 
   // --- the cursor lights the nearby sand; it falls dark farther away, and the
   //     recent drag trail stays lit ---
@@ -113,7 +114,7 @@ void main() {
   col *= clamp(0.30 + 0.78 * broad + 0.5 * trail, 0.0, 1.15);
 
   // --- sun glint: tight pool of sparkle at the cursor ---
-  float radius = 0.34;
+  float radius = 0.34 * u_glow;
   float pool = exp(-(md * md) / (radius * radius));
   float spec = 0.08 + pool; // faint ambient sparkle + bright pool at cursor
 
@@ -204,28 +205,28 @@ export default function SandSurface({ reduceMotion = false, className = "" }) {
     const uMouse = gl.getUniformLocation(prog, "u_mouse");
     const uTrail = gl.getUniformLocation(prog, "u_trail[0]");
     const uTrailStr = gl.getUniformLocation(prog, "u_trailStr[0]");
+    const uGlow = gl.getUniformLocation(prog, "u_glow");
+
+    // Touch devices can't hover/drag, so park the light just beyond the top
+    // edge; desktops rest on a soft top-center "sun" until the pointer moves,
+    // then ease back to it when the pointer leaves.
+    const canHover = !!(
+      window.matchMedia && window.matchMedia("(hover: hover)").matches
+    );
+    const SUN = canHover ? { x: 0.5, y: 0.1 } : { x: 0.5, y: -0.16 };
 
     // Recent pointer positions (a fading trail) drive the drag trough.
     const TRAIL_N = 24;
     const trailXY = new Float32Array(TRAIL_N * 2);
     const trailStr = new Float32Array(TRAIL_N);
     let head = 0;
-    const last = { x: 0.5, y: 0.42 };
+    const last = { x: SUN.x, y: SUN.y };
 
     let width = 0;
     let height = 0;
     let raf = 0;
     let cancelled = false;
-    // Touch devices can't hover/drag, so park the light just beyond the top
-    // edge instead of following a pointer.
-    const canHover = !!(
-      window.matchMedia && window.matchMedia("(hover: hover)").matches
-    );
-    const mouse = { x: 0.5, y: 0.42, tx: 0.5, ty: 0.42 };
-    if (!canHover) {
-      mouse.x = mouse.tx = 0.5;
-      mouse.y = mouse.ty = -0.14;
-    }
+    const mouse = { x: SUN.x, y: SUN.y, tx: SUN.x, ty: SUN.y };
     const start = performance.now();
 
     function resize() {
@@ -267,6 +268,16 @@ export default function SandSurface({ reduceMotion = false, className = "" }) {
       mouse.tx = (e.clientX - r.left) / r.width;
       mouse.ty = (e.clientY - r.top) / r.height;
     }
+    // When the pointer leaves the window, ease the light back to the resting
+    // sun so the hero always settles into a composed, lit state.
+    function onLeave() {
+      mouse.tx = SUN.x;
+      mouse.ty = SUN.y;
+    }
+
+    // A tighter glint on touch devices keeps the fixed top-edge sun from
+    // blooming too large; desktops use the full pool.
+    gl.uniform1f(uGlow, canHover ? 1.0 : 0.7);
 
     resize();
     const ro = new ResizeObserver(() => {
@@ -280,7 +291,10 @@ export default function SandSurface({ reduceMotion = false, className = "" }) {
     } else {
       // only follow the pointer where hovering is possible; mobile keeps the
       // fixed beam but still twinkles
-      if (canHover) window.addEventListener("pointermove", onMove, { passive: true });
+      if (canHover) {
+        window.addEventListener("pointermove", onMove, { passive: true });
+        document.addEventListener("mouseleave", onLeave, { passive: true });
+      }
       raf = requestAnimationFrame(frame);
     }
 
@@ -289,6 +303,7 @@ export default function SandSurface({ reduceMotion = false, className = "" }) {
       cancelAnimationFrame(raf);
       ro.disconnect();
       window.removeEventListener("pointermove", onMove);
+      document.removeEventListener("mouseleave", onLeave);
       const ext = gl.getExtension("WEBGL_lose_context");
       if (ext) ext.loseContext();
     };

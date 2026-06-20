@@ -14,14 +14,14 @@ import { useEffect, useRef } from "react";
  * Reduced-motion users get a single static frame (no loop, no listeners).
  */
 
-const COUNT_DIVISOR = 18; // larger = sparser
-const COUNT_CAP = 9000;
+const COUNT_DIVISOR = 18; // base density, scaled by device tier (larger = sparser)
+const COUNT_CAP = 9000; // base cap, scaled by device tier
 const PUSH_RADIUS = 142;
 const PUSH_STRENGTH = 3.3;
 const FRICTION = 0.84;
 const HEAL = 0.005; // how quickly pooled grains drift home (small = slow)
 const LIGHT_FALLOFF = 0.24; // share of the short side the cursor light reaches
-const MOBILE_LIGHT_FALLOFF = 0.16;
+const MOBILE_LIGHT_FALLOFF = 0.13;
 const GRAIN = [210, 146, 86]; // toned to sit close to the lit sand below
 const SPRITE_SIZE = 32;
 
@@ -45,6 +45,24 @@ function makeGrain() {
   g.fillStyle = grad;
   g.fillRect(0, 0, SPRITE_SIZE, SPRITE_SIZE);
   return c;
+}
+
+// Grain count adapts to device capability so low-power phones and laptops draw
+// a lighter field while capable desktops get the full, dense sand. Returns a
+// multiplier (~0.4 weak → 1.2 strong) applied to both density and the cap.
+function qualityTier() {
+  if (typeof navigator === "undefined") return 1;
+  const mem = navigator.deviceMemory; // GB; undefined on Safari/Firefox
+  const cores = navigator.hardwareConcurrency || 8;
+  const coarse =
+    typeof window.matchMedia === "function" &&
+    window.matchMedia("(pointer: coarse)").matches;
+  let tier = 1;
+  if (coarse) tier -= 0.4; // phones / tablets
+  if (mem !== undefined && mem <= 4) tier -= 0.3; // low-memory devices
+  if (cores <= 4) tier -= 0.2; // low-core laptops
+  if ((mem === undefined || mem >= 8) && cores >= 8) tier += 0.15; // capable desktops
+  return Math.max(0.4, Math.min(1.2, tier));
 }
 
 export default function SandGrains({ reduceMotion = false, className = "" }) {
@@ -72,14 +90,18 @@ export default function SandGrains({ reduceMotion = false, className = "" }) {
     let ro = null;
     let rect = canvas.getBoundingClientRect();
     let lightR2 = 1;
-    // pointer.moveT tracks the last move so we only push WHILE dragging
+    const tier = qualityTier();
+    // pointer drives the brush (raw, instant, used only while dragging); light
+    // is the smoothed glow position so it can glide to the cursor and ease back
+    // to the resting sun.
     const pointer = { x: 0, y: 0, moveT: -1e9 };
+    const light = { x: 0, y: 0, tx: 0, ty: 0 };
 
     function build() {
       grains = [];
       const count = Math.min(
-        COUNT_CAP,
-        Math.round((width * height) / COUNT_DIVISOR)
+        Math.round(COUNT_CAP * tier),
+        Math.round((width * height) / (COUNT_DIVISOR / tier))
       );
       for (let i = 0; i < count; i++) {
         const hx = Math.random() * width;
@@ -114,10 +136,15 @@ export default function SandGrains({ reduceMotion = false, className = "" }) {
         Math.min(width, height) * (canHover ? LIGHT_FALLOFF : MOBILE_LIGHT_FALLOFF);
       lightR2 = r * r;
       if (pointer.moveT < 0) {
-        pointer.x = width * 0.5;
-        // Touch/mobile has no cursor, so place the light just beyond the top
-        // edge to mimic a desktop cursor hovering over the page boundary.
-        pointer.y = canHover ? height * 0.42 : -height * 0.14;
+        const sx = width * 0.5;
+        // Desktops rest on a soft top-center sun; touch/mobile has no cursor,
+        // so place the light just beyond the top edge to mimic one hovering
+        // over the page boundary.
+        const sy = canHover ? height * 0.1 : -height * 0.16;
+        pointer.x = sx;
+        pointer.y = sy;
+        light.x = light.tx = sx;
+        light.y = light.ty = sy;
       }
       build();
     }
@@ -125,6 +152,8 @@ export default function SandGrains({ reduceMotion = false, className = "" }) {
     function draw(now) {
       const tnow = now || performance.now();
       const moving = tnow - pointer.moveT < 100;
+      light.x += (light.tx - light.x) * 0.12;
+      light.y += (light.ty - light.y) * 0.12;
       ctx.clearRect(0, 0, width, height);
       for (const g of grains) {
         if (moving) {
@@ -145,8 +174,8 @@ export default function SandGrains({ reduceMotion = false, className = "" }) {
         g.y += g.vy;
 
         // grains catch the light near the cursor, fall dark farther away
-        const lx = g.x - pointer.x;
-        const ly = g.y - pointer.y;
+        const lx = g.x - light.x;
+        const ly = g.y - light.y;
         const prox = Math.exp(-(lx * lx + ly * ly) / lightR2);
         ctx.globalAlpha = g.a * (0.6 + 0.4 * prox);
         const s = Math.max(1.55, g.r * (1.82 + 0.5 * prox));
@@ -160,6 +189,13 @@ export default function SandGrains({ reduceMotion = false, className = "" }) {
       pointer.x = e.clientX - rect.left;
       pointer.y = e.clientY - rect.top;
       pointer.moveT = performance.now();
+      light.tx = pointer.x;
+      light.ty = pointer.y;
+    }
+    // Ease the glow back to the resting sun when the pointer leaves the window.
+    function onLeave() {
+      light.tx = width * 0.5;
+      light.ty = height * 0.1;
     }
     function onScroll() {
       rect = canvas.getBoundingClientRect();
@@ -175,6 +211,7 @@ export default function SandGrains({ reduceMotion = false, className = "" }) {
     if (interactive) {
       window.addEventListener("pointermove", onMove, { passive: true });
       window.addEventListener("scroll", onScroll, { passive: true });
+      document.addEventListener("mouseleave", onLeave, { passive: true });
       raf = requestAnimationFrame(draw);
     } else {
       draw();
@@ -186,6 +223,7 @@ export default function SandGrains({ reduceMotion = false, className = "" }) {
       if (ro) ro.disconnect();
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("scroll", onScroll);
+      document.removeEventListener("mouseleave", onLeave);
     };
   }, [reduceMotion]);
 
