@@ -102,10 +102,10 @@ void main() {
   vec2 p = vec2(uv.x * aspect, uv.y);
   vec2 windUv = vec2(p.x * 0.76 + p.y * 0.48, p.y * 0.82 - p.x * 0.16);
   float wind = sin(windUv.x * 12.0 + fbm(windUv * 1.7) * 3.0 - t * 0.7);
-  float windLine = smoothstep(0.58, 1.0, wind);
+  float windLine = smoothstep(0.44, 1.0, wind);
   float windMask = 0.72 + 0.28 * smoothstep(0.04, 0.36, uv.y);
-  col *= 1.0 + wind * 0.014 * windMask;
-  col += vec3(1.0, 0.76, 0.38) * windLine * 0.04 * windMask;
+  col *= 1.0 + wind * 0.022 * windMask;
+  col += vec3(1.0, 0.76, 0.38) * windLine * 0.042 * windMask;
 
   // --- the cursor lights the nearby sand; it falls dark farther away, and the
   //     recent drag trail stays lit ---
