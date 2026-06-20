@@ -1,14 +1,13 @@
 "use client";
 
-import { useRef } from "react";
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { hero, site } from "@/lib/content";
-import SandField from "@/components/SandField";
+import SandSurface from "@/components/SandSurface";
+import SandGrains from "@/components/SandGrains";
 
 export default function Hero() {
   const reduceMotion = useReducedMotion();
-  const glowRef = useRef(null);
 
   const stagger = {
     hidden: {},
@@ -26,64 +25,51 @@ export default function Hero() {
     },
   };
 
-  // Ember glow that trails the cursor. Writes styles directly (no re-render);
-  // the overlay only exists for fine pointers and sits under the content.
-  function handleMouseMove(e) {
-    if (reduceMotion) return;
-    const el = glowRef.current;
-    if (!el) return;
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    el.style.background = `radial-gradient(540px circle at ${x}px ${y}px, rgba(255, 178, 80, 0.12), transparent 70%)`;
-  }
-
-  function handleMouseLeave() {
-    const el = glowRef.current;
-    if (el) el.style.background = "transparent";
-  }
-
   return (
     <section
       id="top"
       aria-label="Introduction"
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      className="relative overflow-hidden border-b border-line"
+      className="relative flex min-h-[90vh] flex-col justify-center overflow-hidden"
     >
-      {/* Texture: drifting sand that dissolves toward the content. */}
-      <SandField />
+      {/* The whole sand stack, masked to fade out at the bottom so the section
+          dissolves into the continuous page background — no seam, no hard line. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0"
+        style={{
+          WebkitMaskImage:
+            "linear-gradient(to bottom, #000 68%, transparent 100%)",
+          maskImage: "linear-gradient(to bottom, #000 68%, transparent 100%)",
+        }}
+      >
+        {/* Warm sand fallback, in case WebGL is unavailable. */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_38%,#7a3f17_0%,#3a1f0d_60%,#1b1008_100%)]" />
+        {/* Lower layer: lit sand, the sun glint pooled under the cursor. */}
+        <SandSurface
+          reduceMotion={!!reduceMotion}
+          className="absolute inset-0 block h-full w-full"
+        />
+        {/* Upper layer: loose grains the cursor brushes aside and pools. */}
+        <SandGrains
+          reduceMotion={!!reduceMotion}
+          className="absolute inset-0 block h-full w-full"
+        />
+      </div>
 
-      {/* Light: a sun-like glow pouring in from the top, plus two soft
-          off-center washes for depth. */}
+      {/* Legibility scrim behind the centered copy. */}
       <div
         aria-hidden="true"
-        className="absolute -top-72 left-1/2 h-[42rem] w-[72rem] -translate-x-1/2 rounded-full bg-amber/20 blur-[160px]"
-      />
-      <div
-        aria-hidden="true"
-        className="absolute -top-40 right-[-10%] h-[34rem] w-[34rem] rounded-full bg-ember/20 blur-[140px]"
-      />
-      <div
-        aria-hidden="true"
-        className="absolute bottom-[-30%] left-[-5%] h-[26rem] w-[26rem] rounded-full bg-amber/10 blur-[140px]"
-      />
-
-      {/* Interactive: ember glow that follows the cursor (desktop only). */}
-      <div
-        ref={glowRef}
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 hidden [@media(pointer:fine)]:block"
+        className="absolute inset-0 bg-[radial-gradient(ellipse_62%_52%_at_50%_44%,rgba(12,7,3,0.5),transparent_72%)]"
       />
 
       <motion.div
         variants={stagger}
         initial="hidden"
         animate="show"
-        className="relative mx-auto w-full max-w-page px-6 pb-28 pt-28 text-center sm:px-10 md:pb-40 md:pt-40"
+        className="relative z-10 mx-auto w-full max-w-page px-6 py-24 text-center sm:px-10"
       >
         <motion.p variants={item} className="mb-10 flex justify-center">
-          <span className="inline-flex items-center gap-2 rounded-full border border-line bg-panel/70 px-4 py-2 font-mono text-xs uppercase tracking-label text-muted backdrop-blur-sm">
+          <span className="inline-flex items-center gap-2 rounded-full border border-line bg-panel/60 px-4 py-2 font-mono text-xs uppercase tracking-label text-fog/80 backdrop-blur-sm">
             <svg
               aria-hidden="true"
               width="11"
@@ -108,7 +94,7 @@ export default function Hero() {
 
         <motion.h1
           variants={item}
-          className="mx-auto max-w-5xl font-display text-6xl font-semibold leading-[1.02] tracking-tight sm:text-7xl md:text-8xl"
+          className="mx-auto max-w-5xl font-display text-6xl font-semibold leading-[1.02] tracking-tight text-fog drop-shadow-[0_2px_20px_rgba(0,0,0,0.35)] sm:text-7xl md:text-8xl"
         >
           {hero.headline}
           <span className="accent-text-flow mt-4 block pb-1 text-3xl font-medium leading-[1.2] sm:text-5xl">
@@ -118,7 +104,7 @@ export default function Hero() {
 
         <motion.p
           variants={item}
-          className="mx-auto mt-8 max-w-2xl text-left text-lg leading-relaxed text-muted"
+          className="mx-auto mt-8 max-w-2xl text-left text-lg leading-relaxed text-fog/85"
         >
           {hero.intro}
         </motion.p>
@@ -132,15 +118,32 @@ export default function Hero() {
           </Link>
           <a
             href={site.links.resume}
-            className="rounded-full border border-line px-6 py-3 text-sm text-fog transition-colors hover:border-amber/60"
+            className="rounded-full border border-line bg-panel/30 px-6 py-3 text-sm text-fog backdrop-blur-sm transition-colors hover:border-amber/60"
           >
             Resume
           </a>
-          <Link href="/#contact" className="link-quiet text-sm text-muted hover:text-fog">
+          <Link href="/#contact" className="link-quiet text-sm text-fog/80 hover:text-fog">
             Contact &rarr;
           </Link>
         </motion.div>
       </motion.div>
+
+      {/* A note to self, in the margin — a quiet nod for anyone who lingers. */}
+      {hero.note && (
+        <motion.p
+          aria-hidden="true"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{
+            delay: reduceMotion ? 0 : 6,
+            duration: reduceMotion ? 0 : 1.4,
+            ease: "easeOut",
+          }}
+          className="pointer-events-none absolute bottom-6 left-6 z-10 hidden max-w-[15rem] -rotate-2 font-hand text-lg leading-snug text-amber/60 sm:block md:bottom-9 md:left-10 md:text-xl"
+        >
+          {hero.note}
+        </motion.p>
+      )}
     </section>
   );
 }

@@ -1,5 +1,5 @@
 import "./globals.css";
-import { Inter, Schibsted_Grotesk, JetBrains_Mono } from "next/font/google";
+import { Inter, Schibsted_Grotesk, JetBrains_Mono, Caveat } from "next/font/google";
 import { site } from "@/lib/content";
 import ThemeSongProvider from "@/components/ThemeSongProvider";
 
@@ -18,6 +18,12 @@ const display = Schibsted_Grotesk({
 const mono = JetBrains_Mono({
   subsets: ["latin"],
   variable: "--font-mono",
+  display: "swap",
+});
+
+const hand = Caveat({
+  subsets: ["latin"],
+  variable: "--font-hand",
   display: "swap",
 });
 
@@ -49,7 +55,7 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="en"
-      className={`${body.variable} ${display.variable} ${mono.variable}`}
+      className={`${body.variable} ${display.variable} ${mono.variable} ${hand.variable}`}
     >
       <body className="grain font-sans">
         <a
