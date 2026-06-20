@@ -182,15 +182,15 @@ export default function SandSurface({ reduceMotion = false, className = "" }) {
     let height = 0;
     let raf = 0;
     let cancelled = false;
-    // Touch devices can't hover/drag, so park the light as a fixed beam above
-    // the name instead of following a pointer.
+    // Touch devices can't hover/drag, so park the light just beyond the top
+    // edge instead of following a pointer.
     const canHover = !!(
       window.matchMedia && window.matchMedia("(hover: hover)").matches
     );
     const mouse = { x: 0.5, y: 0.42, tx: 0.5, ty: 0.42 };
     if (!canHover) {
       mouse.x = mouse.tx = 0.5;
-      mouse.y = mouse.ty = 0.22;
+      mouse.y = mouse.ty = -0.14;
     }
     const start = performance.now();
 

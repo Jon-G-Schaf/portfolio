@@ -21,6 +21,7 @@ const PUSH_STRENGTH = 3.3;
 const FRICTION = 0.84;
 const HEAL = 0.005; // how quickly pooled grains drift home (small = slow)
 const LIGHT_FALLOFF = 0.24; // share of the short side the cursor light reaches
+const MOBILE_LIGHT_FALLOFF = 0.16;
 const GRAIN = [210, 146, 86]; // toned to sit close to the lit sand below
 const SPRITE_SIZE = 32;
 
@@ -109,12 +110,14 @@ export default function SandGrains({ reduceMotion = false, className = "" }) {
       canvas.width = Math.round(width * dpr);
       canvas.height = Math.round(height * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      const r = Math.min(width, height) * LIGHT_FALLOFF;
+      const r =
+        Math.min(width, height) * (canHover ? LIGHT_FALLOFF : MOBILE_LIGHT_FALLOFF);
       lightR2 = r * r;
       if (pointer.moveT < 0) {
         pointer.x = width * 0.5;
-        // touch/mobile: fix the light as a beam above the name
-        pointer.y = height * (canHover ? 0.42 : 0.22);
+        // Touch/mobile has no cursor, so place the light just beyond the top
+        // edge to mimic a desktop cursor hovering over the page boundary.
+        pointer.y = canHover ? height * 0.42 : -height * 0.14;
       }
       build();
     }
