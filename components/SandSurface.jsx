@@ -7,8 +7,8 @@ import { useEffect, useRef } from "react";
  *
  * No sky, no horizon: the whole hero is sand. The sun's glint is a pool of fine
  * specular sparkles gathered under the pointer, fading with distance — so the
- * light follows the cursor across the sand. The surface itself is static; only
- * the glint moves (with the pointer) and twinkles.
+ * light follows the cursor across the sand. Subtle dune contours and wind
+ * shimmer keep the surface cinematic without adding extra DOM layers.
  *
  * Reduced-motion users get a single still frame. If WebGL is unavailable the
  * canvas hides itself and the CSS sand gradient behind it shows through.
@@ -80,6 +80,33 @@ void main() {
   float grain = fbm(vec2(uv.x * aspect, uv.y) * 260.0);
   col *= 0.90 + 0.18 * grain;
 
+  // --- broad dune forms: sweeping, readable ridges instead of flat noise ---
+  float crestA = 0.68 - 0.24 * uv.x + 0.045 * sin(uv.x * 4.6 + 0.4);
+  float da = uv.y - crestA;
+  float ridgeA = exp(-(da * da) / 0.0042);
+  float leeA = smoothstep(0.0, 0.34, da) * (1.0 - smoothstep(0.9, 1.0, uv.y));
+  float faceA = smoothstep(0.30, -0.08, da) * smoothstep(0.08, 0.7, uv.y);
+
+  float crestB = 0.38 + 0.13 * uv.x + 0.035 * sin(uv.x * 5.8 + 1.6);
+  float db = uv.y - crestB;
+  float ridgeB = exp(-(db * db) / 0.0032) * 0.75;
+  float leeB = smoothstep(0.0, 0.28, db) * (1.0 - smoothstep(0.78, 0.95, uv.y));
+
+  float duneShade = 1.0 + ridgeA * 0.28 + ridgeB * 0.18;
+  duneShade += faceA * 0.075;
+  duneShade -= leeA * 0.22 + leeB * 0.11;
+  col *= clamp(duneShade, 0.68, 1.38);
+  col += vec3(1.0, 0.62, 0.25) * (ridgeA * 0.095 + ridgeB * 0.052);
+
+  // --- visible wind shimmer: bright, slow-moving sand bands across the full field ---
+  vec2 p = vec2(uv.x * aspect, uv.y);
+  vec2 windUv = vec2(p.x * 0.76 + p.y * 0.48, p.y * 0.82 - p.x * 0.16);
+  float wind = sin(windUv.x * 12.0 + fbm(windUv * 1.7) * 3.0 - t * 0.7);
+  float windLine = smoothstep(0.58, 1.0, wind);
+  float windMask = 0.72 + 0.28 * smoothstep(0.04, 0.36, uv.y);
+  col *= 1.0 + wind * 0.014 * windMask;
+  col += vec3(1.0, 0.76, 0.38) * windLine * 0.04 * windMask;
+
   // --- the cursor lights the nearby sand; it falls dark farther away, and the
   //     recent drag trail stays lit ---
   float broad = exp(-(md * md) / (0.55 * 0.55));
@@ -102,6 +129,13 @@ void main() {
 
   // soft warm bloom under the cursor + a gentle glow trailing the drag
   col += vec3(1.0, 0.72, 0.4) * (pool * 0.16 + trail * 0.09);
+
+  // Reassert dune definition after sunlight and glints so the cursor does not
+  // flatten the ridgelines when it passes over them.
+  float ridgeDefinition = ridgeA * 0.11 + ridgeB * 0.07;
+  float leeDefinition = leeA * 0.065 + leeB * 0.038;
+  col += vec3(1.0, 0.66, 0.28) * ridgeDefinition;
+  col -= vec3(0.18, 0.09, 0.035) * leeDefinition;
 
   // gentle vignette to frame the field
   float vig = length((uv - 0.5) * vec2(1.0, 1.15));
