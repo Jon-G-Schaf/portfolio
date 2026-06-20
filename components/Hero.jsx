@@ -83,11 +83,25 @@ export default function Hero() {
         className="relative mx-auto w-full max-w-page px-6 pb-28 pt-28 text-center sm:px-10 md:pb-40 md:pt-40"
       >
         <motion.p variants={item} className="mb-10 flex justify-center">
-          <span className="inline-flex items-center gap-2.5 rounded-full border border-line bg-panel/70 px-4 py-2 font-mono text-xs uppercase tracking-label text-muted backdrop-blur-sm">
-            <span aria-hidden="true" className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-amber opacity-60" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-amber" />
-            </span>
+          <span className="inline-flex items-center gap-2 rounded-full border border-line bg-panel/70 px-4 py-2 font-mono text-xs uppercase tracking-label text-muted backdrop-blur-sm">
+            <svg
+              aria-hidden="true"
+              width="11"
+              height="14"
+              viewBox="0 0 11 14"
+              fill="none"
+              className="shrink-0 text-amber"
+            >
+              <path
+                d="M5.5 13C5.5 13 10 8.86 10 5.5a4.5 4.5 0 1 0-9 0C1 8.86 5.5 13 5.5 13Z"
+                fill="currentColor"
+                fillOpacity="0.18"
+                stroke="currentColor"
+                strokeWidth="1.1"
+                strokeLinejoin="round"
+              />
+              <circle cx="5.5" cy="5.5" r="1.6" fill="currentColor" />
+            </svg>
             {hero.eyebrow}
           </span>
         </motion.p>
