@@ -3,32 +3,46 @@
 import { useEffect, useRef } from "react";
 
 /**
- * SandGrains — a layer of loose sand that the cursor brushes aside.
+ * SandGrains — a layer of loose sand that the cursor carves through.
  *
  * A field of fine warm grains rests over the lit SandSurface, static until
- * disturbed. While the pointer is moving it pushes nearby grains radially out;
- * friction lets them coast and pool where they land, then they ease home so the
- * field heals. Grains also catch the light near the cursor and fall dark farther
- * away, matching the lit surface beneath.
+ * disturbed. While the pointer moves it acts like a solid object dragged across
+ * the sand: grains caught inside its disc are shoved out to the rim, where they
+ * heap into berms along the path. The carved channel persists, then quietly
+ * refills toward home. Each grain is drawn with a brightness-matched sprite so
+ * it's lit exactly like the surface beneath — dark where the sand is shaded,
+ * bright where the cursor lights it — so the field reads as the same surface
+ * rather than a sheet floating over it.
  *
  * Reduced-motion users get a single static frame (no loop, no listeners).
  */
 
 const COUNT_DIVISOR = 18; // base density, scaled by device tier (larger = sparser)
 const COUNT_CAP = 9000; // base cap, scaled by device tier
-const PUSH_RADIUS = 142;
-const PUSH_STRENGTH = 3.3;
-const FRICTION = 0.84;
-const HEAL = 0.005; // how quickly pooled grains drift home (small = slow)
-const LIGHT_FALLOFF = 0.24; // share of the short side the cursor light reaches
-const MOBILE_LIGHT_FALLOFF = 0.11;
-const GRAIN = [210, 146, 86]; // toned to sit close to the lit sand below
+const CARVE = 0.3; // how fast grains are shoved out of the cursor's disc to the rim
+const HEAL = 0.01; // how fast the carved channel refills toward home (small = persists)
+// Grains are lit exactly like the SandSurface beneath them. Its cursor glow
+// falls off over ~0.48 of the canvas height (the shader's "broad" term), so the
+// grains use the same radius. Crucially, instead of fading grains to nothing
+// where the sand is dark (which made the whole field vanish), each grain draws a
+// brightness-matched sprite: dark and blended into the shaded sand, bright and
+// sparkling where the cursor lights it. So the field stays visible everywhere as
+// fine grain, yet never reads as a separate sheet floating over the surface.
+const LIGHT_FALLOFF = 0.48; // fraction of HEIGHT the grain LIGHTING reaches (matches broad glow)
+const CARVE_FALLOFF = 0.2; // carve-disc radius as a fraction of canvas HEIGHT
+const GRAIN = [196, 134, 78]; // base grain hue; the brightness ramp below lights it
+const LIT_LEVELS = 6; // number of pre-rendered brightness steps
+const LIT_MIN = 0.52; // shaded-grain brightness (kept visible, still sits in the sand)
+const LIT_MAX = 1.15; // sunlit-grain brightness (sparkles under the cursor)
 const SPRITE_SIZE = 32;
 
-function makeGrain() {
+function makeGrain(bright) {
   const c = document.createElement("canvas");
   c.width = c.height = SPRITE_SIZE;
   const g = c.getContext("2d");
+  const r = Math.round(GRAIN[0] * bright);
+  const gr = Math.round(GRAIN[1] * bright);
+  const b = Math.round(GRAIN[2] * bright);
   const grad = g.createRadialGradient(
     SPRITE_SIZE / 2,
     SPRITE_SIZE / 2,
@@ -38,13 +52,29 @@ function makeGrain() {
     SPRITE_SIZE / 2
   );
   // sharper core so grains read as fine specks, not soft blobs
-  grad.addColorStop(0, `rgba(${GRAIN[0]},${GRAIN[1]},${GRAIN[2]},0.95)`);
-  grad.addColorStop(0.18, `rgba(${GRAIN[0]},${GRAIN[1]},${GRAIN[2]},0.8)`);
-  grad.addColorStop(0.55, `rgba(${GRAIN[0]},${GRAIN[1]},${GRAIN[2]},0.32)`);
-  grad.addColorStop(1, `rgba(${GRAIN[0]},${GRAIN[1]},${GRAIN[2]},0)`);
+  grad.addColorStop(0, `rgba(${r},${gr},${b},0.95)`);
+  grad.addColorStop(0.18, `rgba(${r},${gr},${b},0.8)`);
+  grad.addColorStop(0.55, `rgba(${r},${gr},${b},0.32)`);
+  grad.addColorStop(1, `rgba(${r},${gr},${b},0)`);
   g.fillStyle = grad;
   g.fillRect(0, 0, SPRITE_SIZE, SPRITE_SIZE);
   return c;
+}
+
+// A small ramp of brightness-graded sprites, shaded (LIT_MIN) to sunlit
+// (LIT_MAX). Each grain draws the one matching its light envelope.
+function makeGrainSprites() {
+  const out = [];
+  for (let i = 0; i < LIT_LEVELS; i++) {
+    out.push(makeGrain(LIT_MIN + (LIT_MAX - LIT_MIN) * (i / (LIT_LEVELS - 1))));
+  }
+  return out;
+}
+
+// GLSL-style smoothstep, so the grains can reuse the surface shader's vignette.
+function smoothstep(a, b, x) {
+  const t = Math.max(0, Math.min(1, (x - a) / (b - a)));
+  return t * t * (3 - 2 * t);
 }
 
 // Grain count adapts to device capability so low-power phones and laptops draw
@@ -81,7 +111,7 @@ export default function SandGrains({ reduceMotion = false, className = "" }) {
     );
     const interactive = canHover && !reduceMotion;
 
-    const sprite = makeGrain();
+    const sprites = makeGrainSprites();
     let width = 0;
     let height = 0;
     let grains = [];
@@ -90,6 +120,7 @@ export default function SandGrains({ reduceMotion = false, className = "" }) {
     let ro = null;
     let rect = canvas.getBoundingClientRect();
     let lightR2 = 1;
+    let pushR = 0; // carve-disc radius, matched to the focused glint (set in resize)
     const tier = qualityTier();
     // pointer drives the brush (raw, instant, used only while dragging); light
     // is the smoothed glow position so it can glide to the cursor and ease back
@@ -132,9 +163,9 @@ export default function SandGrains({ reduceMotion = false, className = "" }) {
       canvas.width = Math.round(width * dpr);
       canvas.height = Math.round(height * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      const r =
-        Math.min(width, height) * (canHover ? LIGHT_FALLOFF : MOBILE_LIGHT_FALLOFF);
+      const r = height * LIGHT_FALLOFF; // same broad falloff the surface uses (by height)
       lightR2 = r * r;
+      pushR = height * CARVE_FALLOFF; // carve-disc radius (independent of the lighting)
       if (pointer.moveT < 0) {
         const sx = width * 0.5;
         // Desktops rest on a soft top-center sun; touch/mobile has no cursor,
@@ -156,30 +187,41 @@ export default function SandGrains({ reduceMotion = false, className = "" }) {
       light.y += (light.ty - light.y) * 0.12;
       ctx.clearRect(0, 0, width, height);
       for (const g of grains) {
+        // Carve-and-pool: while the cursor moves it behaves like a solid object
+        // dragged across the sand, shoving any grain inside its disc out to the
+        // rim, where grains heap into berms along the path. No fling-and-coast,
+        // so the field stays put — it just gets carved, then slowly refills.
         if (moving) {
           const dx = g.x - pointer.x;
           const dy = g.y - pointer.y;
           const d2 = dx * dx + dy * dy;
-          if (d2 < PUSH_RADIUS * PUSH_RADIUS) {
+          if (d2 < pushR * pushR) {
             const d = Math.sqrt(d2) || 1;
-            const f = (1 - d / PUSH_RADIUS) * PUSH_STRENGTH * g.mob;
-            g.vx += (dx / d) * f;
-            g.vy += (dy / d) * f;
+            const corr = (pushR - d) * CARVE * g.mob; // shove toward the rim
+            g.x += (dx / d) * corr;
+            g.y += (dy / d) * corr;
           }
         }
-        // coast (friction) + slow pull home, so grains pool then heal
-        g.vx = (g.vx + (g.hx - g.x) * HEAL) * FRICTION;
-        g.vy = (g.vy + (g.hy - g.y) * HEAL) * FRICTION;
-        g.x += g.vx;
-        g.y += g.vy;
+        g.x += (g.hx - g.x) * HEAL; // the carve persists, then quietly refills home
+        g.y += (g.hy - g.y) * HEAL;
 
-        // grains catch the light near the cursor, fall dark farther away
+        // Light each grain like the surface beneath: the cursor's broad glow
+        // (prox) and the shader's vignette set a brightness, and we draw the
+        // brightness-matched sprite. Grains keep full presence everywhere (so
+        // the field is always visible) but go dark where the sand is shaded, so
+        // they read as the surface itself rather than a sheet floating over it.
         const lx = g.x - light.x;
         const ly = g.y - light.y;
         const prox = Math.exp(-(lx * lx + ly * ly) / lightR2);
-        ctx.globalAlpha = g.a * (0.6 + 0.4 * prox);
-        const s = Math.max(1.55, g.r * (1.82 + 0.5 * prox));
-        ctx.drawImage(sprite, g.x - s / 2, g.y - s / 2, s, s);
+        const vx = g.x / width - 0.5;
+        const vy = (g.y / height - 0.5) * 1.15;
+        const vig = 1 - 0.28 * smoothstep(0.45, 1.0, Math.sqrt(vx * vx + vy * vy));
+        const env = (0.36 + 0.74 * prox) * vig;
+        let li = Math.round(((env - LIT_MIN) / (LIT_MAX - LIT_MIN)) * (LIT_LEVELS - 1));
+        li = li < 0 ? 0 : li > LIT_LEVELS - 1 ? LIT_LEVELS - 1 : li;
+        ctx.globalAlpha = g.a;
+        const s = Math.max(1.6, g.r * (2.0 + 0.5 * prox));
+        ctx.drawImage(sprites[li], g.x - s / 2, g.y - s / 2, s, s);
       }
       ctx.globalAlpha = 1;
       if (!reduceMotion && !cancelled) raf = requestAnimationFrame(draw);

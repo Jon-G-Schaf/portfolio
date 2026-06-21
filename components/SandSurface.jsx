@@ -5,10 +5,10 @@ import { useEffect, useRef } from "react";
 /**
  * SandSurface — a warm, sun-lit plane of sand, rendered in WebGL.
  *
- * No sky, no horizon: the whole hero is sand. The sun's glint is a pool of fine
- * specular sparkles gathered under the pointer, fading with distance — so the
- * light follows the cursor across the sand. Subtle dune contours and wind
- * shimmer keep the surface cinematic without adding extra DOM layers.
+ * No sky, no horizon: the whole hero is sand. A warm light follows the pointer:
+ * a broad glow brightening the sand under the cursor, with a tight glint of fine
+ * specular sparkle at its center, easing into shadow with distance. A single
+ * broad dune and a sweeping wind gust keep the surface cinematic.
  *
  * Reduced-motion users get a single still frame. If WebGL is unavailable the
  * canvas hides itself and the CSS sand gradient behind it shows through.
@@ -33,7 +33,7 @@ uniform float u_time;
 uniform vec2 u_mouse;
 uniform vec2 u_trail[TRAIL_N];
 uniform float u_trailStr[TRAIL_N];
-uniform float u_glow;
+uniform float u_mobile;
 
 float hash(vec2 p) {
   p = fract(p * vec2(123.34, 456.21));
@@ -81,40 +81,43 @@ void main() {
   float grain = fbm(vec2(uv.x * aspect, uv.y) * 260.0);
   col *= 0.90 + 0.18 * grain;
 
-  // --- broad dune forms: sweeping, readable ridges instead of flat noise ---
-  float crestA = 0.68 - 0.24 * uv.x + 0.045 * sin(uv.x * 4.6 + 0.4);
+  // --- a single broad dune, seen up close (camera just above the sand): one
+  //     soft crest sweeping across the frame, the upper slope toward the sun lit
+  //     and the near foreground easing into shadow. Wide, gentle forms read as
+  //     one near dune rather than a pair of distant ridgelines. ---
+  float crestA = 0.54 - 0.14 * uv.x + 0.06 * sin(uv.x * 1.7 + 0.5);
   float da = uv.y - crestA;
-  float ridgeA = exp(-(da * da) / 0.0042);
-  float leeA = smoothstep(0.0, 0.34, da) * (1.0 - smoothstep(0.9, 1.0, uv.y));
-  float faceA = smoothstep(0.30, -0.08, da) * smoothstep(0.08, 0.7, uv.y);
+  float ridgeA = exp(-(da * da) / 0.022);                              // broad crest highlight
+  float faceA = smoothstep(0.36, -0.05, da) * smoothstep(0.04, 0.9, uv.y); // lit upper slope
+  float leeA = smoothstep(0.0, 0.46, da) * (1.0 - smoothstep(0.92, 1.0, uv.y)); // near shadow
 
-  float crestB = 0.38 + 0.13 * uv.x + 0.035 * sin(uv.x * 5.8 + 1.6);
-  float db = uv.y - crestB;
-  float ridgeB = exp(-(db * db) / 0.0032) * 0.75;
-  float leeB = smoothstep(0.0, 0.28, db) * (1.0 - smoothstep(0.78, 0.95, uv.y));
-
-  float duneShade = 1.0 + ridgeA * 0.28 + ridgeB * 0.18;
-  duneShade += faceA * 0.075;
-  duneShade -= leeA * 0.22 + leeB * 0.11;
-  col *= clamp(duneShade, 0.68, 1.38);
-  col += vec3(1.0, 0.62, 0.25) * (ridgeA * 0.095 + ridgeB * 0.052);
-
-  // --- visible wind shimmer: bright, slow-moving sand bands across the full field ---
-  vec2 p = vec2(uv.x * aspect, uv.y);
-  vec2 windUv = vec2(p.x * 0.76 + p.y * 0.48, p.y * 0.82 - p.x * 0.16);
-  float wind = sin(windUv.x * 12.0 + fbm(windUv * 1.7) * 3.0 - t * 0.7);
-  float windLine = smoothstep(0.40, 1.0, wind);
-  float windMask = 0.72 + 0.28 * smoothstep(0.04, 0.36, uv.y);
-  col *= 1.0 + wind * 0.030 * windMask;
-  col += vec3(1.0, 0.76, 0.38) * windLine * 0.060 * windMask;
+  // Desktop shows the dune; mobile drops it for a calmer, cleaner field.
+  float duneAmt = 1.0 - u_mobile;
+  float duneShade = 1.0 + (ridgeA * 0.30 + faceA * 0.10 - leeA * 0.26) * duneAmt;
+  col *= clamp(duneShade, 0.66, 1.40);
+  col += vec3(1.0, 0.62, 0.25) * ridgeA * 0.11 * duneAmt;
 
   // --- the cursor lights the nearby sand; it falls dark farther away, and the
   //     recent drag trail stays lit ---
-  float broad = exp(-(md * md) / (0.55 * 0.55));
-  col *= clamp(0.30 + 0.78 * broad + 0.5 * trail, 0.0, 1.15);
+  float broad = exp(-(md * md) / (0.48 * 0.48));
+  col *= clamp(0.36 + 0.74 * broad + 0.5 * trail, 0.0, 1.18);
 
-  // --- sun glint: tight pool of sparkle at the cursor ---
-  float radius = 0.34 * u_glow;
+  // --- wind: a single gust of blown sand sweeping across the field — one band
+  //     on screen at a time (low spatial frequency), textured with fine drifting
+  //     streaks so it reads as moving sand rather than a smooth glow. Applied
+  //     after the cursor light so it stays visible across the shaded field. ---
+  vec2 p = vec2(uv.x * aspect, uv.y);
+  vec2 windUv = vec2(p.x * 0.76 + p.y * 0.48, p.y * 0.82 - p.x * 0.16);
+  float gust = sin(windUv.x * 2.3 + fbm(windUv * 1.5) * 1.2 - t * 0.5);
+  float band = smoothstep(0.5, 1.0, gust);               // one soft gust band
+  float streak = 0.5 + 0.5 * fbm(vec2(windUv.x * 7.0, windUv.y * 24.0) - vec2(0.0, t));
+  float windMask = 0.72 + 0.28 * smoothstep(0.04, 0.36, uv.y);
+  col *= 1.0 + gust * 0.014 * windMask;                   // faint overall breath
+  col += vec3(1.0, 0.78, 0.42) * band * streak * .15 * windMask; // the blown sand
+
+  // --- sun glint: a tight pool of fine sparkle at the cursor, riding on top of
+  //     the broad glow so the light reads as one source focused at the pointer ---
+  float radius = 0.34;
   float pool = exp(-(md * md) / (radius * radius));
   float spec = 0.08 + pool; // faint ambient sparkle + bright pool at cursor
 
@@ -131,10 +134,10 @@ void main() {
   // soft warm bloom under the cursor + a gentle glow trailing the drag
   col += vec3(1.0, 0.72, 0.4) * (pool * 0.16 + trail * 0.09);
 
-  // Reassert dune definition after sunlight and glints so the cursor does not
+  // Reassert dune definition after the cursor light so the cursor does not
   // flatten the ridgelines when it passes over them.
-  float ridgeDefinition = ridgeA * 0.11 + ridgeB * 0.07;
-  float leeDefinition = leeA * 0.065 + leeB * 0.038;
+  float ridgeDefinition = ridgeA * 0.12 * duneAmt;
+  float leeDefinition = leeA * 0.07 * duneAmt;
   col += vec3(1.0, 0.66, 0.28) * ridgeDefinition;
   col -= vec3(0.18, 0.09, 0.035) * leeDefinition;
 
@@ -205,7 +208,7 @@ export default function SandSurface({ reduceMotion = false, className = "" }) {
     const uMouse = gl.getUniformLocation(prog, "u_mouse");
     const uTrail = gl.getUniformLocation(prog, "u_trail[0]");
     const uTrailStr = gl.getUniformLocation(prog, "u_trailStr[0]");
-    const uGlow = gl.getUniformLocation(prog, "u_glow");
+    const uMobile = gl.getUniformLocation(prog, "u_mobile");
 
     // Touch devices can't hover/drag, so park the light just beyond the top
     // edge; desktops rest on a soft top-center "sun" until the pointer moves,
@@ -275,9 +278,7 @@ export default function SandSurface({ reduceMotion = false, className = "" }) {
       mouse.ty = SUN.y;
     }
 
-    // A tighter glint on touch devices keeps the fixed top-edge sun from
-    // blooming too large; desktops use the full pool.
-    gl.uniform1f(uGlow, canHover ? 1.0 : 0.55);
+    gl.uniform1f(uMobile, canHover ? 0.0 : 1.0);
 
     resize();
     const ro = new ResizeObserver(() => {
