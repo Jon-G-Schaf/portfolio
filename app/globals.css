@@ -58,16 +58,14 @@ body {
    tiny range of near-black browns; on OLED phones (true-black floor, high
    shadow contrast) that ramp blows up into a visible light-top/dark-bottom
    split, while on desktop LCDs it's nearly invisible. So the gradient — and
-   its anti-banding noise dither — are desktop-only (see the md media query).
-   The flat tone is the espresso floor (darkest token) so panels still read as
-   lifted, and it matches the `html` background-color. */
+   its anti-banding noise dither — are desktop-only (see the md media query). */
 body::before {
   content: "";
   position: fixed;
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  background-color: var(--espresso);
+  background-color: var(--ink);
 }
 
 @media (min-width: 768px) {
