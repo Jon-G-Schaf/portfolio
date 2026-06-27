@@ -36,17 +36,27 @@ html {
 }
 
 body {
-  background:
-    radial-gradient(
-      circle at top,
-      #4a2a12 0%,
-      #2b1707 40%,
-      #1b1008 100%
-    );
-  background-attachment: fixed;
   color: var(--fog);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+}
+
+/* Fixed gradient backdrop as its own layer. Using a fixed pseudo-element
+   instead of `background-attachment: fixed` on body — the latter breaks
+   `position: sticky` on iOS Safari (the nav detaches during momentum
+   scroll), while a separate fixed layer leaves sticky positioning intact. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(
+    circle at top,
+    #4a2a12 0%,
+    #2b1707 40%,
+    #1b1008 100%
+  );
 }
 
 ::selection {
