@@ -67,7 +67,7 @@ function Metric({ value, label }) {
 function BrowserShot({ src, alt, h = 900, label, priority = false, className = "" }) {
   return (
     <figure
-      className={`overflow-hidden rounded-2xl border border-line bg-[#171310] shadow-2xl ${className}`}
+      className={`overflow-hidden rounded-2xl border border-line bg-espresso shadow-2xl ${className}`}
     >
       <div className="flex items-center gap-2 border-b border-line px-4 py-2.5">
         <span aria-hidden="true" className="flex gap-1.5">
@@ -322,7 +322,7 @@ export default function CrosstownCaseStudy() {
               system observes them. On load, the camera moves into Columbus while
               the network fades up. Every animation on the site falls back to a
               static render under{" "}
-              <code className="rounded bg-panel px-1.5 py-0.5 text-sm text-fog/90">
+              <code className="rounded bg-espresso px-1.5 py-0.5 text-sm text-fog/90">
                 prefers-reduced-motion
               </code>
               .

@@ -68,7 +68,7 @@ function Metric({ value, label }) {
 function Shot({ src, alt, h = 3020, className = "" }) {
   return (
     <div
-      className={`w-full max-w-[260px] rounded-[2rem] border border-line bg-[#171310] p-2 shadow-2xl ${className}`}
+      className={`w-full max-w-[260px] rounded-[2rem] border border-line bg-espresso p-2 shadow-2xl ${className}`}
     >
       <Image
         src={src}
@@ -234,7 +234,7 @@ export default function QuorumCaseStudy() {
               theme with custom light and dark color schemes, an{" "}
               <span className="text-fog">Outfit</span> type scale, and shared
               components so every screen felt like one app. A{" "}
-              <code className="rounded bg-panel px-1.5 py-0.5 text-sm text-fog/90">
+              <code className="rounded bg-espresso px-1.5 py-0.5 text-sm text-fog/90">
                 ThemeController
               </code>{" "}
               swaps light and dark at runtime. The whole UI was built against
@@ -265,7 +265,7 @@ export default function QuorumCaseStudy() {
                   The home screen isn't a calendar. It's a feed of what's near you{" "}
                   <em>now</em>, sorted by distance and time, with category chips to
                   filter by what you're into. Events carry a{" "}
-                  <code className="rounded bg-panel px-1.5 py-0.5 text-sm text-fog/90">
+                  <code className="rounded bg-espresso px-1.5 py-0.5 text-sm text-fog/90">
                     GeoPoint
                   </code>
                   , so distance is computed from your location, and a map view plots

@@ -72,7 +72,7 @@ export default function FeaturedProject() {
               aria-label="Open the live Crosstown map in a new tab"
               className="group block"
             >
-              <div className="overflow-hidden rounded-2xl border border-line bg-[#171310] shadow-2xl transition-transform duration-500 group-hover:scale-[1.015]">
+              <div className="overflow-hidden rounded-2xl border border-line bg-espresso shadow-2xl transition-transform duration-500 group-hover:scale-[1.015]">
                 <div className="flex items-center gap-2 border-b border-line px-4 py-2.5">
                   <span aria-hidden="true" className="flex gap-1.5">
                     <span className="h-2.5 w-2.5 rounded-full bg-line" />

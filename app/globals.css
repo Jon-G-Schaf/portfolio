@@ -3,7 +3,9 @@
 @tailwind utilities;
 
 :root {
-  --ink: #2b1707;
+  --espresso: #1b1008; /* deepest well — page floor, scrollbar track, recesses */
+  --ink: #2b1707;      /* walnut — base surface */
+  --lift: #4a2e18;     /* walnut-lit — hover lift, top-lit edge */
   --fog: #f7eddc;
   --ember: #ff7a1a;
   --amber: #ffc35c;
@@ -13,10 +15,11 @@ html {
   scroll-behavior: smooth;
   /* Keep anchored sections clear of the sticky nav. */
   scroll-padding-top: 5.5rem;
-  /* Dark base so mobile toolbar hide/show and overscroll never flash white. */
-  background-color: #1b1008;
-  /* Warm dark scrollbar; the default white bar fights the theme. */
-  scrollbar-color: #5a3a1e #1b1008;
+  /* Espresso floor so mobile toolbar hide/show and overscroll never flash white. */
+  background-color: var(--espresso);
+  /* Warm dark scrollbar; the default white bar fights the theme.
+     Track sits at the espresso floor; thumb is the walnut-lit edge. */
+  scrollbar-color: var(--lift) var(--espresso);
 }
 
 ::-webkit-scrollbar {
@@ -24,15 +27,15 @@ html {
   height: 12px;
 }
 ::-webkit-scrollbar-track {
-  background: #1b1008;
+  background: var(--espresso);
 }
 ::-webkit-scrollbar-thumb {
-  background: #4a2f17;
+  background: var(--lift);
   border-radius: 6px;
-  border: 3px solid #1b1008;
+  border: 3px solid var(--espresso);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #6b4423;
+  background: #5e3c20;
 }
 
 body {
@@ -54,8 +57,8 @@ body::before {
   background: radial-gradient(
     circle at top,
     #4a2a12 0%,
-    #2b1707 40%,
-    #1b1008 100%
+    var(--ink) 40%,
+    var(--espresso) 100%
   );
 }
 

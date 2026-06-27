@@ -12,7 +12,7 @@ export default function Projects() {
               href={project.href}
               target={project.href?.startsWith("http") ? "_blank" : undefined}
               rel={project.href?.startsWith("http") ? "noopener noreferrer" : undefined}
-              className="group flex h-full flex-col p-8 transition-colors hover:bg-panel"
+              className="group flex h-full flex-col p-8 transition-colors hover:bg-lift"
             >
               <p className="flex items-center justify-between font-mono text-xs text-muted">
                 <span className="uppercase tracking-label">{project.type}</span>

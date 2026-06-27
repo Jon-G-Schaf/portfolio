@@ -8,9 +8,12 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-      // Base — dark amber, not black
-      ink: "#2b1707",
-      panel: "#3b2414",
+      // Surfaces — walnut-forward, never black. Elevation ladder, low → high:
+      // espresso (deepest well) < ink (walnut body) < panel (raised) < lift (top-lit).
+      espresso: "#1b1008", // deepest well — recesses, screenshot bezels, code insets
+      ink: "#2b1707",      // walnut — base surface
+      panel: "#3b2414",    // walnut+ — raised panels, chips
+      lift: "#4a2e18",     // walnut-lit — hover lift, top-lit edge
       line: "rgba(246, 236, 217, 0.13)",
 
       // Text
