@@ -27,6 +27,13 @@ const hand = Caveat({
   display: "swap",
 });
 
+// Declare the page as dark so Samsung Internet (and other auto dark-mode
+// engines) don't re-theme the warm palette into something unrecognizable.
+export const viewport = {
+  colorScheme: "dark",
+  themeColor: "#1b1008", // espresso — matches the page floor
+};
+
 export const metadata = {
   metadataBase: new URL(
     site.url.startsWith("https://[") ? "http://localhost:3000" : site.url

@@ -84,14 +84,18 @@ function qualityTier() {
   if (typeof navigator === "undefined") return 1;
   const mem = navigator.deviceMemory; // GB; undefined on Safari/Firefox
   const cores = navigator.hardwareConcurrency || 8;
-  const coarse =
-    typeof window.matchMedia === "function" &&
-    window.matchMedia("(pointer: coarse)").matches;
+  const mm = typeof window.matchMedia === "function" ? window.matchMedia : null;
+  const coarse = !!(mm && mm("(pointer: coarse)").matches);
+  const reducedData = !!(mm && mm("(prefers-reduced-data: reduce)").matches);
   let tier = 1;
   if (coarse) tier -= 0.4; // phones / tablets
+  if (reducedData) tier -= 0.4; // user asked for a lighter, cheaper page
   if (mem !== undefined && mem <= 4) tier -= 0.3; // low-memory devices
   if (cores <= 4) tier -= 0.2; // low-core laptops
-  if ((mem === undefined || mem >= 8) && cores >= 8) tier += 0.15; // capable desktops
+  // Only grant the "capable desktop" bonus when memory is actually known to be
+  // high. deviceMemory is undefined on Safari/Firefox, so treating undefined as
+  // capable handed low-end iPhones the *densest* field — the opposite of intent.
+  if (mem !== undefined && mem >= 8 && cores >= 8) tier += 0.15;
   return Math.max(0.4, Math.min(1.2, tier));
 }
 
@@ -101,7 +105,7 @@ export default function SandGrains({ reduceMotion = false, className = "" }) {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext("2d");
+    let ctx = canvas.getContext("2d");
     if (!ctx) return;
 
     // Touch devices can't hover/drag: light a fixed beam above the name and
@@ -111,13 +115,16 @@ export default function SandGrains({ reduceMotion = false, className = "" }) {
     );
     const interactive = canHover && !reduceMotion;
 
-    const sprites = makeGrainSprites();
+    let sprites = makeGrainSprites();
     let width = 0;
     let height = 0;
     let grains = [];
     let raf = 0;
     let cancelled = false;
+    let visible = true;
+    let lost = false;
     let ro = null;
+    let io = null;
     let rect = canvas.getBoundingClientRect();
     let lightR2 = 1;
     let pushR = 0; // carve-disc radius, matched to the focused glint (set in resize)
@@ -157,11 +164,18 @@ export default function SandGrains({ reduceMotion = false, className = "" }) {
 
     function resize() {
       rect = canvas.getBoundingClientRect();
+      const dpr = Math.min(2, window.devicePixelRatio || 1);
+      const cw = Math.round(rect.width * dpr);
+      const ch = Math.round(rect.height * dpr);
+      // Guard against the mobile-toolbar resize storm: scrolling fires
+      // ResizeObserver every frame. Rebuilding thousands of grains (and
+      // clearing the backing canvas) on each tick is heavy jank, so bail when
+      // the pixel size hasn't actually changed.
+      if (cw === canvas.width && ch === canvas.height && grains.length) return;
       width = rect.width;
       height = rect.height;
-      const dpr = Math.min(2, window.devicePixelRatio || 1);
-      canvas.width = Math.round(width * dpr);
-      canvas.height = Math.round(height * dpr);
+      canvas.width = cw;
+      canvas.height = ch;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       const r = height * LIGHT_FALLOFF; // same broad falloff the surface uses (by height)
       lightR2 = r * r;
@@ -181,6 +195,10 @@ export default function SandGrains({ reduceMotion = false, className = "" }) {
     }
 
     function draw(now) {
+      if (cancelled || !visible || lost) {
+        raf = 0;
+        return;
+      }
       const tnow = now || performance.now();
       const moving = tnow - pointer.moveT < 100;
       light.x += (light.tx - light.x) * 0.12;
@@ -224,7 +242,15 @@ export default function SandGrains({ reduceMotion = false, className = "" }) {
         ctx.drawImage(sprites[li], g.x - s / 2, g.y - s / 2, s, s);
       }
       ctx.globalAlpha = 1;
-      if (!reduceMotion && !cancelled) raf = requestAnimationFrame(draw);
+      if (!reduceMotion && !cancelled && visible && !lost)
+        raf = requestAnimationFrame(draw);
+      else raf = 0;
+    }
+
+    // Kick the loop unless it's already running or the field is off-screen.
+    function startLoop() {
+      if (reduceMotion || cancelled || !visible || lost || raf) return;
+      raf = requestAnimationFrame(draw);
     }
 
     function onMove(e) {
@@ -243,12 +269,51 @@ export default function SandGrains({ reduceMotion = false, className = "" }) {
       rect = canvas.getBoundingClientRect();
     }
 
+    // The 2D canvas can also be reclaimed under mobile memory pressure. It fails
+    // to transparent (the lit SandSurface shows through) rather than white, but
+    // handle it for parity: stop on loss, rebuild the context, sprites and grain
+    // field on restore. preventDefault keeps the context restorable.
+    function onLost(e) {
+      e.preventDefault();
+      lost = true;
+      cancelAnimationFrame(raf);
+      raf = 0;
+    }
+    function onRestored() {
+      lost = false;
+      ctx = canvas.getContext("2d");
+      if (!ctx) return;
+      sprites = makeGrainSprites();
+      canvas.width = 0; // force resize() past its no-op guard to rebuild
+      resize();
+      if (reduceMotion) draw();
+      else startLoop();
+    }
+    canvas.addEventListener("contextlost", onLost, false);
+    canvas.addEventListener("contextrestored", onRestored, false);
+
     resize();
     ro = new ResizeObserver(() => {
       resize();
       if (!interactive) draw();
     });
     ro.observe(canvas);
+
+    // Pause the loop while the hero is scrolled out of view, then resume on
+    // re-entry — saves GPU/battery and avoids animating sand nobody can see.
+    io = new IntersectionObserver(
+      ([entry]) => {
+        visible = entry.isIntersecting;
+        if (visible) {
+          startLoop();
+        } else {
+          cancelAnimationFrame(raf);
+          raf = 0;
+        }
+      },
+      { threshold: 0 }
+    );
+    io.observe(canvas);
 
     if (interactive) {
       window.addEventListener("pointermove", onMove, { passive: true });
@@ -263,6 +328,9 @@ export default function SandGrains({ reduceMotion = false, className = "" }) {
       cancelled = true;
       cancelAnimationFrame(raf);
       if (ro) ro.disconnect();
+      if (io) io.disconnect();
+      canvas.removeEventListener("contextlost", onLost);
+      canvas.removeEventListener("contextrestored", onRestored);
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("scroll", onScroll);
       document.removeEventListener("mouseleave", onLeave);

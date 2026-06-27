@@ -167,49 +167,6 @@ export default function SandSurface({ reduceMotion = false, className = "" }) {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const gl =
-      canvas.getContext("webgl", { antialias: true, alpha: false }) ||
-      canvas.getContext("experimental-webgl");
-    if (!gl) {
-      canvas.style.display = "none";
-      return;
-    }
-
-    const vs = compile(gl, gl.VERTEX_SHADER, VERT);
-    const fs = compile(gl, gl.FRAGMENT_SHADER, FRAG);
-    if (!vs || !fs) {
-      canvas.style.display = "none";
-      return;
-    }
-    const prog = gl.createProgram();
-    gl.attachShader(prog, vs);
-    gl.attachShader(prog, fs);
-    gl.linkProgram(prog);
-    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {
-      console.error("SandSurface link error:", gl.getProgramInfoLog(prog));
-      canvas.style.display = "none";
-      return;
-    }
-    gl.useProgram(prog);
-
-    const buf = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-    gl.bufferData(
-      gl.ARRAY_BUFFER,
-      new Float32Array([-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1]),
-      gl.STATIC_DRAW
-    );
-    const aPos = gl.getAttribLocation(prog, "a_pos");
-    gl.enableVertexAttribArray(aPos);
-    gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
-
-    const uRes = gl.getUniformLocation(prog, "u_res");
-    const uTime = gl.getUniformLocation(prog, "u_time");
-    const uMouse = gl.getUniformLocation(prog, "u_mouse");
-    const uTrail = gl.getUniformLocation(prog, "u_trail[0]");
-    const uTrailStr = gl.getUniformLocation(prog, "u_trailStr[0]");
-    const uMobile = gl.getUniformLocation(prog, "u_mobile");
-
     // Touch devices can't hover/drag, so park the light just beyond the top
     // edge; desktops rest on a soft top-center "sun" until the pointer moves,
     // then ease back to it when the pointer leaves.
@@ -229,20 +186,91 @@ export default function SandSurface({ reduceMotion = false, className = "" }) {
     let height = 0;
     let raf = 0;
     let cancelled = false;
+    let lost = false;
+    let visible = true;
     const mouse = { x: SUN.x, y: SUN.y, tx: SUN.x, ty: SUN.y };
     const start = performance.now();
 
+    // GL handle + uniform locations live here so the context can be torn down
+    // and rebuilt on a context-restore without recreating the whole effect.
+    let gl = null;
+    let uRes, uTime, uMouse, uTrail, uTrailStr, uMobile;
+
+    // Build (or rebuild) the GL program, buffer and uniforms. Returns true on
+    // success; on failure hides the canvas so the warm CSS gradient fallback
+    // shows through instead of an opaque (alpha:false → white) dead canvas.
+    function setupGL() {
+      gl =
+        canvas.getContext("webgl", { antialias: true, alpha: false }) ||
+        canvas.getContext("experimental-webgl");
+      if (!gl) {
+        canvas.style.display = "none";
+        return false;
+      }
+
+      const vs = compile(gl, gl.VERTEX_SHADER, VERT);
+      const fs = compile(gl, gl.FRAGMENT_SHADER, FRAG);
+      if (!vs || !fs) {
+        canvas.style.display = "none";
+        return false;
+      }
+      const prog = gl.createProgram();
+      gl.attachShader(prog, vs);
+      gl.attachShader(prog, fs);
+      gl.linkProgram(prog);
+      if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {
+        console.error("SandSurface link error:", gl.getProgramInfoLog(prog));
+        canvas.style.display = "none";
+        return false;
+      }
+      gl.useProgram(prog);
+
+      const buf = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+      gl.bufferData(
+        gl.ARRAY_BUFFER,
+        new Float32Array([-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1]),
+        gl.STATIC_DRAW
+      );
+      const aPos = gl.getAttribLocation(prog, "a_pos");
+      gl.enableVertexAttribArray(aPos);
+      gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
+
+      uRes = gl.getUniformLocation(prog, "u_res");
+      uTime = gl.getUniformLocation(prog, "u_time");
+      uMouse = gl.getUniformLocation(prog, "u_mouse");
+      uTrail = gl.getUniformLocation(prog, "u_trail[0]");
+      uTrailStr = gl.getUniformLocation(prog, "u_trailStr[0]");
+      uMobile = gl.getUniformLocation(prog, "u_mobile");
+      gl.uniform1f(uMobile, canHover ? 0.0 : 1.0);
+
+      canvas.style.display = "";
+      return true;
+    }
+
     function resize() {
+      if (!gl || lost) return;
       const r = canvas.getBoundingClientRect();
       const dpr = Math.min(2, window.devicePixelRatio || 1);
-      width = Math.max(1, Math.round(r.width * dpr));
-      height = Math.max(1, Math.round(r.height * dpr));
+      const w = Math.max(1, Math.round(r.width * dpr));
+      const h = Math.max(1, Math.round(r.height * dpr));
+      // Guard against the mobile-toolbar resize storm: scrolling shows/hides
+      // the URL bar, firing ResizeObserver every frame. Reallocating the GL
+      // drawing buffer on each tick thrashes the GPU and can drop the context
+      // (→ white canvas). Only reallocate when the pixel size actually changes.
+      if (w === width && h === height) return;
+      width = w;
+      height = h;
       canvas.width = width;
       canvas.height = height;
       gl.viewport(0, 0, width, height);
     }
 
     function frame(now) {
+      if (!gl || lost || cancelled || !visible) {
+        raf = 0;
+        return;
+      }
       mouse.x += (mouse.tx - mouse.x) * 0.07;
       mouse.y += (mouse.ty - mouse.y) * 0.07;
 
@@ -263,7 +291,9 @@ export default function SandSurface({ reduceMotion = false, className = "" }) {
       gl.uniform2fv(uTrail, trailXY);
       gl.uniform1fv(uTrailStr, trailStr);
       gl.drawArrays(gl.TRIANGLES, 0, 6);
-      if (!reduceMotion && !cancelled) raf = requestAnimationFrame(frame);
+      if (!reduceMotion && !cancelled && visible && !lost)
+        raf = requestAnimationFrame(frame);
+      else raf = 0;
     }
 
     function onMove(e) {
@@ -278,34 +308,89 @@ export default function SandSurface({ reduceMotion = false, className = "" }) {
       mouse.ty = SUN.y;
     }
 
-    gl.uniform1f(uMobile, canHover ? 0.0 : 1.0);
+    // Kick the animation loop, unless it's already running, the context is
+    // gone, or the hero is scrolled out of view.
+    function startLoop() {
+      if (reduceMotion || lost || cancelled || !visible || raf) return;
+      raf = requestAnimationFrame(frame);
+    }
+
+    // Start (or restart) the render loop for the current motion preference.
+    function run() {
+      if (reduceMotion) frame(performance.now());
+      else startLoop();
+    }
+
+    // The GPU can drop the WebGL context (memory pressure, tab churn,
+    // resize thrash). Default behaviour leaves an opaque white canvas frozen
+    // over the hero. Catch the loss, stop the loop and reveal the CSS sand
+    // fallback; rebuild and resume if/when the context is restored.
+    function onLost(e) {
+      e.preventDefault();
+      lost = true;
+      cancelAnimationFrame(raf);
+      canvas.style.display = "none";
+    }
+    function onRestored() {
+      lost = false;
+      width = height = 0; // force resize() to reallocate the drawing buffer
+      if (setupGL()) {
+        resize();
+        run();
+      }
+    }
+    canvas.addEventListener("webglcontextlost", onLost, false);
+    canvas.addEventListener("webglcontextrestored", onRestored, false);
+
+    if (!setupGL()) {
+      return () => {
+        canvas.removeEventListener("webglcontextlost", onLost);
+        canvas.removeEventListener("webglcontextrestored", onRestored);
+      };
+    }
 
     resize();
     const ro = new ResizeObserver(() => {
       resize();
-      if (reduceMotion) frame(performance.now());
+      if (reduceMotion && !lost) frame(performance.now());
     });
     ro.observe(canvas);
 
-    if (reduceMotion) {
-      frame(performance.now());
-    } else {
-      // only follow the pointer where hovering is possible; mobile keeps the
-      // fixed beam but still twinkles
-      if (canHover) {
-        window.addEventListener("pointermove", onMove, { passive: true });
-        document.addEventListener("mouseleave", onLeave, { passive: true });
-      }
-      raf = requestAnimationFrame(frame);
+    // Pause the loop while the hero is off-screen — no point burning GPU/battery
+    // animating sand nobody can see, and an idle background canvas is less
+    // likely to get its context reclaimed. Resume when it scrolls back in.
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        visible = entry.isIntersecting;
+        if (visible) {
+          startLoop();
+        } else {
+          cancelAnimationFrame(raf);
+          raf = 0;
+        }
+      },
+      { threshold: 0 }
+    );
+    io.observe(canvas);
+
+    // only follow the pointer where hovering is possible; mobile keeps the
+    // fixed beam but still twinkles
+    if (!reduceMotion && canHover) {
+      window.addEventListener("pointermove", onMove, { passive: true });
+      document.addEventListener("mouseleave", onLeave, { passive: true });
     }
+    run();
 
     return () => {
       cancelled = true;
       cancelAnimationFrame(raf);
       ro.disconnect();
+      io.disconnect();
+      canvas.removeEventListener("webglcontextlost", onLost);
+      canvas.removeEventListener("webglcontextrestored", onRestored);
       window.removeEventListener("pointermove", onMove);
       document.removeEventListener("mouseleave", onLeave);
-      const ext = gl.getExtension("WEBGL_lose_context");
+      const ext = gl && gl.getExtension("WEBGL_lose_context");
       if (ext) ext.loseContext();
     };
   }, [reduceMotion]);

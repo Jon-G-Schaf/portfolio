@@ -29,7 +29,7 @@ export default function Hero() {
     <section
       id="top"
       aria-label="Introduction"
-      className="relative flex min-h-[90vh] flex-col justify-center overflow-hidden"
+      className="relative flex min-h-[90svh] flex-col justify-center overflow-hidden"
     >
       {/* The whole sand stack, masked to fade out at the bottom so the section
           dissolves into the continuous page background — no seam, no hard line. */}
