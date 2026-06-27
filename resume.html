@@ -11,12 +11,16 @@
   /* ------------------------------------------------------------------
      Resume source of truth. Open in a browser, Ctrl+P, "Save as PDF"
      (enable Background graphics), save over public/JonathanSchafer_Resume.pdf.
+     Espresso masthead band; body stays light and print-safe.
   ------------------------------------------------------------------ */
   :root {
     --ink: #1c1814;
     --muted: #57504a;
     --accent: #b45309;     /* dark amber: brand-warm, prints with contrast */
     --rule: #e7dfd3;
+    --espresso: #1b1008;
+    --cream: #f7eddc;
+    --cream-dim: #d0aa81;
   }
 
   * {
@@ -42,37 +46,59 @@
     padding: 0.55in 0.65in;
     background: #fff;
     box-shadow: 0 8px 40px rgba(0, 0, 0, 0.18);
+    overflow: hidden;            /* clip the full-bleed masthead corners */
   }
 
   a { color: inherit; text-decoration: none; }
 
-  /* Header */
-  h1 {
+  /* ============ Masthead (the one bold move) ============ */
+  .masthead {
+    background: var(--espresso);
+    color: var(--cream);
+    /* bleed out past the page padding to the sheet edges */
+    margin: -0.55in -0.65in 0;
+    padding: 0.46in 0.65in 0.4in;
+  }
+  .masthead h1 {
     font-family: "Schibsted Grotesk", "Inter", sans-serif;
     font-size: 23pt;
     font-weight: 700;
     letter-spacing: -0.5px;
+    color: var(--cream);
+    display: flex;
+    align-items: center;
   }
-  .contact {
-    margin-top: 4px;
+  /* Signature G as the middle initial — sized to the cap, raised so it rides
+     on the caps, carrying the period the signature has after it ("G."). */
+  .sig-inline { height: 1.18em; width: auto; margin: 0 0.14em; transform: translateY(-0.04em); }
+  .masthead .contact {
+    margin-top: 5px;
     font-size: 8.8pt;
-    color: var(--muted);
+    color: var(--cream-dim);
   }
-  .contact span { white-space: nowrap; }
-  .contact span + span::before { content: "  \00b7  "; color: #b9b0a4; white-space: normal; }
-
-  .summary {
+  .masthead .contact a { color: var(--cream); }
+  .masthead .contact span { white-space: nowrap; }
+  .masthead .contact span + span::before {
+    content: "  \00b7  ";
+    color: rgba(208, 170, 129, 0.5);
+    white-space: normal;
+  }
+  .masthead .summary {
     margin-top: 9px;
     font-size: 9.7pt;
-    color: var(--ink);
+    color: rgba(247, 237, 220, 0.92);
+    max-width: 6.6in;
   }
-
-  .header-rule {
-    margin-top: 11px;
+  /* the one flourish, as the bottom edge of the band */
+  .masthead-rule {
+    margin-top: 12px;
     height: 2.5px;
     background: linear-gradient(90deg, #ff7a1a, #ffc35c);
     border-radius: 2px;
   }
+
+  /* spacing between masthead and first section */
+  .body { margin-top: 12px; }
 
   /* Sections */
   h2 {
@@ -104,11 +130,9 @@
   li { margin-bottom: 2px; }
   li::marker { color: var(--accent); }
 
-  /* Skills */
   .skills p { margin-bottom: 3px; }
   .skills b { font-weight: 600; }
 
-  /* Education */
   .edu-course { margin-top: 2px; font-size: 9pt; color: var(--muted); }
 
   @page { size: letter; margin: 0; }
@@ -121,15 +145,31 @@
       padding: 0.36in 0.6in;
       box-shadow: none;
     }
+    .masthead { margin: -0.36in -0.6in 0; padding: 0.34in 0.6in 0.3in; }
   }
 </style>
 </head>
 <body>
 <div class="page">
 
-  <!-- ============ Header ============ -->
-  <header>
-    <h1>Jonathan Schafer</h1>
+  <!-- ============ Masthead ============ -->
+  <header class="masthead">
+    <h1>
+      Jonathan
+      <svg class="sig-inline" viewBox="326.5 83 297 297" aria-hidden="true">
+        <defs>
+          <linearGradient id="sig" x1="0" y1="0" x2="1" y2="0.17">
+            <stop offset="0" stop-color="#ff7a1a" />
+            <stop offset="1" stop-color="#ffc35c" />
+          </linearGradient>
+        </defs>
+        <path fill="none" stroke="url(#sig)" stroke-width="13"
+          stroke-linecap="round" stroke-linejoin="round"
+          d="M458.64,155.85c-1.31-4.59-38.98,3.93-69.77,40.62s-11.14,59.95,29.81,56.02c40.95-3.93,90.3-32.39,108.1-53.72c20.37-24.42,5.57-48.48-44.88-26.21s-98.78,74.6-92.7,109.1c6.11,34.67,65.51,33.07,112.69,11.12c47.17-21.95,45.29-46.22,3.28-42.91c-39.84,3.13-70.1,23.26-60.6,20.96s153.96-22.28,129.06-15.72" />
+        <circle cx="601" cy="251" r="8" fill="#ff7a1a" />
+      </svg>
+      Schafer
+    </h1>
     <p class="contact">
       <span>Columbus, OH</span>
       <span>(614) 961-9989</span>
@@ -146,8 +186,10 @@
       to React and Next.js on the web. Looking for software and full-stack roles in Columbus,
       Cincinnati, Pittsburgh, or remote.
     </p>
-    <div class="header-rule"></div>
+    <div class="masthead-rule"></div>
   </header>
+
+  <div class="body">
 
   <!-- ============ Education ============ -->
   <section>
@@ -262,6 +304,8 @@
     </div>
 
   </section>
+
+  </div><!-- /.body -->
 
 </div>
 </body>
