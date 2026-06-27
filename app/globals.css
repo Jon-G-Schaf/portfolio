@@ -49,22 +49,32 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-/* Fixed gradient backdrop as its own layer. Using a fixed pseudo-element
-   instead of `background-attachment: fixed` on body — the latter breaks
-   `position: sticky` on iOS Safari (the nav detaches during momentum
-   scroll), while a separate fixed layer leaves sticky positioning intact. */
+/* Fixed backdrop as its own layer. Using a fixed pseudo-element instead of
+   `background-attachment: fixed` on body — the latter breaks `position: sticky`
+   on iOS Safari (the nav detaches during momentum scroll), while a separate
+   fixed layer leaves sticky positioning intact.
+
+   Mobile gets a FLAT walnut tone — no gradient. The radial gradient spans a
+   tiny range of near-black browns; on OLED phones (true-black floor, high
+   shadow contrast) that ramp blows up into a visible light-top/dark-bottom
+   split, while on desktop LCDs it's nearly invisible. So the gradient — and
+   its anti-banding noise dither — are desktop-only (see the md media query). */
 body::before {
   content: "";
   position: fixed;
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  /* Dark brown gradients span a tiny RGB range, so mobile GPUs (which don't
-     dither) quantize them into visible bands whose muddy in-between browns
-     read as a sickly/"pukey" cast; desktop compositors dither and look rich.
-     Fix: a fine GREY noise tile soft-light-blended over the gradient supplies
-     the missing dither (±~2 levels — enough to break bands, invisible as
-     texture). Two non-obvious requirements, both verified by rendering:
+  background-color: var(--ink);
+}
+
+@media (min-width: 768px) {
+  /* Desktop: the warm radial gradient. Dark brown gradients span a tiny RGB
+     range, so GPUs that don't dither quantize them into visible bands whose
+     muddy in-between browns read as a sickly/"pukey" cast. Fix: a fine GREY
+     noise tile soft-light-blended over the gradient supplies the missing
+     dither (±~2 levels — enough to break bands, invisible as texture). Two
+     non-obvious requirements, both verified by rendering:
        1. The feColorMatrix replicates ONE input channel across R/G/B so the
           noise is provably grey (R=G=B). Per-channel turbulence is COLOURED
           and soft-light smears that hue across the page — that was the puke.
@@ -72,18 +82,34 @@ body::before {
           where mid-grey 0.5 encodes to ~0.74 sRGB and soft-light then lightens
           the whole page. sRGB keeps the noise mean neutral (no wash).
      Extra gradient stops keep each ramp short for the same anti-banding end. */
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='d' color-interpolation-filters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='1' stitchTiles='stitch' seed='3'/%3E%3CfeColorMatrix type='matrix' values='0.16 0 0 0 0.42 0.16 0 0 0 0.42 0.16 0 0 0 0.42 0 0 0 0 1'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23d)'/%3E%3C/svg%3E"),
-    radial-gradient(
-      circle at top,
-      #4a2a12 0%,
-      #3a2210 22%,
-      var(--ink) 45%,
-      #231209 72%,
-      var(--espresso) 100%
-    );
-  background-repeat: repeat, no-repeat;
-  background-size: 200px 200px, cover;
-  background-blend-mode: soft-light, normal;
+  body::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='d' color-interpolation-filters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='1' stitchTiles='stitch' seed='3'/%3E%3CfeColorMatrix type='matrix' values='0.16 0 0 0 0.42 0.16 0 0 0 0.42 0.16 0 0 0 0.42 0 0 0 0 1'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23d)'/%3E%3C/svg%3E"),
+      radial-gradient(
+        circle at top,
+        #4a2a12 0%,
+        #3a2210 22%,
+        var(--ink) 45%,
+        #231209 72%,
+        var(--espresso) 100%
+      );
+    background-repeat: repeat, no-repeat;
+    background-size: 200px 200px, cover;
+    background-blend-mode: soft-light, normal;
+  }
+}
+
+/* iOS Safari: the nav's backdrop-filter glitches `position: sticky` during
+   momentum/rubber-band scroll — the GPU re-samples the blurred backdrop as you
+   fling and, under load, that layer intermittently fails to paint, so the bar
+   flashes transparent or appears to detach. `-webkit-touch-callout` is an
+   iOS-WebKit-only property, so this forces an opaque bar there while leaving
+   the frosted glass intact on desktop and Android. */
+@supports (-webkit-touch-callout: none) {
+  .nav-glass {
+    background-color: var(--espresso);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
 }
 
 ::selection {

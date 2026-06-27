@@ -21,7 +21,7 @@ export default function Nav() {
     // The before: bleed paints the strip above the header so page content
     // can't show through the iOS Safari status-bar gap (sticky elements pin
     // below the notch while the page scrolls edge-to-edge behind it).
-    <header className="sticky top-0 z-40 border-b border-line bg-espresso/80 backdrop-blur-md before:pointer-events-none before:absolute before:inset-x-0 before:bottom-full before:h-28 before:bg-espresso">
+    <header className="nav-glass sticky top-0 z-40 border-b border-line bg-espresso/80 backdrop-blur-md before:pointer-events-none before:absolute before:inset-x-0 before:bottom-full before:h-28 before:bg-espresso">
       <nav
         aria-label="Primary"
         className="mx-auto flex h-16 w-full max-w-page items-center justify-between px-6 sm:px-10"
