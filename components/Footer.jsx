@@ -5,8 +5,10 @@ export default function Footer() {
     <footer className="border-t border-line">
       <div className="mx-auto w-full max-w-page px-6 py-14 sm:px-10">
         {/* Colophon - the site exposing its own design tokens. A small,
-            deliberate signal that the design decisions here were decisions. */}
-        <div>
+            deliberate signal that the design decisions here were decisions.
+            Recessed into an espresso well so the token strip reads as a sunk
+            plate - the page settling into its deepest tone at the very end. */}
+        <div className="rounded-2xl border border-line bg-espresso p-6 shadow-[inset_0_2px_14px_rgba(0,0,0,0.35)] sm:p-8">
           <p className="font-mono text-xs uppercase tracking-label text-muted">
             Colophon
           </p>
@@ -23,7 +25,7 @@ export default function Footer() {
                 {token.kind === "swatch" && (
                   <span
                     aria-hidden="true"
-                    className="inline-block h-3 w-3 rounded-sm"
+                    className="inline-block h-3 w-3 rounded-sm border border-line"
                     style={{ backgroundColor: token.value }}
                   />
                 )}

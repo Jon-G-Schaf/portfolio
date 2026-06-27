@@ -55,7 +55,7 @@ function Decision({ title, children }) {
 
 function Metric({ value, label }) {
   return (
-    <div className="rounded-2xl border border-line bg-panel/60 p-6">
+    <div className="rounded-2xl border border-line bg-espresso p-6 shadow-[inset_0_2px_12px_rgba(0,0,0,0.3)]">
       <p className="accent-text font-display text-3xl font-semibold">{value}</p>
       <p className="mt-2 font-mono text-xs leading-relaxed text-muted">{label}</p>
     </div>
