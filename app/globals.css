@@ -59,25 +59,12 @@ body::before {
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  /* Two layers: a fine luminance-noise tile soft-light-blended over the
-     gradient. Dark brown gradients span a tiny RGB range, so mobile GPUs (which
-     don't dither) quantize them into visible bands whose muddy in-between
-     browns read as a sickly/"pukey" cast; desktop compositors dither and look
-     rich. The noise is compressed to ±0.08 around mid-grey, so soft-light only
-     nudges each pixel a few levels — enough to shatter the bands, invisible as
-     texture. Extra gradient stops keep each ramp short for the same reason. */
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='d'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='2' stitchTiles='stitch' seed='3'/%3E%3CfeColorMatrix type='matrix' values='0.16 0 0 0 0.42 0 0.16 0 0 0.42 0 0 0.16 0 0.42 0 0 0 0 1'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23d)'/%3E%3C/svg%3E"),
-    radial-gradient(
-      circle at top,
-      #4a2a12 0%,
-      #3a2210 22%,
-      var(--ink) 45%,
-      #221305 72%,
-      var(--espresso) 100%
-    );
-  background-repeat: repeat, no-repeat;
-  background-size: 180px 180px, cover;
-  background-blend-mode: soft-light, normal;
+  background: radial-gradient(
+    circle at top,
+    #4a2a12 0%,
+    var(--ink) 40%,
+    var(--espresso) 100%
+  );
 }
 
 ::selection {
