@@ -30,10 +30,31 @@ export default function Nav() {
           <ThemeSong />
           <Link
             href="/"
-            className="font-mono text-sm text-fog transition-colors hover:text-white"
+            aria-label={`g//${site.shortName.toLowerCase()}`}
+            className="flex items-center font-mono text-sm text-fog transition-colors hover:text-white"
             onClick={() => setOpen(false)}
           >
-            <span className="accent-text font-semibold">g</span>
+            {/* Signature G — Jon's handwritten mark, ember→amber stroke. */}
+            <svg
+              viewBox="326.5 83 297 297"
+              aria-hidden="true"
+              className="h-[1.5em] w-[1.5em] -translate-y-[0.06em]"
+            >
+              <defs>
+                <linearGradient id="wordmark-g" x1="0" y1="0" x2="1" y2="0.17">
+                  <stop offset="0" stopColor="#ff7a1a" />
+                  <stop offset="1" stopColor="#ffc35c" />
+                </linearGradient>
+              </defs>
+              <path
+                fill="none"
+                stroke="url(#wordmark-g)"
+                strokeWidth="13"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M458.64,155.85c-1.31-4.59-38.98,3.93-69.77,40.62s-11.14,59.95,29.81,56.02c40.95-3.93,90.3-32.39,108.1-53.72c20.37-24.42,5.57-48.48-44.88-26.21s-98.78,74.6-92.7,109.1c6.11,34.67,65.51,33.07,112.69,11.12c47.17-21.95,45.29-46.22,3.28-42.91c-39.84,3.13-70.1,23.26-60.6,20.96s153.96-22.28,129.06-15.72"
+              />
+            </svg>
             {"//"}
             {site.shortName.toLowerCase()}
           </Link>
