@@ -70,7 +70,7 @@
   }
   /* Signature G as the middle initial — sized to the cap, raised so it rides
      on the caps, carrying the period the signature has after it ("G."). */
-  .sig-inline { height: 1.18em; width: auto; margin: 0 0.14em; transform: translateY(-0.04em); }
+  .sig-inline { height: 1.18em; width: auto; margin: 0 0.14em; transform: translateY(-0.01em); }
   .masthead .contact {
     margin-top: 5px;
     font-size: 8.8pt;
@@ -105,7 +105,7 @@
     margin: 8px 0 5px;
     font-size: 9pt;
     font-weight: 700;
-    letter-spacing: 2.2px;
+    letter-spacing: 0.5px;
     text-transform: uppercase;
     color: var(--accent);
     border-bottom: 1px solid var(--rule);
@@ -181,10 +181,10 @@
       <span><a href="https://www.linkedin.com/in/jongschaf">linkedin.com/in/jongschaf</a></span>
     </p>
     <p class="summary">
-      Full-stack developer with a designer's eye. Computer Science graduate who designs the
-      interface in Figma, then builds the whole product, from Flutter and Firebase on mobile
-      to React and Next.js on the web. Looking for software and full-stack roles in Columbus,
-      Cincinnati, Pittsburgh, or remote.
+      Full-stack developer with a designer's eye. I design polished interfaces in Figma and
+      build the apps behind them across Next.js, React, Flutter, Firebase, Node.js, and
+      PostgreSQL. Seeking software, full-stack, and front-end roles in Columbus, Cincinnati,
+      Pittsburgh, or remote.
     </p>
     <div class="masthead-rule"></div>
   </header>
@@ -212,7 +212,23 @@
 
     <div class="item">
       <div class="item-head">
-        <p class="item-title">Quorum <span class="sep">&middot;</span> Local Events App (CS Capstone)</p>
+        <p class="item-title">Crosstown <span class="sep">&middot;</span> Live Transit Reliability Tracker</p>
+        <p class="item-when">2026 &middot; <a href="https://crosstown.jongschaf.com"><b>crosstown.jongschaf.com</b></a></p>
+      </div>
+      <p class="item-sub">Solo &middot; TypeScript, Node.js, Fastify, PostgreSQL, Next.js, MapLibre</p>
+      <ul>
+        <li>Built a 24/7 ingestion service that polls COTA's public GTFS-realtime feeds into Postgres
+            and rolls every arrival up into route-by-route on-time stats with hand-written SQL</li>
+        <li>Computed the arrival delays the feed doesn't publish by joining realtime predictions
+            against the static schedule, set-based in SQL at roughly 10k upserts a minute</li>
+        <li>Streamed live positions to a Next.js + MapLibre map over server-sent events with
+            client-side motion interpolation, tested with Vitest and GitHub Actions</li>
+      </ul>
+    </div>
+
+    <div class="item">
+      <div class="item-head">
+        <p class="item-title">Quorum <span class="sep">&middot;</span> Local Events App <span class="sep">&middot;</span> CS Capstone</p>
         <p class="item-when">Aug 2025 &ndash; May 2026</p>
       </div>
       <p class="item-sub">UI/UX Lead &amp; Full-Stack &middot; Flutter, Dart, Firebase, Figma &middot; five-person team</p>
@@ -221,40 +237,25 @@
             to find your next game, hangout, or meetup and connect when it fits your schedule</li>
         <li>Designed the complete interface in Figma and shipped it as a Material&nbsp;3 design system
             with custom light/dark color schemes and runtime theme switching</li>
-        <li>Designed the Firestore data model for users, events, groups, and chat, with realtime
-            listeners and transactions for limited-spot joins</li>
-        <li>Built real-time chat with read receipts, reactions, photo sharing, and shareable event
+        <li>Modeled users, events, groups, and chat in Firestore, with realtime listeners and
+            transactions for limited-spot joins</li>
+        <li>Built realtime chat with read receipts, reactions, photo sharing, and shareable event
             cards, with event chat membership synced to attendance</li>
       </ul>
     </div>
 
     <div class="item">
       <div class="item-head">
-        <p class="item-title">Crosstown <span class="sep">&middot;</span> Live Transit Reliability Tracker</p>
-        <p class="item-when">2026 &middot; <a href="https://crosstown.jongschaf.com"><b>crosstown.jongschaf.com</b></a></p>
-      </div>
-      <p class="item-sub">Solo &middot; TypeScript, Node.js, Fastify, PostgreSQL, Next.js, MapLibre</p>
-      <ul>
-        <li>Built a 24/7 ingestion service that polls COTA's public GTFS-realtime feeds into Postgres
-            and rolls every arrival up into route-by-route on-time stats with hand-written SQL</li>
-        <li>Computes the arrival delays the feed doesn't publish by joining realtime predictions
-            against the static schedule, set-based in SQL at roughly 10k upserts a minute</li>
-        <li>Streams live positions to a Next.js + MapLibre map over server-sent events with
-            client-side motion interpolation, tested with Vitest and GitHub Actions</li>
-      </ul>
-    </div>
-
-    <div class="item">
-      <div class="item-head">
-        <p class="item-title">Personal Portfolio</p>
+        <p class="item-title">Lustre <span class="sep">&middot;</span> Desktop Environment &amp; Design System</p>
         <p class="item-when">2026</p>
       </div>
-      <p class="item-sub">Designer &amp; Developer &middot; Next.js, React, Tailwind CSS, Framer Motion</p>
+      <p class="item-sub">Solo &middot; KDE Plasma 6, QML, Python, JavaScript</p>
       <ul>
-        <li>Designed and built a fully custom site: one-accent design system, scroll-driven reveals,
-            and a generative animated sand background built from layered SVG noise</li>
-        <li>Code-generated Open Graph images and favicon, with keyboard-accessible and
-            reduced-motion-aware interactions</li>
+        <li>Designed and built a complete KDE Plasma 6 desktop environment end to end, driven by a
+            single design system carried across the window manager, panels, widgets, login, and terminal</li>
+        <li>Built a Python pipeline that generates the entire ~50-SVG Plasma theme from one
+            token file, so a single palette or metric change re-renders every surface, with a montage
+            preview mode for fast design review</li>
       </ul>
     </div>
 
