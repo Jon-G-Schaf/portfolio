@@ -30,7 +30,7 @@ function StudySection({ id, eyebrow, title, children }) {
         </p>
         <h2
           id={`${id}-title`}
-          className="font-display text-3xl font-semibold tracking-tight"
+          className="text-balance font-display text-3xl font-semibold tracking-tight"
         >
           {title}
         </h2>
@@ -67,7 +67,7 @@ function Metric({ value, label }) {
 function BrowserShot({ src, alt, h = 900, label, priority = false, className = "" }) {
   return (
     <figure
-      className={`overflow-hidden rounded-2xl border border-line bg-espresso shadow-2xl ${className}`}
+      className={`overflow-hidden rounded-2xl border border-line bg-espresso shadow-[inset_0_1px_0_rgba(247,237,220,0.06),0_25px_50px_-12px_rgba(0,0,0,0.45)] ${className}`}
     >
       <div className="flex items-center gap-2 border-b border-line px-4 py-2.5">
         <span aria-hidden="true" className="flex gap-1.5">
@@ -126,7 +126,7 @@ export default function CrosstownCaseStudy() {
               <h1 className="mt-6 font-display text-5xl font-semibold tracking-tight sm:text-6xl">
                 Crosstown
               </h1>
-              <p className="mt-5 max-w-2xl text-xl leading-snug text-fog/90">
+              <p className="mt-5 max-w-2xl text-balance text-xl leading-snug text-fog/90">
                 Every COTA bus, live.{" "}
                 <span className="accent-text">Every arrival, on the record.</span>
               </p>
@@ -151,9 +151,9 @@ export default function CrosstownCaseStudy() {
               <dl className="mt-14 grid grid-cols-2 gap-x-8 gap-y-6 font-mono text-xs sm:grid-cols-4">
                 {[
                   ["Role", "Design + build, solo"],
-                  ["Context", "Personal project \u00b7 live product"],
-                  ["Timeline", "June 2026 - running 24/7 since"],
-                  ["Stack", "TypeScript \u00b7 Postgres \u00b7 Next.js"],
+                  ["Context", "Personal project · live product"],
+                  ["Timeline", "June 2026 · running 24/7 since"],
+                  ["Stack", "TypeScript · Postgres · Next.js"],
                 ].map(([term, detail]) => (
                   <div key={term}>
                     <dt className="uppercase tracking-label text-muted">{term}</dt>
@@ -172,14 +172,14 @@ export default function CrosstownCaseStudy() {
               src="/images/crosstown-map.jpg"
               alt="Crosstown's live map at night: every COTA bus as a glowing directional marker over a dark map of Columbus, route strands faintly lit beneath them, with a stats panel, a service-tier legend, and a ticker of recent arrivals"
               h={900}
-              label="The live map \u00b7 one marker per bus, updating in real time"
+              label="The live map · one marker per bus, updating in real time"
               priority
             />
           </Reveal>
         </div>
 
         {/* Overview */}
-        <StudySection id="overview" eyebrow="01 \u00b7 Overview" title="What Crosstown is">
+        <StudySection id="overview" eyebrow="01 · Overview" title="What Crosstown is">
           <Reveal>
             <p>
               Crosstown answers one question: how reliable is each Columbus bus route?
@@ -205,7 +205,7 @@ export default function CrosstownCaseStudy() {
         {/* Problem */}
         <StudySection
           id="problem"
-          eyebrow="02 \u00b7 Problem"
+          eyebrow="02 · Problem"
           title="The schedule is a promise nobody checks"
         >
           <Reveal>
@@ -230,7 +230,7 @@ export default function CrosstownCaseStudy() {
         {/* System */}
         <StudySection
           id="system"
-          eyebrow="03 \u00b7 The system"
+          eyebrow="03 · The system"
           title="A 24/7 pipeline on a $5 budget"
         >
           <Reveal>
@@ -300,7 +300,7 @@ export default function CrosstownCaseStudy() {
         {/* Design */}
         <StudySection
           id="design"
-          eyebrow="04 \u00b7 Design"
+          eyebrow="04 · Design"
           title="Night service, built like a control room"
         >
           <Reveal>
@@ -353,7 +353,7 @@ export default function CrosstownCaseStudy() {
         {/* Decisions */}
         <StudySection
           id="decisions"
-          eyebrow="05 \u00b7 Decisions"
+          eyebrow="05 · Decisions"
           title="The calls that shaped it"
         >
           <div className="space-y-12 pt-2">
@@ -397,7 +397,7 @@ export default function CrosstownCaseStudy() {
         {/* Outcome */}
         <StudySection
           id="outcome"
-          eyebrow="06 \u00b7 Outcome"
+          eyebrow="06 · Outcome"
           title="Live and recording"
         >
           <Reveal>
@@ -426,7 +426,7 @@ export default function CrosstownCaseStudy() {
           className="mx-auto w-full max-w-3xl px-6 pb-28 pt-10 sm:px-10"
         >
           <Reveal>
-            <div className="rounded-2xl border border-line bg-panel/60 p-10">
+            <div className="rounded-2xl border border-line bg-panel/60 p-10 shadow-[inset_0_1px_0_rgba(247,237,220,0.07)]">
               <p className="font-mono text-xs uppercase tracking-label text-muted">
                 Thanks for reading
               </p>
@@ -438,7 +438,7 @@ export default function CrosstownCaseStudy() {
                   href="https://crosstown.jongschaf.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="accent-bar rounded-full px-6 py-3 text-sm font-medium text-ink shadow-[0_0_28px_-6px_rgba(255,122,26,0.45)] transition hover:scale-[1.03] hover:shadow-[0_0_38px_-6px_rgba(255,122,26,0.65)] active:scale-[0.98]"
+                  className="accent-bar rounded-full px-6 py-3 text-sm font-medium text-ink shadow-[0_0_28px_-6px_rgba(255,122,26,0.45)] transition duration-300 ease-out hover:scale-[1.03] hover:shadow-[0_0_38px_-6px_rgba(255,122,26,0.65)] active:scale-[0.98]"
                 >
                   Open the live map
                 </a>

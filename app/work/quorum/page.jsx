@@ -30,7 +30,7 @@ function StudySection({ id, eyebrow, title, children }) {
         </p>
         <h2
           id={`${id}-title`}
-          className="font-display text-3xl font-semibold tracking-tight"
+          className="text-balance font-display text-3xl font-semibold tracking-tight"
         >
           {title}
         </h2>
@@ -65,16 +65,17 @@ function Metric({ value, label }) {
 /* A phone screenshot in a slim device bezel. All exports are 1440px wide;
    pass each image's real height so next/image renders the correct aspect
    ratio (no distortion). Extra classes (tilts, hovers) land on the frame. */
-function Shot({ src, alt, h = 3020, className = "" }) {
+function Shot({ src, alt, h = 3020, priority = false, className = "" }) {
   return (
     <div
-      className={`w-full max-w-[260px] rounded-[2rem] border border-line bg-espresso p-2 shadow-2xl ${className}`}
+      className={`w-full max-w-[260px] rounded-[2rem] border border-line bg-espresso p-2 shadow-[inset_0_1px_0_rgba(247,237,220,0.06),0_25px_50px_-12px_rgba(0,0,0,0.45)] ${className}`}
     >
       <Image
         src={src}
         alt={alt}
         width={1440}
         height={h}
+        priority={priority}
         className="w-full rounded-[1.5rem]"
       />
     </div>
@@ -116,7 +117,7 @@ export default function QuorumCaseStudy() {
               <h1 className="mt-6 font-display text-5xl font-semibold tracking-tight sm:text-6xl">
                 Quorum
               </h1>
-              <p className="mt-5 max-w-2xl text-xl leading-snug text-fog/90">
+              <p className="mt-5 max-w-2xl text-balance text-xl leading-snug text-fog/90">
                 Find events near you, fill the open spots,{" "}
                 <span className="accent-text">and make the plan happen.</span>
               </p>
@@ -126,10 +127,10 @@ export default function QuorumCaseStudy() {
             <Reveal delay={0.16}>
               <dl className="mt-14 grid grid-cols-2 gap-x-8 gap-y-6 font-mono text-xs sm:grid-cols-4">
                 {[
-                  ["Role", "UI/UX lead \u00b7 Full-stack build"],
+                  ["Role", "UI/UX lead · Full-stack build"],
                   ["Context", "CS capstone, Ohio University"],
-                  ["Timeline", "Aug 2025 - May 2026"],
-                  ["Stack", "Flutter \u00b7 Dart \u00b7 Firebase"],
+                  ["Timeline", "Aug 2025 – May 2026"],
+                  ["Stack", "Flutter · Dart · Firebase"],
                 ].map(([term, detail]) => (
                   <div key={term}>
                     <dt className="uppercase tracking-label text-muted">{term}</dt>
@@ -149,12 +150,14 @@ export default function QuorumCaseStudy() {
                 src="/images/quorum-discover-dark.jpg"
                 alt="Quorum's Discover feed in dark mode: nearby events with category, time, distance, and Join buttons"
                 h={3023}
+                priority
                 className="will-change-transform transition-transform duration-500 sm:-rotate-2 sm:hover:rotate-0"
               />
               <Shot
                 src="/images/quorum-discover-light.jpg"
                 alt="The same Discover feed in light mode, showing Quorum's light/dark design system"
                 h={2994}
+                priority
                 className="will-change-transform transition-transform duration-500 sm:rotate-2 sm:hover:rotate-0"
               />
             </div>
@@ -162,7 +165,7 @@ export default function QuorumCaseStudy() {
         </div>
 
         {/* Overview */}
-        <StudySection id="overview" eyebrow="01 \u00b7 Overview" title="What Quorum is">
+        <StudySection id="overview" eyebrow="01 · Overview" title="What Quorum is">
           <Reveal>
             <p>
               Quorum is a mobile app for finding events near you and helping people
@@ -190,7 +193,7 @@ export default function QuorumCaseStudy() {
         {/* Problem */}
         <StudySection
           id="problem"
-          eyebrow="02 \u00b7 Problem"
+          eyebrow="02 · Problem"
           title="The plan only works if people show"
         >
           <Reveal>
@@ -216,7 +219,7 @@ export default function QuorumCaseStudy() {
         {/* Role & process */}
         <StudySection
           id="process"
-          eyebrow="03 \u00b7 Role & process"
+          eyebrow="03 · Role & process"
           title="From Figma flows to a shipped design system"
         >
           <Reveal>
@@ -255,7 +258,7 @@ export default function QuorumCaseStudy() {
         {/* Product & design decisions */}
         <StudySection
           id="design"
-          eyebrow="04 \u00b7 Product decisions"
+          eyebrow="04 · Product decisions"
           title="The calls that shaped the app"
         >
           <div className="space-y-12 pt-2">
@@ -366,7 +369,7 @@ export default function QuorumCaseStudy() {
         {/* Engineering */}
         <StudySection
           id="engineering"
-          eyebrow="05 \u00b7 Engineering"
+          eyebrow="05 · Engineering"
           title="Flutter + Firebase, and the hard parts"
         >
           <Reveal>
@@ -415,7 +418,7 @@ export default function QuorumCaseStudy() {
         {/* Outcome */}
         <StudySection
           id="outcome"
-          eyebrow="06 \u00b7 Outcome"
+          eyebrow="06 · Outcome"
           title="What shipped, and what I took from it"
         >
           <Reveal>
@@ -444,7 +447,7 @@ export default function QuorumCaseStudy() {
           className="mx-auto w-full max-w-3xl px-6 pb-28 pt-10 sm:px-10"
         >
           <Reveal>
-            <div className="rounded-2xl border border-line bg-panel/60 p-10">
+            <div className="rounded-2xl border border-line bg-panel/60 p-10 shadow-[inset_0_1px_0_rgba(247,237,220,0.07)]">
               <p className="font-mono text-xs uppercase tracking-label text-muted">
                 Thanks for reading
               </p>
@@ -454,7 +457,7 @@ export default function QuorumCaseStudy() {
               <div className="mt-6 flex flex-wrap items-center gap-6">
                 <a
                   href={`mailto:${site.email}`}
-                  className="accent-bar rounded-full px-6 py-3 text-sm font-medium text-ink shadow-[0_0_28px_-6px_rgba(255,122,26,0.45)] transition hover:scale-[1.03] hover:shadow-[0_0_38px_-6px_rgba(255,122,26,0.65)] active:scale-[0.98]"
+                  className="accent-bar rounded-full px-6 py-3 text-sm font-medium text-ink shadow-[0_0_28px_-6px_rgba(255,122,26,0.45)] transition duration-300 ease-out hover:scale-[1.03] hover:shadow-[0_0_38px_-6px_rgba(255,122,26,0.65)] active:scale-[0.98]"
                 >
                   Email me
                 </a>
