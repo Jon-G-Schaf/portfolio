@@ -37,7 +37,7 @@ export default function FeaturedProject() {
                 href={featuredProject.liveHref}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="accent-bar rounded-full px-6 py-3 text-sm font-medium text-ink shadow-[0_0_28px_-6px_rgba(255,122,26,0.45)] transition hover:scale-[1.03] hover:shadow-[0_0_38px_-6px_rgba(255,122,26,0.65)] active:scale-[0.98]"
+                className="accent-bar rounded-full px-6 py-3 text-sm font-medium text-ink shadow-[0_0_28px_-6px_rgba(255,122,26,0.45)] transition duration-300 ease-out hover:scale-[1.03] hover:shadow-[0_0_38px_-6px_rgba(255,122,26,0.65)] active:scale-[0.98]"
               >
                 {featuredProject.liveLabel ?? "Open the live app"}
               </a>
@@ -72,7 +72,7 @@ export default function FeaturedProject() {
               aria-label="Open the live Crosstown map in a new tab"
               className="group block"
             >
-              <div className="overflow-hidden rounded-2xl border border-line bg-espresso shadow-2xl transition-transform duration-500 group-hover:scale-[1.015]">
+              <div className="overflow-hidden rounded-2xl border border-line bg-espresso shadow-[inset_0_1px_0_rgba(247,237,220,0.06),0_25px_50px_-12px_rgba(0,0,0,0.45)] transition-transform duration-500 group-hover:scale-[1.015]">
                 <div className="flex items-center gap-2 border-b border-line px-4 py-2.5">
                   <span aria-hidden="true" className="flex gap-1.5">
                     <span className="h-2.5 w-2.5 rounded-full bg-line" />

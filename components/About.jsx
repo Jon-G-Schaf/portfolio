@@ -7,7 +7,7 @@ export default function About() {
     <Section id="about" eyebrow="About" align="center">
       <div className="mx-auto max-w-3xl text-center">
         <Reveal>
-          <h2 className="font-display text-3xl font-semibold leading-snug tracking-tight sm:text-4xl">
+          <h2 className="text-balance font-display text-3xl font-semibold leading-snug tracking-tight sm:text-4xl">
             I build software end to end, then sweat{" "}
             <span className="accent-text">the details most people skip.</span>
           </h2>

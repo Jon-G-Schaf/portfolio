@@ -23,7 +23,7 @@ export default function Contact() {
     <Section id="contact" eyebrow="Contact" align="center" className="border-t border-line">
       <div className="mx-auto max-w-3xl text-center">
         <Reveal>
-          <h2 className="font-display text-4xl font-semibold tracking-tight sm:text-5xl">
+          <h2 className="text-balance font-display text-4xl font-semibold tracking-tight sm:text-5xl">
             {contact.heading}
           </h2>
         </Reveal>
@@ -43,7 +43,11 @@ export default function Contact() {
             <button
               type="button"
               onClick={copyEmail}
-              className="rounded-full border border-line px-4 py-1.5 font-mono text-xs uppercase tracking-label text-muted transition-colors hover:border-amber/60 hover:text-fog"
+              className={`rounded-full border px-4 py-1.5 font-mono text-xs uppercase tracking-label transition-colors duration-300 ${
+                copied
+                  ? "border-amber/70 text-amber"
+                  : "border-line text-muted hover:border-amber/60 hover:text-fog"
+              }`}
             >
               {copied ? "Copied \u2713" : "Copy"}
             </button>

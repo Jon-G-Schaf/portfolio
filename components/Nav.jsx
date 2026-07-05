@@ -2,7 +2,13 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import {
+  AnimatePresence,
+  motion,
+  useReducedMotion,
+  useScroll,
+  useSpring,
+} from "framer-motion";
 import { site } from "@/lib/content";
 import ThemeSong from "@/components/ThemeSong";
 
@@ -12,6 +18,27 @@ const links = [
   { href: "/#work", label: "Work" },
   { href: "/#contact", label: "Contact" },
 ];
+
+/* A hairline of reading progress that paints the nav's bottom border in the
+   accent gradient as you scroll. Spring-smoothed so it glides rather than
+   ratchets; reduced-motion users get it tracking the scrollbar exactly. */
+function ScrollProgress() {
+  const reduceMotion = useReducedMotion();
+  const { scrollYProgress } = useScroll();
+  const smooth = useSpring(scrollYProgress, {
+    stiffness: 140,
+    damping: 26,
+    mass: 0.4,
+  });
+
+  return (
+    <motion.span
+      aria-hidden="true"
+      className="accent-bar absolute inset-x-0 -bottom-px h-px origin-left"
+      style={{ scaleX: reduceMotion ? scrollYProgress : smooth }}
+    />
+  );
+}
 
 export default function Nav() {
   const [open, setOpen] = useState(false);
@@ -91,6 +118,8 @@ export default function Nav() {
         </button>
       </nav>
 
+      <ScrollProgress />
+
       <AnimatePresence>
         {open && (
           <motion.div
@@ -102,23 +131,43 @@ export default function Nav() {
             className="overflow-hidden border-t border-line md:hidden"
           >
             <div className="flex flex-col gap-1 px-6 py-4">
-              {links.map((link) => (
-                <Link
+              {links.map((link, i) => (
+                <motion.div
                   key={link.href}
-                  href={link.href}
-                  className="py-2 text-sm text-muted transition-colors hover:text-fog"
+                  initial={reduceMotion ? false : { opacity: 0, y: -6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{
+                    duration: 0.3,
+                    delay: reduceMotion ? 0 : 0.05 + i * 0.045,
+                    ease: "easeOut",
+                  }}
+                >
+                  <Link
+                    href={link.href}
+                    className="block py-2 text-sm text-muted transition-colors hover:text-fog"
+                    onClick={() => setOpen(false)}
+                  >
+                    {link.label}
+                  </Link>
+                </motion.div>
+              ))}
+              <motion.div
+                initial={reduceMotion ? false : { opacity: 0, y: -6 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: 0.3,
+                  delay: reduceMotion ? 0 : 0.05 + links.length * 0.045,
+                  ease: "easeOut",
+                }}
+              >
+                <a
+                  href={site.links.resume}
+                  className="block py-2 font-mono text-xs uppercase tracking-label text-fog"
                   onClick={() => setOpen(false)}
                 >
-                  {link.label}
-                </Link>
-              ))}
-              <a
-                href={site.links.resume}
-                className="py-2 font-mono text-xs uppercase tracking-label text-fog"
-                onClick={() => setOpen(false)}
-              >
-                Resume
-              </a>
+                  Resume
+                </a>
+              </motion.div>
             </div>
           </motion.div>
         )}

@@ -94,10 +94,10 @@ export default function Hero() {
 
         <motion.h1
           variants={item}
-          className="mx-auto max-w-5xl font-display text-6xl font-semibold leading-[1.02] tracking-tight text-fog drop-shadow-[0_2px_20px_rgba(0,0,0,0.35)] sm:text-7xl md:text-8xl"
+          className="mx-auto max-w-5xl text-balance font-display text-6xl font-semibold leading-[1.02] tracking-tight text-fog drop-shadow-[0_2px_20px_rgba(0,0,0,0.35)] sm:text-7xl md:text-8xl"
         >
           {hero.headline}
-          <span className="accent-text-flow mt-4 block pb-1 text-3xl font-medium leading-[1.2] sm:text-5xl">
+          <span className="accent-text-flow mt-4 block text-balance pb-1 text-3xl font-medium leading-[1.2] sm:text-5xl">
             {hero.positioning}
           </span>
         </motion.h1>
@@ -112,18 +112,27 @@ export default function Hero() {
         <motion.div variants={item} className="mt-12 flex flex-wrap items-center justify-center gap-4">
           <Link
             href="/#work"
-            className="accent-bar rounded-full px-6 py-3 text-sm font-medium text-ink shadow-[0_0_28px_-6px_rgba(255,122,26,0.45)] transition hover:scale-[1.03] hover:shadow-[0_0_38px_-6px_rgba(255,122,26,0.65)] active:scale-[0.98]"
+            className="accent-bar rounded-full px-6 py-3 text-sm font-medium text-ink shadow-[0_0_28px_-6px_rgba(255,122,26,0.45)] transition duration-300 ease-out hover:scale-[1.03] hover:shadow-[0_0_38px_-6px_rgba(255,122,26,0.65)] active:scale-[0.98]"
           >
             View work
           </Link>
           <a
             href={site.links.resume}
-            className="rounded-full border border-line bg-panel/30 px-6 py-3 text-sm text-fog backdrop-blur-sm transition-colors hover:border-amber/60"
+            className="rounded-full border border-line bg-panel/30 px-6 py-3 text-sm text-fog backdrop-blur-sm transition-colors duration-300 hover:border-amber/60"
           >
             Resume
           </a>
-          <Link href="/#contact" className="link-quiet text-sm text-fog/80 hover:text-fog">
-            Contact &rarr;
+          <Link
+            href="/#contact"
+            className="group inline-flex items-center gap-1.5 text-sm text-fog/80 hover:text-fog"
+          >
+            <span className="link-quiet">Contact</span>
+            <span
+              aria-hidden="true"
+              className="transition-transform duration-300 group-hover:translate-x-1"
+            >
+              &rarr;
+            </span>
           </Link>
         </motion.div>
       </motion.div>
